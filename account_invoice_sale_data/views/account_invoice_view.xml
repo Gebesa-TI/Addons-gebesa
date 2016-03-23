@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model='ir.ui.view' id='account_invoice_view_form'>
+        	<field name='name'>account_invoice_view_form</field>
+        	<field name='model'>account.invoice</field>
+        	<field name='inherit_id' ref='account.invoice_form'/>
+        	<field name='arch' type='xml'>
+        		<xpath expr="//notebook/page[2]" position="after">
+        			<page string="Sale data">
+        				<group>
+        					<group>
+        						<field name='total_net_sale' widget="monetary"/>
+        						<field name='perc_freight'/>
+        						<field name='total_freight' widget="monetary"/>
+        						<field name='perc_installation'/>
+        						<field name='total_installation' widget="monetary"/>
+        					</group>
+        					<group>
+        						<field name='profit_margin'/>
+        						<field name='not_be_billed'/>
+        						<field name='manufacture'/>
+        						<field name='executive'/>        						
+        					</group>
+        				</group>
+        			</page>
+        		</xpath>
+        		<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="standard_cost" widget="monetary"/>
+                    <field name="net_sale" widget="monetary"/>
+                    <field name="freight_amount" widget="monetary"/>
+                    <field name="installation_amount" widget="monetary"/>                    
+                    <field name="profit_margin" widget="monetary"/>
+                    <field name="margin_justification"/>
+                </xpath>          		   		
+        	</field>
+        </record>
+    </data>
+</openerp>

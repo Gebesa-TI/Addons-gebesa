@@ -1,0 +1,1 @@
+addons-jarsa https://github.com/Jarsa-dev/addons-jarsa.git 9.0
