@@ -60,5 +60,3 @@ docs/_build/
 odoo.tar.gz
 .coveragerc
 sftp-config.json
-crear_modulo.sh
-*.bak
