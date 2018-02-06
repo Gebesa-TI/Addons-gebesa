@@ -14,5 +14,6 @@
         <menuitem id="gebesa_report_clave_menu" name="Claves" parent="gebesa_report_menu"/>
         <menuitem id="gebesa_report_venta_menu" name="Ventas" parent="gebesa_report_menu"/>
         <menuitem id="gebesa_report_merca_menu" name="Mercadotecnia" parent="gebesa_report_menu"/>
+        <menuitem id="gebesa_report_fletera_menu" name="Fletera" parent="gebesa_report_menu"/>
     </data>
 </openerp>

@@ -18,6 +18,7 @@
     "depends": [
         "base",
         "stock",
+        "stock_picking_tipo_dev",
     ],
     "data": [
         "views/stock.xml",
