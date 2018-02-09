@@ -44,5 +44,18 @@ class ParticularReport(models.AbstractModel):
             'docs': docs,
             'shipment': shipment,
             'kit': kit,
+            'picking_open': self._picking_open,
         }
-        return report_obj.render('mrp_shipment.report_shipment_barcode', docargs)
+        return report_obj.render(
+            'mrp_shipment.report_shipment_barcode', docargs)
+
+    def _picking_open(self, order):
+        picking_obj = self.env['stock.picking']
+        location_obj = self.env['stock.location']
+        location = location_obj.search([('usage', '=', 'customer')])
+        picking = picking_obj.search([
+            ('group_id', '=', order.procurement_group_id.id),
+            ('location_dest_id', 'in', location.mapped('id')),
+            ('state', 'not in', ['done', 'cancel'])
+        ], limit=1)
+        return picking.name or False
