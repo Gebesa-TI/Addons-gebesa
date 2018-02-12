@@ -184,9 +184,9 @@
                                                                     </t>
                                                                 </td>
                                                                 <td align="center">
-                                                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', line.product_id.default_code, 600, 100)" style="margin:2px 2px 2px 2px;width:350px;height:50px"/>
+                                                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', bom_line.product_id.default_code, 600, 100)" style="margin:2px 2px 2px 2px;width:350px;height:50px"/>
                                                                     <br/>
-                                                                    <span t-esc="line.product_id.default_code"/>
+                                                                    <span t-esc="bom_line.product_id.default_code"/>
                                                                 </td>
                                                                 <td><span t-esc="line.sale_order_id.name"/></td>
                                                                 <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
