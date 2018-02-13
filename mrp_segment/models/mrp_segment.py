@@ -245,7 +245,7 @@ class MrpSegment(models.Model):
                                 WHERE id = %s """,
                             (segment.folio + ', ', sale.id)
                         )
-                    if segment.folio not in sale.related_segment:
+                    elif segment.folio not in sale.related_segment:
                         self.env.cr.execute(
                             """update sale_order
                                 set related_segment = CONCAT(
