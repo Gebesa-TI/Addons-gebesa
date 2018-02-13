@@ -25,6 +25,7 @@
         "views/product_template_view.xml",
         "views/purchase_order_view.xml",
         "views/account_invoice_view.xml",
+        "views/mrp_bom_view.xml"
 
     ],
     "demo": [

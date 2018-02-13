@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model='ir.ui.view' id='inactive_mrp_bom_form_view'>
+            <field name='name'>inactive.mrp.bom.form.view</field>
+            <field name='model'>mrp.bom</field>
+            <field name='inherit_id' ref='wizard_cut_detail.mrp_bom_wizard'/>
+            <field name='arch' type='xml'>
+                <xpath expr="//button[@name='print_wizard']" postition='after'>
+                    <button name="inactive_button_mrp_bom" string="Inactive BOM" type="object" icon="fa-ban" groups="global_privilege_button.group_manager_inactive_mrp_bom" attrs="{'invisible': [('active', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
