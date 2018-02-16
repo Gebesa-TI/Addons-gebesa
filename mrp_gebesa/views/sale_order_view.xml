@@ -6,9 +6,6 @@
             <field name='model'>sale.order</field>
             <field name='inherit_id' ref="sale.view_order_form"/>
             <field name='arch' type='xml'>
-                <xpath expr="//group/group/field[@name='complement_saleorder_id']" position="after">
-                    <field name="production_status" readonly="1"/>
-                </xpath>
                 <xpath expr="//notebook/page/group/group/field[@name='company_id']" position="after">
                     <field name="country_id" readonly="1"/>
                     <field name="state_id" readonly="1"/>
@@ -28,9 +25,6 @@
                     <field name="state_id" readonly="1"/>
                     <field name="city_id" readonly="1"/>
                     <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
-                </xpath>
-                <xpath expr="//field[@name='invoice_status']" position="before">
-                    <field name='production_status' readonly="True"/>
                 </xpath>
             </field>
         </record>

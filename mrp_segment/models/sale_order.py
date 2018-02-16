@@ -21,9 +21,14 @@ class SaleOrder(models.Model):
         string='Relatad Segment',
         default='',
     )
-
     production_status = fields.Selection(
+        [('no_production', _('No Production')),
+         ('partial_production', _('Partial Production')),
+         ('total_production', _('Total Production'))],
+        string=_("Production Status"),
+        default='no_production',
         compute='_compuete_production_status',
+        store=True,
     )
 
     @api.model
