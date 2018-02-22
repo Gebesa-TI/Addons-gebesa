@@ -55,6 +55,13 @@ msgid "Error!\n"
 msgstr "Error! Tu no tienes privilegios para Eliminar Lista de Materiales. Consulte con el Administrador del Sistema. "
 
 #. module: global_privilege_button
+#: code:addons/global_privilege_button/models/mrp_bom.py:43
+#, python-format
+msgid "Error!\n"
+"You can not Inactivate this BOM, you need to delete all the lines."
+msgstr "No puedes Inactivar este BOM, necesitas eliminar todas las lineas."
+
+#. module: global_privilege_button
 #: code:addons/global_privilege_button/models/product_product.py:34
 #: code:addons/global_privilege_button/models/product_template.py:34
 #, python-format
@@ -142,3 +149,8 @@ msgstr "Error! Tu no tienes privilegios para Crear Producto(s) de Linea."
 msgid "Error!\n"
 "You do not have privileges to Modify Line Products."
 msgstr "Error! Tu no tienes privilegios para Modificar Producto(s) de Linea."
+
+#. module: global_privilege_button
+#: model:ir.ui.view,arch_db:global_privilege_button.inactive_mrp_bom_form_view
+msgid "Inactive BOM"
+msgstr "Inactivar BOM"

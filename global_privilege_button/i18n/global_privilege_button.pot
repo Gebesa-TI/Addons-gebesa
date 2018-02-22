@@ -55,6 +55,13 @@ msgid "Error!\n"
 msgstr ""
 
 #. module: global_privilege_button
+#: code:addons/global_privilege_button/models/mrp_bom.py:43
+#, python-format
+msgid "Error!\n"
+"You can not Inactivate this BOM, you need to delete all the lines."
+msgstr ""
+
+#. module: global_privilege_button
 #: code:addons/global_privilege_button/models/product_product.py:34
 #: code:addons/global_privilege_button/models/product_template.py:34
 #, python-format
@@ -120,4 +127,9 @@ msgstr ""
 #. module: global_privilege_button
 #: model:ir.model,name:global_privilege_button.model_mrp_bom_line_detail
 msgid "mrp.bom.line.detail"
+msgstr ""
+
+#. module: global_privilege_button
+#: model:ir.ui.view,arch_db:global_privilege_button.inactive_mrp_bom_form_view
+msgid "Inactive BOM"
 msgstr ""

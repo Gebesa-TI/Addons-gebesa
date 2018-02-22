@@ -35,3 +35,13 @@ class MrpBom(models.Model):
                               ' Material(s) list.\nCheck with your'
                               ' System Administrator.'))
         return super(MrpBom, self).unlink()
+
+    @api.one
+    def inactive_button_mrp_bom(self):
+        for rec in self:
+            if rec.bom_line_ids:
+                raise UserError(_('Error!\nYou can not Inactivate this BOM,'
+                                  ' you need to delete all the lines.'))
+            rec.active = False
+
+        return True
