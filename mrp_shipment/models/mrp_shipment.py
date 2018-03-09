@@ -11,7 +11,7 @@ from openerp.addons import decimal_precision as dp
 class MrpShipment(models.Model):
     _name = 'mrp.shipment'
     _description = 'Shipment'
-    _rec_name = 'reference'
+    _rec_name = 'folio'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     state = fields.Selection(
