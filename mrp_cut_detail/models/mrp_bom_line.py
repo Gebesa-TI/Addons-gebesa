@@ -13,7 +13,7 @@ class MrpBomLine(models.Model):
         'mrp.bom.line.detail',
         'bom_line_id',
         string=_('BoM Line Details'),
-        copy=False,
+        copy=True,
     )
 
     @api.multi
