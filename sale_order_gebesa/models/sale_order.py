@@ -253,6 +253,8 @@ class SaleOrder(models.Model):
                 if line.product_id:
                     routes = line.product_id.route_ids + \
                         line.product_id.categ_id.total_route_ids
+                    if line.product_id.type == 'service':
+                        continue
                     if len(routes) < 2:
                         raise UserError(
                             _('%s %s %s' % (
