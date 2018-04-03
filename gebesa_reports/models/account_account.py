@@ -32,7 +32,8 @@ class AccountAccount(models.Model):
          (21, _(u'Perdida tipo de cambio')),
          (22, _(u'Utilidad cambiaria')),
          (23, _(u'Otros ingresos')),
-         (24, _(u'ISR y PTU'))],
+         (24, _(u'ISR y PTU')),
+         (25, _(u'Otras Ventas'))],
         string=_(u"Estado de resultados"),
     )
 
