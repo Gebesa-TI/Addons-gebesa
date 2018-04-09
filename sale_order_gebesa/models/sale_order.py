@@ -312,7 +312,7 @@ class SaleOrder(models.Model):
 
             if order.company_id.is_manufacturer:
                 resws = order._product_data_validation()
-                resws2 = order._product_data_validation2()
+                resws2 = order.product_data_validation2()
         # if resws[0] != 'OK':
         #     raise ValidationError('Este pedido no podra ser aprobado  \
         #         debido a errores de configuracion \
