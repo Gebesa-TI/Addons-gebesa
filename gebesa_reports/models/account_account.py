@@ -76,6 +76,7 @@ class AccountAccount(models.Model):
          (36, _(u'Reserva Legal')),
          (37, _(u'Resultado de Ejercicios Anteriores')),
          (38, _(u'Supertavit por Actualizacion')),
-         (39, _(u'Otras Aportaciones'))],
+         (39, _(u'Otras Aportaciones')),
+         (40, _(u'Reexpresion de capital por reev. de activos'))],
         string=_(u"Balance General"),
     )
