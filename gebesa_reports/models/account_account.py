@@ -59,7 +59,7 @@ class AccountAccount(models.Model):
          (19, _(u'Construcciones')),
          (20, _(u'Equipo de Comunicacion')),
          (21, _(u'Equipo de Seguriad')),
-         (41, _(u'Supertavit por Actualizacion Activo')
+         (41, _(u'Supertavit por Actualizacion Activo')),
          (22, _(u'Depreciacion')),
          (23, _(u'Deposito de Garantia')),
          (24, _(u'Gastos Diferidos')),
