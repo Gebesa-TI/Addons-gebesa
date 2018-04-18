@@ -59,6 +59,7 @@ class AccountAccount(models.Model):
          (19, _(u'Construcciones')),
          (20, _(u'Equipo de Comunicacion')),
          (21, _(u'Equipo de Seguriad')),
+         (41, _(u'Supertavit por Actualizacion Activo')
          (22, _(u'Depreciacion')),
          (23, _(u'Deposito de Garantia')),
          (24, _(u'Gastos Diferidos')),
@@ -75,7 +76,7 @@ class AccountAccount(models.Model):
          (35, _(u'Capital Social')),
          (36, _(u'Reserva Legal')),
          (37, _(u'Resultado de Ejercicios Anteriores')),
-         (38, _(u'Supertavit por Actualizacion')),
+         (38, _(u'Supertavit por Actualizacion Capital')),
          (39, _(u'Otras Aportaciones')),
          (40, _(u'Reexpresion de capital por reev. de activos'))],
         string=_(u"Balance General"),
