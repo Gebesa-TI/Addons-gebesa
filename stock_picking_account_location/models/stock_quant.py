@@ -154,7 +154,8 @@ class stock_quant(osv.osv):
         partner_id = (
             move.picking_id.partner_id and self.pool.get(
                 'res.partner')._find_accounting_partner(
-                    move.picking_id.partner_id).id) or False
+                    move.picking_id.partner_id).id) or (
+            move.picking_id.partner_id.id)
 
         # Cesar Barron 09 Ago 2016 ####
         reference = False
