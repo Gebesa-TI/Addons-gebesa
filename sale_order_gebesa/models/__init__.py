@@ -6,3 +6,4 @@ from . import sale_order
 from . import account_analytic_account
 from . import stock_picking
 from . import res_partner
+from . import sale_make_invoice_advance

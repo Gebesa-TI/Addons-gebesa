@@ -68,6 +68,10 @@ class SaleOrder(models.Model):
         string=_(u'not be billed'),
     )
 
+    no_facturar = fields.Boolean(
+        string=_(u'No Facturar'),
+    )
+
     manufacture = fields.Selection(
         [('special', _(u'Special')),
             ('line', _(u'Line')),
