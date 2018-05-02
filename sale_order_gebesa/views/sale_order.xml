@@ -102,7 +102,8 @@
         					<group>
                                 <field name='total_cost'/>
         						<field name='profit_margin' readonly="True"/>
-        						<field name='not_be_billed'/>
+        						<field name='not_be_billed' string="No Entregar"/>
+                                <field name='no_facturar'/>
                                 <field name='sale_picking_adm' groups="system_administrator.group_system_administrator_gebesa"/>
         						<field name='manufacture'/>
         						<!-- <field name='executive'/> -->
