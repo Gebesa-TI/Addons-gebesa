@@ -36,7 +36,7 @@ class MrpBom(models.Model):
                               ' System Administrator.'))
         return super(MrpBom, self).unlink()
 
-    @api.one
+    @api.multi
     def inactive_button_mrp_bom(self):
         for rec in self:
             if rec.bom_line_ids:
