@@ -54,6 +54,8 @@ class StockPicking(models.Model):
         for pick in self:
             move_ids = []
             for move in pick.move_lines:
+                if move.state != 'done':
+                    continue
                 location_from = move.location_id
                 location_to = move.location_dest_id
                 company_from = location_from._location_owner(location_from)
