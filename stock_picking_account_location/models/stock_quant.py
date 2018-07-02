@@ -59,7 +59,10 @@ class stock_quant(osv.osv):
                     acc_src = acc_valuation.id
                     acc_valuation = move.location_dest_id.account_id
             elif pick_type == 'internal':
-                acc_valuation = move.location_dest_id.account_id or False
+                if move.location_id.usage in ('rm', 'fp'):
+                    acc_valuation = move.location_id.account_id or False
+                else:
+                    acc_valuation = move.location_dest_id.account_id or False
             else:
                 acc_valuation = move.location_id.account_id or False
         else:
