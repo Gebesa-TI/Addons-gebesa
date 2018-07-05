@@ -20,10 +20,12 @@
     ],
     "data": [
         "security/security.xml",
+        "security/ir.model.access.csv",
         "views/account_account.xml",
         "views/account_journal.xml",
         "views/gebesa_report.xml",
-        "views/account_account_type.xml"
+        "views/account_account_type.xml",
+        "views/res_partner.xml",
     ],
     "demo": [
     ],
