@@ -4,3 +4,4 @@
 from . import account_account
 from . import account_account_type
 from . import account_journal
+from . import res_partner
