@@ -27,6 +27,7 @@
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
                     <field name="state" string="Estatus"/>
+                    <!-- INCOMPLETO -->
                     <!--button name="action_closed_line" groups="sale_order_state_change.group_close_sale_order_line" states="sale,done" type="object" confirm="¿Desea cerrar esta Linea de Venta?" icon="gtk-cancel" help="Cancelar Linea de Venta"/-->
                 </xpath>
         	</field>
