@@ -4,6 +4,8 @@
 
 from openerp import _, api, fields, models
 from openerp.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
@@ -43,6 +45,7 @@ class SaleOrder(models.Model):
             for pick in order.picking_ids:
                 if pick.state in ['draft', 'waiting', 'confirmed',
                                   'partially_available', 'assigned']:
+                    pick.do_unreserve()
                     moves = ''
                     for move in pick.move_lines:
                         moves += str(move.id) + ','
@@ -128,21 +131,23 @@ class SaleOrderLine(models.Model):
         store=True,
         default='draft')
 
-    @api.multi
-    def action_closed_line(self):
-        proc_obj = self.env['procurement.order']
-        move_obj = self.env['stock.move']
-        for line in self:
-            if line.order_id.invoice_status == 'invoiced':
-                raise UserError(_("No se puede Cerrar esta Linea de Venta"
-                                  " el Pedido ya esta Facturado"))
-            procurement = proc_obj.search([('sale_line_id', '=', line.id)])
-            if procurement.state in ['confirmed', 'exception', 'running']:
-                    self.env.cr.execute("""UPDATE procurement_order SET state = 'cancel'
-                                    WHERE id = %s """ % (procurement.id))
-            moves = move_obj.search([('procurement_id', '=', procurement.id)])
-            for move in moves:
-                move.procurement_searh()
-        self.write({'state': 'closed'})
+    # INCOMPLETO
+    # @api.multi
+    # def action_closed_line(self):
+    #     proc_obj = self.env['procurement.order']
+    #     move_obj = self.env['stock.move']
+    #     for line in self:
+    #         if line.order_id.invoice_status == 'invoiced':
+    #             raise UserError(_("No se puede Cerrar esta Linea de Venta"
+    #                               " el Pedido ya esta Facturado"))
+    #         procurement = proc_obj.search([('sale_line_id', '=', line.id)])
+    #         if procurement.state in ['confirmed', 'exception', 'running']:
+    #                 self.env.cr.execute("""UPDATE procurement_order SET state = 'cancel'
+    #                                 WHERE id = %s """ % (procurement.id))
+    #         moves = move_obj.search([('procurement_id', '=', procurement.id)])
+    #         for move in moves:
+    #             _logger.error("stock.move" + str(move.id))
+    #             move.procurement_searh()
+    #     self.write({'state': 'closed'})
 
-        return
+    #     return
