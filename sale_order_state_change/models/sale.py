@@ -45,6 +45,7 @@ class SaleOrder(models.Model):
             for pick in order.picking_ids:
                 if pick.state in ['draft', 'waiting', 'confirmed',
                                   'partially_available', 'assigned']:
+                    pick.do_unreserve()
                     moves = ''
                     for move in pick.move_lines:
                         moves += str(move.id) + ','
