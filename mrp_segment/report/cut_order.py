@@ -14,67 +14,67 @@ class ParticularReport(models.AbstractModel):
         report = report_obj._get_report_from_name(
             'mrp_segment.report_cut_order')
         obj_segment = self.env['mrp.segment']
-        segment = obj_segment.browse(self._ids)
+        segments = obj_segment.browse(self._ids)
         docs = []
-        for doc in segment:
+        for seg in segments:
             products = {}
-            cut_detail = {}
-            cut_line = []
-            for line in doc.line_ids:
-                production = line.mrp_production_id
+            for seg_line in seg.line_ids:
+                production = seg_line.mrp_production_id
+                product = production.product_id
                 bom_lines = production.bom_id.bom_line_ids
-                bom_line_detail = False
                 for bom_line in bom_lines:
-                    for detail in bom_line.bom_line_detail_ids:
-                        bom_line_detail = True
-                        production_line = detail.production_line_id.description
-                        if production_line not in cut_line:
-                            cut_line.append(production_line)
-                            cut_detail[production_line] = []
+                    for bom_line_det in bom_line.bom_line_detail_ids:
+                        if production.product_id.id in products.keys():
+                            products[product.id]['product_qty'] += \
+                                production.product_qty
+                        else:
+                            products[product.id] = {
+                                'product_name': product.name,
+                                'product_qty': production.product_qty,
+                                'product_code': product.default_code,
+                                'cut_line': {}
+                            }
+                        prod_line = bom_line_det.production_line_id.description
+                        if prod_line not in products[product.id][
+                                'cut_line'].keys():
+                            products[product.id]['cut_line'][prod_line] = []
                         add = True
-                        for cut in cut_detail[production_line]:
-                            if cut['name'] == detail.name and \
-                                    cut['caliber'] == detail.caliber_id and \
-                                    cut['width'] == detail.width_cut and \
-                                    cut['long'] == detail.long_cut:
-                                cut['qty'] += detail.quantity * \
+                        for cut in products[product.id]['cut_line'][prod_line]:
+                            if cut['name'] == bom_line_det.name and \
+                                    cut['caliber'] == bom_line_det.caliber_id and \
+                                    cut['width'] == bom_line_det.width_cut and \
+                                    cut['long'] == bom_line_det.long_cut:
+                                cut['qty'] += bom_line_det.quantity * \
                                     production.product_qty
                                 add = False
                         if add:
-                            cut_detail[production_line].append({
-                                'name': detail.name,
-                                'caliber': detail.caliber_id,
-                                'width': detail.width_cut,
-                                'long': detail.long_cut,
-                                'qty': detail.quantity * production.product_qty
+                            products[product.id]['cut_line'][prod_line].append({
+                                'name': bom_line_det.name,
+                                'caliber': bom_line_det.caliber_id,
+                                'width': bom_line_det.width_cut,
+                                'long': bom_line_det.long_cut,
+                                'qty': bom_line_det.quantity * production.product_qty
                             })
-                if bom_line_detail:
-                    if production.product_id.id in products.keys():
-                        products[production.product_id.id]['product_qty'] += \
-                            production.product_qty
-                    else:
-                        products[production.product_id.id] = {
-                            'product_name': production.product_id.name,
-                            'product_qty': production.product_qty,
-                            'product_code': line.product_id.default_code,
-                        }
-            for cut_d in cut_detail:
-                cut_detail[cut_d] = sorted(cut_detail[cut_d],
-                                           key=lambda cut: cut['long'])
-                cut_detail[cut_d] = sorted(cut_detail[cut_d],
-                                           key=lambda cut: cut['width'])
-                cut_detail[cut_d] = sorted(cut_detail[cut_d],
-                                           key=lambda cut: cut[
-                                           'caliber'].key_caliber)
-                cut_detail[cut_d] = sorted(cut_detail[cut_d],
-                                           key=lambda cut: cut['name'])
+
+                for product in products.keys():
+                    for prod_line in products[product]['cut_line'].keys():
+                        products[product]['cut_line'][prod_line] = sorted(
+                            products[product]['cut_line'][prod_line],
+                            key=lambda cut: cut['long'])
+                        products[product]['cut_line'][prod_line] = sorted(
+                            products[product]['cut_line'][prod_line],
+                            key=lambda cut: cut['width'])
+                        products[product]['cut_line'][prod_line] = sorted(
+                            products[product]['cut_line'][prod_line],
+                            key=lambda cut: cut['caliber'].key_caliber)
+                        products[product]['cut_line'][prod_line] = sorted(
+                            products[product]['cut_line'][prod_line],
+                            key=lambda cut: cut['name'])
 
             docs.append({
-                'name': doc.name,
-                'folio': doc.folio,
+                'name': seg.name,
+                'folio': seg.folio,
                 'products': products,
-                'cut_line': cut_line,
-                'cut_detail': cut_detail,
             })
 
         docargs = {
@@ -82,6 +82,6 @@ class ParticularReport(models.AbstractModel):
             'doc_model': report.model,
             'docs': docs,
         }
+
         return report_obj.render(
-            'mrp_segment.report_cut_order',
-            docargs)
+            'mrp_segment.report_cut_order', docargs)

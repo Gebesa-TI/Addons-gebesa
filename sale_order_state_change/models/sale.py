@@ -47,11 +47,19 @@ class SaleOrder(models.Model):
                                   'partially_available', 'assigned']:
                     pick.do_unreserve()
                     moves = ''
+                    cancel_pick = True
                     for move in pick.move_lines:
-                        moves += str(move.id) + ','
-                    moves = moves[:-1]
-                    self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
-                                    WHERE id in (%s) """ % (moves))
+                        if move.state not in ('done'):
+                            moves += str(move.id) + ','
+                        else:
+                            cancel_pick = False
+                    if moves != '':
+                        moves = moves[:-1]
+                        self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
+                                        WHERE id in (%s) """ % (moves))
+                if cancel_pick:
+                    self.env.cr.execute("""UPDATE stock_picking SET state = 'cancel'
+                                    WHERE id in (%s) """ % (pick.id))
                     # move_obj.browse(moves).action_cancel()
             production = prod_obj.search([('sale_id', '=', order.id)])
             for prod in production:
