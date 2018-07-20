@@ -19,19 +19,19 @@ class ParticularReport(models.AbstractModel):
         for production in mrp_production:
             products = {}
             product = production.product_id
+            if product.id in products.keys():
+                products[product.id][
+                    'product_qty'] += production.product_qty
+            else:
+                products[product.id] = {
+                    'product_name': product.name,
+                    'product_qty': production.product_qty,
+                    'product_code': product.default_code,
+                    'cut_line': {}
+                }
             bom_lines = production.bom_id.bom_line_ids
             for bom_line in bom_lines:
                 for bom_line_det in bom_line.bom_line_detail_ids:
-                    if product.id in products.keys():
-                            products[product.id][
-                                'product_qty'] += production.product_qty
-                    else:
-                        products[product.id] = {
-                            'product_name': product.name,
-                            'product_qty': production.product_qty,
-                            'product_code': product.default_code,
-                            'cut_line': {}
-                        }
                     prod_line = bom_line_det.production_line_id.description
                     if prod_line not in products[
                             product.id]['cut_line'].keys():
