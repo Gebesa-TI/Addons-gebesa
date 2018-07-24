@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    	<report
+            id="cut_order_production_consolidado"
+            model="mrp.production"
+            string="Cut order consolidated"
+            report_type="qweb-pdf"
+            name="mrp_segment.report_cut_order_production_consolidado"
+            file="mrp_segment.report_cut_order_production_consolidado"
+        />
+        <template id="report_cut_order_production_consolidado">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="mrp_segment.report_cut_order_document"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>
