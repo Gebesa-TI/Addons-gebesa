@@ -44,7 +44,8 @@
         "report/manufacturing_order_production.xml",
         "report/cut_order.xml",
         "report/cut_order2.xml",
-        "report/cut_order_production.xml"
+        "report/cut_order_production.xml",
+        "report/cut_order_production_consolidado.xml",
     ],
     "demo": [
     ],
