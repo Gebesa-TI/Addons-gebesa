@@ -166,6 +166,22 @@ class MrpShipment(models.Model):
                         raise UserError(
                             _('The lines of order %s have no city.') % (
                                 sale_order_id.name))
+                    if not line.street:
+                        raise UserError(
+                            _('The lines of order %s have no street.') % (
+                                sale_order_id.name))
+                    if not line.state_id.name:
+                        raise UserError(
+                            _('The lines of order %s have no state.') % (
+                                sale_order_id.name))
+                    if not line.country_id.name:
+                        raise UserError(
+                            _('The lines of order %s have no country.') % (
+                                sale_order_id.name))
+                    if not line.partner_id.name:
+                        raise UserError(
+                            _('The lines of order %s have no partner.') % (
+                                sale_order_id.name))
                     concatenate += line.partner_id.name + ';' +\
                         line.country_id.name + ';' + line.state_id.name +\
                         ';' + line.city + ';' + line.street + ' '
