@@ -24,7 +24,7 @@ class StockMove(models.Model):
 
     @api.multi
     def action_cancel(self):
-        result = super(StockMove, self).action_done()
+        result = super(StockMove, self).action_cancel()
         for move in self:
             if move.production_id and move.production_id.segment_line_ids:
                 production = move.production_id
