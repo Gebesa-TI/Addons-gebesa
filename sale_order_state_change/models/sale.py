@@ -37,46 +37,83 @@ class SaleOrder(models.Model):
 
     @api.multi
     def all_cancel(self):
-        # move_obj = self.env['stock.move']
         prod_obj = self.env['mrp.production']
         proc_obj = self.env['procurement.order']
-        # purchase_obj = self.env['purchase.order']
+
         for order in self:
-            for pick in order.picking_ids:
-                if pick.state in ['draft', 'waiting', 'confirmed',
-                                  'partially_available', 'assigned']:
-                    pick.do_unreserve()
-                    moves = ''
-                    cancel_pick = True
-                    for move in pick.move_lines:
+            production = prod_obj.search([('sale_id', '=', order.id)])
+            list_prod_ids = []
+            list_prod_ids = []
+            for prod in production:
+                if prod.state in ['draft', 'confirmed']:
+                    self.env.cr.execute("""UPDATE mrp_production SET state = 'cancel'
+                                    WHERE id = %s """ % (prod.id))
+                    for move in prod.move_lines:
                         if move.state not in ('done'):
-                            moves += str(move.id) + ','
-                        else:
-                            cancel_pick = False
-                    if moves != '':
-                        moves = moves[:-1]
+                            self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
+                                         WHERE id in (%s) """ % (move.id))
+                    for move in prod.move_created_ids:
+                        if move.state not in ('done'):
+                            self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
+                                         WHERE id in (%s) """ % (move.id))
+                    for picking in prod.picking_raw_material_ids:
+                        if picking.state in ['draft', 'waiting', 'confirmed',
+                                             'partially_available', 'assigned']:
+                            picking.do_unreserve()
+                            moves = ''
+                            cancel_pick = True
+                            for move in picking.move_lines:
+                                if move.state not in ('done'):
+                                    moves += str(move.id) + ','
+                                else:
+                                    cancel_pick = False
+                            if moves != '':
+                                moves = moves[:-1]
+                                self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
+                                                    WHERE id in (%s) """ % (moves))
+                        if cancel_pick:
+                            self.env.cr.execute("""UPDATE stock_picking SET state = 'cancel'
+                                                WHERE id in (%s) """ % (picking.id))
+                    if prod.move_prod_id.state not in ('done'):
+                        prod.move_prod_id.do_unreserve()
                         self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
+                                         WHERE id in (%s) """ % (prod.move_prod_id.id))
+                        move_done = prod.picking_move_prod_id.move_lines.filtered(lambda r: r.state == 'done')
+                        if not move_done:
+                            self.env.cr.execute("""UPDATE stock_picking SET state = 'cancel'
+                                                WHERE id in (%s) """ % (prod.picking_move_prod_id.id))
+                else:
+                    list_prod_ids.append(prod.id)
+                    for picking in prod.picking_raw_material_ids:
+                        list_prod_ids.append(picking.id)
+                    for picking in prod.picking_move_prod_id:
+                        list_prod_ids.append(picking.id)
+            pickings = order.picking_ids.filtered(
+                lambda x: x.state not in ['done', 'cancel'] and
+                x.id not in list_prod_ids)
+            for picking in pickings:
+                picking.do_unreserve()
+                moves = ''
+                cancel_pick = True
+                for move in picking.move_lines:
+                    if move.state not in ('done'):
+                        moves += str(move.id) + ','
+                    else:
+                        cancel_pick = False
+                if moves != '':
+                    moves = moves[:-1]
+                    self.env.cr.execute("""UPDATE stock_move SET state = 'cancel'
                                         WHERE id in (%s) """ % (moves))
                 if cancel_pick:
                     self.env.cr.execute("""UPDATE stock_picking SET state = 'cancel'
-                                    WHERE id in (%s) """ % (pick.id))
-                    # move_obj.browse(moves).action_cancel()
-            production = prod_obj.search([('sale_id', '=', order.id)])
-            for prod in production:
-                if prod.state in ['draft', 'confirmed', 'ready']:
-                    self.env.cr.execute("""UPDATE mrp_production SET state = 'cancel'
-                                    WHERE id = %s """ % (prod.id))
-                    # prod.action_cancel()
-            procurement = proc_obj.search([('sale_id', '=', order.id)])
+                                        WHERE id in (%s) """ % (picking.id))
+            procurement = proc_obj.search([
+                ('sale_id', '=', order.id),
+                ('production_id', 'not in', list_prod_ids)])
             for proc in procurement:
                 if proc.state in ['confirmed', 'exception', 'running']:
                     self.env.cr.execute("""UPDATE procurement_order SET state = 'cancel'
-                                    WHERE id = %s """ % (proc.id))
-                    # proc.cancel()
-            # purchase = purchase_obj.search([('origin', 'like', order.name)])
-            # for purc in purchase:
-            #    if purc.state in ['draft']:
-            #        purc.button_cancel()
+                                        WHERE id = %s """ % (proc.id))
 
     @api.multi
     def action_closed(self):
@@ -98,20 +135,22 @@ class SaleOrder(models.Model):
         proc_obj = self.env['procurement.order']
         # purchase_obj = self.env['purchase.order']
         for order in self:
-            for pick in order.picking_ids:
-                if pick.state in ['done']:
-                    raise UserError(_("The sales order cannot be canceled. \
-                        Please close it"))
-            production = prod_obj.search([('sale_id', '=', order.id)])
-            for prod in production:
-                if prod.state in ['in_production', 'done']:
-                    raise UserError(_("The sales order cannot be canceled. \
-                        Please close it"))
-            procurement = proc_obj.search([('sale_id', '=', order.id)])
-            for proc in procurement:
-                if proc.state in ['done']:
-                    raise UserError(_("The sales order cannot be canceled. \
-                        Please close it"))
+            pickings = order.picking_ids.filtered(lambda x: x.state == 'done')
+            if pickings:
+                raise UserError(_("The sales order cannot be canceled. \
+                    Please close it"))
+            production = prod_obj.search([
+                ('sale_id', '=', order.id)]).filtered(lambda x: x.state in [
+                    'ready', 'in_production', 'done', 'transfer'])
+            if production:
+                raise UserError(_("The sales order cannot be canceled. \
+                    Please close it"))
+            procurement = proc_obj.search([
+                ('sale_id', '=', order.id)]).filtered(
+                lambda x: x.state == 'done')
+            if procurement:
+                raise UserError(_("The sales order cannot be canceled. \
+                    Please close it"))
             # purchase = purchase_obj.search([('origin', 'like', order.name)])
             # for purc in purchase:
             #    if purc.state not in ['draft']:
