@@ -20,8 +20,10 @@
 
     ],
     "data": [
+        'security/security.xml',
         'views/openacademy.xml',
         'views/partner.xml',
+        'reports/reports.xml',
 
     ],
     "demo": [
