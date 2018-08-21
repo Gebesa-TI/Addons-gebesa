@@ -7,7 +7,7 @@
     "version": "9.0.1.0.0",
     "category": "Uncategorized",
     "website": "https://odoo-community.org/",
-    "author": "<Deysy Mascorro, Odoo Community Association (OCA)",
+    "author": "<Esther cisneros, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
@@ -20,7 +20,9 @@
 
     ],
     "data": [
-        'views/openacademy.xml'
+        'views/openacademy.xml',
+        'views/partner.xml',
+
     ],
     "demo": [
 
