@@ -78,11 +78,11 @@
                                 <field name="instructor_id"/>
                                 <field name="active"/>
                             </group>
-                            <group string="Schedule">
+<!--                             <group string="Schedule">
                                 <field name="start_date"/>
                                 <field name="duration"/>
                                 <field name="seats"/>
-                            </group>
+                            </group> -->
                             <group>
                             <field name="name"/>
                             <field name="start_date"/>
@@ -121,12 +121,34 @@
                 </calendar>
             </field>
         </record>
+        <record model="ir.ui.view" id="session_gantt_view">
+            <field name="name">session.gantt</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <gantt string="Session Gantt" color="course_id"
+                       date_start="start_date" date_delay="hours"
+                       default_group_by='instructor_id'>
+                    <field name="name"/>
+                </gantt>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="openacademy_session_graph_view">
+            <field name="name">openacademy.session.graph</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <graph string="Participations by Courses">
+                    <field name="course_id"/>
+                    <field name="attendees_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
         <record model="ir.actions.act_window" id="session_list_action">
             <field name="name">Sessions</field>
             <field name="res_model">openacademy.session</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form,calendar</field>
-        </record>
+            <field name="view_mode">tree,form,calendar,gantt,graph</field>
+<!--             <field name="view_mode">tree,form,calendar,gantt</field>
+ -->        </record>
          <menuitem id="main_openacademy_menu" name="Open Academy"/>
         <menuitem id="openacademy_menu" name="Open Academy"
                   parent="main_openacademy_menu"/>
