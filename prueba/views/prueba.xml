@@ -11,5 +11,15 @@
             </xpath>   
             </field>
         </record>
+        <record model='ir.ui.view' id='partner_form_dealer'>
+            <field name='name'>prueba.respartner</field>
+            <field name='model'>res.partner</field>
+            <field name='inherit_id' ref='base.view_partner_form'/>
+            <field name='arch' type='xml'>
+            <xpath expr="//field[@name='fax']" position="after">
+                    <field name="carrera"/> 
+            </xpath>   
+            </field>
+        </record>
     </data>
 </openerp>

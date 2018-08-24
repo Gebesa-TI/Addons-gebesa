@@ -7,3 +7,10 @@ class AcountInvoice(models.Model):
 
 	dealer_id = fields.Many2one('res.partner', string="Comerciante")
     
+class ResPartner(models.Model):
+ 	_name = 'res.partner'
+ 	_inherit = 'res.partner'
+   		
+   	carrera = fields.Text(
+    		string='Carrera',
+    		)
