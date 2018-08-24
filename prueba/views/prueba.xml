@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model='ir.ui.view' id='invoice_form_dealer'>
+            <field name='name'>prueba.accountinvoice</field>
+            <field name='model'>account.invoice</field>
+            <field name='inherit_id' ref='account.invoice_form'/>
+            <field name='arch' type='xml'>
+            <xpath expr="//field[@name='date_invoice']" position="after">
+                    <field name="dealer_id"/> 
+            </xpath>   
+            </field>
+        </record>
+    </data>
+</openerp>
