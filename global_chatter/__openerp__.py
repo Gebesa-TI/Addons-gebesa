@@ -25,6 +25,7 @@
         'message_post_model',
         "mrp_shipment",
         "stock_batch_picking",
+        "project",
     ],
     "data": [
         "views/account_payment_view.xml",
