@@ -18,10 +18,13 @@
     "depends": [
         "base",
         "sale",
+        "mrp",
+
 
     ],
     "data": [
        'views/sale_order.xml',
+       'views/mrp_production.xml',
 
     ],
     "demo": [
