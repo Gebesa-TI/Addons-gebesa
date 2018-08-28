@@ -8,4 +8,5 @@ class SaleOrder(models.Model):
     _name = 'sale.order'
     _inherit = 'sale.order'
 
-    dealer_id = fields.Many2one('res.partner', string="Comerciante")
+
+    dealer_id = fields.Many2one('res.partner', string="Comerciante",)
