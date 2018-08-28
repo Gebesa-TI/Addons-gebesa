@@ -1,0 +1,8 @@
+<?xml version="1.0" encodigo="UTF-8"?>
+<openerp>
+	<data>
+		<record id="group_invoice_evidence_button_gebesa" model="res.groups">
+			<field name="name">Admin Evidencia Factura </field>
+		</record>
+	</data>
+</openerp>
