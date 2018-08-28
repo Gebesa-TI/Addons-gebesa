@@ -83,15 +83,15 @@
                             Estatus:&#160;&#160;<span t-esc="doc.state"/>
                         </div>
                         <div class="col-xs-12" style="margin-top: 15px;">
-                            <div class="col-xs-12" style="text-align:center;font-size:20pt">
+                            <div style="text-align:center;font-size:20pt">
                                 ///&#160;<span t-esc="ship"/>&#160;\\\
                             </div>
                             <t t-foreach="shipment[doc.id][ship]" t-as="partner">
-                                <div class="col-xs-12" style="text-align:center;margin-top:10px">
+                                <div style="text-align:center;margin-top:10px">
                                     <span t-esc="partner"/>
                                     <br />
                                     <t t-foreach="shipment[doc.id][ship][partner]" t-as="city">
-                                        <div class="col-xs-12" aling="center" style="text-align:center;margin-top:5px">
+                                        <div aling="center" style="text-align:center;margin-top:5px">
                                             <span t-esc="city"/>
                                             <t t-set="pedido" t-value="''"/>
                                             <t t-set="mts" t-value="0"/>
@@ -125,12 +125,13 @@
                                             <br />
                                             <table width="100%" class="mrp_shipment_table_detail">
                                                 <tr>
-                                                    <td width="20%">Codigo de Barras</td>
-                                                    <td width="15%">Clave</td>
-                                                    <td width="30%">Articulo</td>
-                                                    <td width="15%">Pedido</td>
-                                                    <td width="10%">Embarca</td>
-                                                    <td width="10%">Cantidad</td>
+                                                    <td width="19%">Codigo de Barras</td>
+                                                    <td width="14%">Clave</td>
+                                                    <td width="15%">Tag Line</td>
+                                                    <td width="27%">Articulo</td>
+                                                    <td width="9%">Pedido</td>
+                                                    <td width="8%">Embarca</td>
+                                                    <td width="8%">Cantidad</td>
                                                 </tr>
                                                 <t t-foreach="shipment[doc.id][ship][partner][city]" t-as="line">
                                                     <t t-set="line" t-value="line.with_context({'lang':'es_MX'})"/>
@@ -141,6 +142,7 @@
                                                                 <span t-esc="line.product_id.default_code"/>
                                                             </td>
                                                             <td><span t-esc="line.product_id.default_code"/></td>
+                                                            <td><span t-esc="line.order_line_id.line_tag_number"/></td>
                                                             <td>
                                                                 <t t-if="line.product_id.individual_name">
                                                                     <span t-esc="line.product_id.individual_name"/>
@@ -161,6 +163,7 @@
                                                                 <span t-esc="line.product_id.default_code"/>
                                                             </td>
                                                             <td><span t-esc="line.product_id.default_code"/></td>
+                                                            <td><span t-esc="line.order_line_id.line_tag_number"/></td>
                                                             <td>
                                                                 <t t-if="line.product_id.individual_name">
                                                                     <span t-esc="line.product_id.individual_name"/>
@@ -182,6 +185,7 @@
                                                                     <span t-esc="bom_line.product_id.default_code"/>
                                                                 </td>
                                                                 <td><span t-esc="bom_line.product_id.default_code"/></td>
+                                                                <td><span t-esc="line.order_line_id.line_tag_number"/></td>
                                                                 <td>
                                                                     <t t-if="bom_line.product_id.individual_name">
                                                                         <span t-esc="bom_line.product_id.individual_name"/>
