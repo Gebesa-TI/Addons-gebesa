@@ -10,7 +10,6 @@
                 <field name="dealer_id" domain="[('parent_id', '=', partner_id)]"/> 
             </xpath>   
             </field>
-
         </record> 
     </data>
 </openerp>

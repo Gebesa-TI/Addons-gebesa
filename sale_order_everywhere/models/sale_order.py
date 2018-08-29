@@ -28,13 +28,14 @@ class SaleOrder(models.Model):
                              'AND pg.id = po.group_id', (order.id, order.id,))
             self._cr.execute('UPDATE mrp_production mp SET sale_id = %s, '
                              'partner_id = %s, client_order_ref = %s, '
-                             'warehouse_id = %s, city_shipping = %s '
+                             'warehouse_id = %s, city_shipping = %s, '
+                             'dealer_id = %s'
                              'FROM procurement_group pg '
                              'join procurement_order po on pg.id = po.group_id '
                              'WHERE pg.sale_id = %s AND po.production_id = mp.id',
                              (order.id, order.partner_id.id, order.client_order_ref,
                               order.warehouse_id.id, order.partner_shipping_id.city,
-                              order.id,))
+                              order.dealer_id.id,order.id,))
             self._cr.execute('UPDATE stock_move sm SET sale_id = %s '
                              'FROM procurement_group pg '
                              'WHERE pg.sale_id = %s AND pg.id = sm.group_id',
