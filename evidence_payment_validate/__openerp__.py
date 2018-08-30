@@ -2,8 +2,8 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Sale Order Dealer",
-    "summary": "Sale Order Dealer",
+    "name": "Evidence Payment Validate",
+    "summary": "Evidence Payment Validate",
     "version": "9.0.1.0.0",
     "category": "Uncategorized",
     "website": "https://odoo-community.org/",
@@ -17,14 +17,13 @@
     },
     "depends": [
         "base",
-        "sale",
-        "mrp",
-
+        "account",
 
     ],
     "data": [
-       'views/sale_order.xml',
-       'views/mrp_production.xml',
+        "security/security.xml",
+        "views/account_invoice_view.xml",
+        "wizards/account_invoice_wizard_evi.xml",
 
     ],
     "demo": [
