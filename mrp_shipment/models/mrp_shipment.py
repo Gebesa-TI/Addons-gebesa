@@ -118,6 +118,27 @@ class MrpShipment(models.Model):
         return super(MrpShipment, self).unlink()
 
     @api.multi
+    def write(self, vals):
+        res = super(MrpShipment, self).write(vals)
+        for ship in self:
+            for sale in ship.mapped('line_ids').mapped('sale_order_id').mapped('id'):
+                self._cr.execute(
+                    """SELECT so.id, so.name
+                        FROM pedidos_vinculados_sale_order_rel AS pvsor
+                        JOIN pedidos_vinculados AS pv ON pv.id = pvsor.pedidos_vinculados_id
+                        JOIN pedidos_vinculados_sale_order_rel AS pvsor2 ON pv.id = pvsor2.pedidos_vinculados_id
+                        JOIN sale_order AS so ON so.id = pvsor2.sale_order_id
+                        WHERE pv.activo = true AND pvsor.sale_order_id = %s AND pvsor.sale_order_id != so.id""",
+                    ([sale]))
+                if self._cr.rowcount:
+                    pedidos_vinculados = self._cr.fetchall()
+                    for ped_vin in pedidos_vinculados:
+                        if ped_vin[0] not in ship.mapped('line_ids').mapped('sale_order_id').mapped('id'):
+                            raise UserError(
+                                _('You need to add the Order %s, due is Linked to another order present in this shipment') % (ped_vin[1]))
+        return res
+
+    @api.multi
     def prepare_shipment(self):
         return self.write({'state': 'confirm'})
 
@@ -198,11 +219,11 @@ class MrpShipment(models.Model):
                         str(line.price_unit) + '|'
                 for a in ship.line_ids:
                     new = a.sale_order_id.name
-                    if not new in ordenes:
+                    if new not in ordenes:
                         ordenes.append(new)
             if add:
                 for op in add:
-                    if not op in ordenes:
+                    if op not in ordenes:
                         raise UserError(
                             _('You need to add the Order %s, due is Linked to another order present in this shipment') % (op))
             ship.state = 'done'

@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import _, api, fields, models
+from openerp.exceptions import UserError
 
 
 class MrpShipmentSaleOrder(models.TransientModel):
@@ -29,6 +30,22 @@ class MrpShipmentSaleOrder(models.TransientModel):
         for shipment_sale in self:
             for sale in shipment_sale.sale_ids:
                 if sale.state in ("done", "sale"):
+                    # PEDIDOS VINCULADOS
+                    self._cr.execute(
+                        """SELECT so.id, so.name
+                            FROM pedidos_vinculados_sale_order_rel AS pvsor
+                            JOIN pedidos_vinculados AS pv ON pv.id = pvsor.pedidos_vinculados_id
+                            JOIN pedidos_vinculados_sale_order_rel AS pvsor2 ON pv.id = pvsor2.pedidos_vinculados_id
+                            JOIN sale_order AS so ON so.id = pvsor2.sale_order_id
+                            WHERE pv.activo = true AND pvsor.sale_order_id = %s AND pvsor.sale_order_id != so.id""",
+                        ([sale.id]))
+                    if self._cr.rowcount:
+                        pedidos_vinculados = self._cr.fetchall()
+                        for ped_vin in pedidos_vinculados:
+                            if ped_vin[0] not in sale_id and ped_vin[0] not in shipment_sale.mapped('sale_ids').mapped('id'):
+                                raise UserError(
+                                    _('You need to add the Order %s, due is Linked to another order present in this shipment') % (ped_vin[1]))
+                    # FIN PEDIDOS VINCULADOS
                     for line in sale.order_line:
                         if line.id not in order_line_id:
                             if line.missing_quantity > 0:
