@@ -16,13 +16,17 @@ class MrpBomLineMassiveReplacement(models.TransientModel):
         'product.product',
         string='New product',
     )
+    limit = fields.Integer(
+        string='Limite',
+    )
 
     @api.multi
     def process(self):
         bom_line_obj = self.env['mrp.bom.line']
         for replacement in self:
             bom_line = bom_line_obj.search(
-                [('product_id', '=', replacement.product_id.id)])
+                [('product_id', '=', replacement.product_id.id)],
+                limit=replacement.limit)
             done_ids = []
             for line in bom_line:
                 line.product_id = replacement.new_product_id.id
