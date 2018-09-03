@@ -24,9 +24,13 @@ class MrpBomLineMassiveReplacement(models.TransientModel):
     def process(self):
         bom_line_obj = self.env['mrp.bom.line']
         for replacement in self:
-            bom_line = bom_line_obj.search(
-                [('product_id', '=', replacement.product_id.id)],
-                limit=replacement.limit)
+            if replacement.limit > 0:
+                bom_line = bom_line_obj.search(
+                    [('product_id', '=', replacement.product_id.id)],
+                    limit=replacement.limit)
+            else:
+                bom_line = bom_line_obj.search(
+                    [('product_id', '=', replacement.product_id.id)])
             done_ids = []
             for line in bom_line:
                 line.product_id = replacement.new_product_id.id
