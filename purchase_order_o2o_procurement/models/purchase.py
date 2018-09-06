@@ -80,15 +80,15 @@ class ProcurementOrder(models.Model):
                 vals = procurement._prepare_purchase_order(partner)
                 po = self.env['purchase.order'].create(vals)
                 cache[domain] = po
-            # elif not po.origin or procurement.origin not in po.origin.split(', '):
-            #     # Keep track of all procurements
-            #     if po.origin:
-            #         if procurement.origin:
-            #             po.write({'origin': po.origin + ', ' + procurement.origin})
-            #         else:
-            #             po.write({'origin': po.origin})
-            #     else:
-            #         po.write({'origin': procurement.origin})
+            elif not po.origin or procurement.origin not in po.origin.split(', '):
+                # Keep track of all procurements
+                if po.origin:
+                    if procurement.origin:
+                        po.write({'origin': po.origin + ', ' + procurement.origin})
+                    else:
+                        po.write({'origin': po.origin})
+                else:
+                    po.write({'origin': procurement.origin})
             if po:
                 res += [procurement.id]
 
