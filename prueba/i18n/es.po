@@ -1,0 +1,226 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* prueba
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-03 22:01+0000\n"
+"PO-Revision-Date: 2018-09-03 22:01+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.status_course_wizard_form
+msgid "*Finalize the following courses?"
+msgstr "*Finaliza los siguientes cursos?"
+
+#. module: prueba
+#: model:res.groups,name:prueba.group_status_course_button_gebesa
+msgid "Admin Cursos Terminados "
+msgstr "Admin Cursos Terminados "
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.status_course_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: prueba
+#: model:ir.actions.act_window,name:prueba.course_prueba_list_action
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_course_id
+msgid "Course"
+msgstr "Curso"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.course_prueba_form_view
+msgid "Course Form"
+msgstr "Formulario del curso"
+
+#. module: prueba
+#: model:ir.ui.menu,name:prueba.courses_menu
+msgid "Courses"
+msgstr "Cursos"
+
+#. module: prueba
+#: model:ir.actions.act_window,help:prueba.course_prueba_list_action
+msgid "Create the first course"
+msgstr "Crear el primer curso"
+
+#. module: prueba
+#: model:ir.actions.act_window,help:prueba.session_prueba_list_action
+msgid "Create the first session"
+msgstr "Crea la primera sesión"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_create_uid
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_create_uid
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_create_date
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_create_date
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.course_prueba_form_view
+msgid "Cursos terminados"
+msgstr "Cursos terminados"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.course_prueba_form_view
+msgid "Description"
+msgstr "Descripción"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_display_name
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_display_name
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_duration
+msgid "Duration"
+msgstr "Duración"
+
+#. module: prueba
+#: model:ir.model.fields,help:prueba.field_session_prueba_duration
+msgid "Duration in days"
+msgstr "Duration in days"
+
+#. module: prueba
+#: code:addons/prueba/models/cursos.py:27
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_status_course
+#, python-format
+msgid "Estatus del curso"
+msgstr "Estatus del curso"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.status_course_wizard_form
+msgid "Finalize"
+msgstr "finalizar"
+
+#. module: prueba
+#: code:addons/prueba/models/cursos.py:25
+#: selection:curso.prueba,status_course:0
+#, python-format
+msgid "Finalized"
+msgstr "finalizado"
+
+#. module: prueba
+#: model:ir.actions.act_window,name:prueba.action_status_course_wizard
+#: model:ir.ui.view,arch_db:prueba.status_course_wizard_form
+msgid "Finished Courses"
+msgstr "Cursos terminados"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_id
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_id
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba___last_update
+#: model:ir.model.fields,field_description:prueba.field_session_prueba___last_update
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_write_uid
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_write_uid
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_write_date
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_write_date
+#: model:ir.model.fields,field_description:prueba.field_status_course_wizard_write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizacion en"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_name
+msgid "Nombre de Curso"
+msgstr "Nombre de Curso"
+
+#. module: prueba
+#: code:addons/prueba/models/cursos.py:26
+#: selection:curso.prueba,status_course:0
+#, python-format
+msgid "Not Finalized"
+msgstr "No finalizado"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.session_prueba_form_view
+msgid "Programar Sesion"
+msgstr "Programar Sesion"
+
+#. module: prueba
+#: model:ir.ui.menu,name:prueba.main_prueba_menu
+#: model:ir.ui.menu,name:prueba.prueba_menu
+msgid "Prueba"
+msgstr "Prueba"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_responsible_id
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: prueba
+#: model:ir.actions.act_window,name:prueba.session_prueba_list_action
+#: model:ir.ui.menu,name:prueba.session_menu
+msgid "Session"
+msgstr "Sesión"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.session_prueba_form_view
+msgid "Session Form"
+msgstr "Formulario de sesión"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_session_prueba_start_date
+msgid "Start date"
+msgstr "Fecha inicial"
+
+#. module: prueba
+#: model:ir.model,name:prueba.model_curso_prueba
+msgid "curso"
+msgstr "curso"
+
+#. module: prueba
+#: model:ir.model.fields,field_description:prueba.field_curso_prueba_description
+msgid "description"
+msgstr "descripcion"
+
+#. module: prueba
+#: model:ir.ui.view,arch_db:prueba.status_course_wizard_form
+msgid "or"
+msgstr "en"
+
+#. module: prueba
+#: model:ir.model,name:prueba.model_session_prueba
+msgid "session.prueba"
+msgstr "sesion.prueba"
+
+#. module: prueba
+#: model:ir.model,name:prueba.model_status_course_wizard
+msgid "status.course.wizard"
+msgstr "status.course.wizard"
+

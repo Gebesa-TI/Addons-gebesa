@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>  
+        <record model='ir.ui.view' id='status_course_wizard_form'>
+            <field name='name'>status.course.wizard.form</field>
+            <field name='model'>status.course.wizard</field>
+            <field name='arch' type='xml'>
+                <form string='Finished Courses'>
+                    <p class="oe_grey">
+                        *Finalize the following courses?
+                    </p>
+                    <footer>
+                        <button string="Finalize" name="button_status_course_wizard" type="object" default_focus="1" class="btn-primary"/>
+                            or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_status_course_wizard"
+            multi="True"
+            key2="client_action_multi" name="Finished Courses"
+            res_model="status.course.wizard" src_model="curso.prueba"
+            view_mode="form" target="new" view_type="form"
+            groups="prueba.group_status_course_button_gebesa"/>
+    </data>
+</openerp>

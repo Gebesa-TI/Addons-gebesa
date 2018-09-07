@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>  
+    <data>  
         <record model='ir.ui.view' id='account_invoice_evidence_wizard_form'>
             <field name='name'>account.invoice.evidence.wizard.form</field>
             <field name='model'>account.invoice.wizard.evi</field>
