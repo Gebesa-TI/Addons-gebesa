@@ -18,11 +18,16 @@
     "depends": [
         "base",
         "hr",
+        'message_post_model',
 
     ],
     "data": [
-        "views/transfer_req.xml",
-       
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "views/transfer_requirements.xml",
+        "views/transfer_requirements2.xml",
+        "views/trasnfer_requirements_secuence.xml",
+
     ],
     "demo": [
 

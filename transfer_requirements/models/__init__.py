@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from . import transfer_req
+from . import transfer_requirements
