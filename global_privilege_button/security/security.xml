@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
+    <data noupdate="1">
         <record id="group_inactivate_product" model="res.groups">
             <field name="name">Product Inactive Button</field>
         </record>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
+    <data noupdate="1">
         <record id="module_logistic" model="ir.module.category">
             <field name="name">Logistics</field>
             <field name="description">User:This user has limitations to read.Manager:The user will have an access to the Logistics data and configurations</field>
