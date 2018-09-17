@@ -21,5 +21,29 @@
                 </xpath> -->
             </field>
         </record>
+
+        <record model='ir.ui.view' id='product_normal_form_view'>
+            <field name='name'>product.product.form</field>
+            <field name='model'>product.product</field>
+            <field name='inherit_id' ref="product.product_normal_form_view"/>
+            <field name='arch' type='xml'>
+                <field name="item_ids" position="replace">
+                    <field name="item_ids" widget="many2many">
+                        <tree string="Pricelist Items">
+                            <field name="pricelist_id" string="Pricelist"/>
+                            <field name="min_quantity"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="price" string="Price"/>
+                            <!--field name="base" invisible="1"/>
+                            <field name="sequence" invisible="1"/>
+                            <field name="price_discount" invisible="1"/-->
+                            <field name="applied_on"/>
+                            <field name="compute_price"/>
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
     </data>
 </openerp>
