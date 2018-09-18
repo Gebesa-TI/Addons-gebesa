@@ -10,3 +10,6 @@ class SaleOrder(models.Model):
 
 
     dealer_id = fields.Many2one('res.partner', string="Comerciante",)
+    
+    order_replaced = fields.Many2one('sale.order', string="Pedido que sustituye",)
+    
