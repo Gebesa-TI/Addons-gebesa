@@ -25,12 +25,19 @@ class ProductProduct(models.Model):
 
     @api.one
     def write(self, vals):
+        bom_line_obj = self.env['mrp.bom.line']
         if not self.env.user.has_group(
                 'global_privilege_button.group_manager_product'):
             raise UserError(_('Error!\nYou do not have privileges to Modify'
                               ' Product(s).\nCheck with your'
                               ' System Administrator.'))
         if 'active' in vals.keys():
+            bom_line_ids = bom_line_obj.search([('product_id', '=', self.id)])
+            bom_ids = bom_line_ids.mapped('bom_id').filtered(
+                lambda x: x.active is True)
+            if vals.get('active') is False and len(bom_ids) > 0:
+                raise UserError(_('Error!\nNo puede Inactivar un Producto que'
+                                  ' se encuentra en listas de materiales activas.'))
             if vals.get('active') is False and self.qty_available != 0:
                 raise UserError(_('Error!\nNo puede Inactivar un Producto con'
                                   ' existencia en el Sistema.'))
