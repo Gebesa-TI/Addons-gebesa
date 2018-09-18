@@ -24,7 +24,7 @@
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
-        "views/transfer_requirements.xml",
+        # "views/transfer_requirements.xml",
         "views/transfer_requirements2.xml",
         "views/trasnfer_requirements_secuence.xml",
 
