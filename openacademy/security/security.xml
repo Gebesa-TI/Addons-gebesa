@@ -1,7 +1,0 @@
-<openerp>
-    <data>
-        <record id="group_manager" model="res.groups">
-            <field name="name">TransferRequirements / Manager</field>
-        </record>
-    </data>
-</openerp

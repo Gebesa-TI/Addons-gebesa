@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-	<data>
-		<record id="group_status_course_button_gebesa" model="res.groups">
-			<field name="name">Admin Cursos Terminados </field>
-		</record>
-	</data>
-</openerp>
