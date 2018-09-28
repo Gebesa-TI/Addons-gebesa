@@ -18,6 +18,7 @@
     "depends": [
         "base",
         "account",
+        "account_invoice_sale_data",
 
     ],
     "data": [
