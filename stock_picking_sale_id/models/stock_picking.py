@@ -22,3 +22,7 @@ class StockPicking(models.Model):
         string='Customer ref',
         store=True,
     )
+    
+    sale_cost_id = fields.Many2one('sale.order',
+        string=("Costo pertenece a pedido"),
+    )
