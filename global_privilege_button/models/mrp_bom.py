@@ -45,3 +45,12 @@ class MrpBom(models.Model):
             rec.active = False
 
         return True
+
+    @api.multi
+    def active_button_mrp_bom(self):
+        for rec in self:
+            if rec.active is False:
+                active = True
+            rec.active = active
+
+        return True
