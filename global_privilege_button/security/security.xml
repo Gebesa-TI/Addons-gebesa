@@ -22,6 +22,9 @@
         <record id="group_manager_inactive_mrp_bom" model="res.groups">
             <field name="name">Manager Inactive MRP BOM</field>
         </record>
+        <record id="group_manager_active_mrp_bom" model="res.groups">
+            <field name="name">Administrador Activar MRP BOM</field>
+        </record>
         <record id="group_unreserve_moves" model="res.groups">
             <field name="name">Unreserve Moves</field>
         </record>

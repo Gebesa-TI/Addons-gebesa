@@ -8,6 +8,7 @@
             <field name='arch' type='xml'>
                 <xpath expr="//button[@name='print_wizard']" postition='after'>
                     <button name="inactive_button_mrp_bom" string="Inactive BOM" type="object" icon="fa-ban" groups="global_privilege_button.group_manager_inactive_mrp_bom" attrs="{'invisible': [('active', '=', False)]}"/>
+                    <button name="active_button_mrp_bom" string="Activar BOM" type="object" icon="fa-check-circle" groups="global_privilege_button.group_manager_active_mrp_bom" attrs="{'invisible': [('active', '=', True)]}"/>
                 </xpath>
             </field>
         </record>
