@@ -10,6 +10,7 @@
         			<field name='sale_id' readonly="True"/>
                     <field name='cust_ven_id' readonly="True"/>
                     <field name='client_order_ref' readonly="True"/>
+                    <field name="sale_cost_id"/>
         		</field>
         	</field>
         </record>
