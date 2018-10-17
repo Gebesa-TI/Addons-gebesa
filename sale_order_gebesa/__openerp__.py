@@ -19,12 +19,16 @@
         "base", "stock",
         "stock_warehouse_analytic_id",
         "product_product_data_validator",
+        "product",
+
     ],
     "data": [
         "security/security.xml",
         "views/sale_order.xml",
         "views/account_analytic_account_view.xml",
-        "views/res_partner_view.xml"
+        "views/res_partner_view.xml",
+        "views/product_product_sale.xml",
+
     ],
     "demo": [
     ],
