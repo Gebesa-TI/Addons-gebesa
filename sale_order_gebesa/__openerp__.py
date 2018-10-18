@@ -20,6 +20,7 @@
         "stock_warehouse_analytic_id",
         "product_product_data_validator",
         "product",
+        "sale_stock",
 
     ],
     "data": [
