@@ -144,5 +144,15 @@
         		</xpath>
         	</field>
         </record>
+        <record model='ir.ui.view' id='view_sale_orders_warehouse'>
+            <field name='name'>view.sale.orders.warehouse</field>
+            <field name='model'>sale.order</field>
+            <field name='inherit_id' ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name='arch' type='xml'>
+                 <xpath expr="//group[@name='sale_shipping']/field[@name='warehouse_id']" position="replace">
+                    <field name="warehouse_id" groups="system_administrator.group_system_administrator_gebesa"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>

@@ -4,7 +4,7 @@
 
 from datetime import timedelta
 from openerp import _, api, fields, models
-from openerp.exceptions import UserError, ValidationError
+from openerp.exceptions import UserError
 
 
 class AccountInvoice(models.Model):
@@ -21,12 +21,17 @@ class AccountInvoice(models.Model):
         string=_("Cancellation Date"),
     )
 
+    number_cancel = fields.Char(
+        string=("Nombre de la factura cancelada"),
+    )
+
     @api.multi
     def action_cancel(self):
         for inv in self:
             if inv.id == inv.invoice_replaced.id:
                 raise UserError(_("Please select an invoice to substitute different to the invoice to be canceled"))
             inv.date_cancelled = fields.Date.today()
+            inv.number_cancel = inv.number
         return super(AccountInvoice, self).action_cancel()
 
     @api.model
@@ -57,7 +62,7 @@ class AccountInvoice(models.Model):
                     <td style="border-bottom: 1px solid silver;">%s</td>
                     <td align="right" style="border-bottom: 1px solid silver;">
                     %s</td></tr>
-            """ % (remp_date, inve.partner_id.name, inve.number, remp_rep)
+            """ % (remp_date, inve.partner_id.name, inve.number_cancel, remp_rep)
         mail_obj = self.env['mail.mail']
         body_mail = u"""
             <div summary="o_mail_notification" style="padding:0px; width:700px;
