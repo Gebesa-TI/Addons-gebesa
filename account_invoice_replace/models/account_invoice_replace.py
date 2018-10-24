@@ -42,6 +42,7 @@ class AccountInvoice(models.Model):
         date_cancel = dd - limit_date
         inv_ids = self.search([
             ('state', '=', ['cancel']),
+            ('company_id', '=', 1),
             ('type', '=', 'out_invoice'),
             ('date_cancelled', '=', date_cancel)])
         table = ''
