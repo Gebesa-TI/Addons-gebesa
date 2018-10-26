@@ -26,3 +26,13 @@ class ProductFamily(models.Model):
         'stock.warehouse',
         string=_('Warehouse'),
     )
+
+    parent_id = fields.Many2one(
+        'product.family',
+        string=_('Padre'),
+    )
+
+    analytic_id = fields.Many2one(
+        'account.analytic.account',
+        string=_('Analítica'),
+    )

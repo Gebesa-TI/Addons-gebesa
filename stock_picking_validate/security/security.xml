@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="group_button_stock_picking" model="res.groups">
+			<field name="name">Admin Stock Picking Validate</field>
+		</record>
+	</data>
+</openerp>
