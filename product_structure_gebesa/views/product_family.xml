@@ -8,6 +8,8 @@
         		<tree string='Product family'>
         			<field name='warehouse_id'/>
         			<field name='name'/>
+                    <field name='parent_id'/>
+                    <field name='analytic_id'/>
         		</tree>
         	</field>
         </record>
