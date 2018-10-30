@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
+    <data noupdate="1">
         <record id="group_aut_pagos_user" model="res.groups">
             <field name="name">Payment authorization user</field>
         </record>

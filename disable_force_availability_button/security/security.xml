@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
+    <data noupdate="1">
         <record id="group_force_availability" model="res.groups">
             <field name="name">Force Availability Button</field>
         </record>

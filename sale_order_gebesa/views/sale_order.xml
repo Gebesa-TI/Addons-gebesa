@@ -11,6 +11,9 @@
                 <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
                     <attribute name="attrs">{'invisible':['|', ('approve','in',('not_approved','suggested'))]}</attribute>
                 </xpath>
+                <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|', ('approve','in',('not_approved','suggested'))]}</attribute>
+                </xpath>
                 <xpath expr="//field[@name='state']" position="before">
                     <button name="approve_action" states="draft,sent" type="object" string="Approve"
                         attrs="{'invisible':['|', ('approve', 'in', ('approved','not_approved'))]}" groups="sale_order_gebesa.group_approve_button"/>
