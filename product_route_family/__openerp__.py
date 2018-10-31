@@ -21,8 +21,8 @@
 
     ],
     "data": [
-        "views/product_route_family.xml",
-
+        "views/stock_location_route.xml",
+        "views/sale_order.xml",
     ],
     "demo": [
     ],
