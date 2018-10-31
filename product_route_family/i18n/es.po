@@ -1,0 +1,37 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* product_route_family
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-30 18:50+0000\n"
+"PO-Revision-Date: 2018-10-30 18:50+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_route_family
+#: model:ir.model,name:product_route_family.model_stock_location_route
+msgid "Inventory Routes"
+msgstr "Rutas de inventario"
+
+#. module: product_route_family
+#: model:ir.model.fields,field_description:product_route_family.field_stock_location_route_preferred_for_family
+msgid "Preferente para familia"
+msgstr "Preferente para familia"
+
+#. module: product_route_family
+#: code:addons/product_route_family/models/product_route_family.py:13
+#, python-format
+msgid "Preferred for family"
+msgstr "Preferente para familia"
+
+#. module: product_route_family
+#: model:ir.model,name:product_route_family.model_product_family
+msgid "product.family"
+msgstr "producto.familia"
