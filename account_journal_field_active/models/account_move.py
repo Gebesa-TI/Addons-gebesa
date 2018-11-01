@@ -14,7 +14,7 @@ class AccountMove(models.Model):
         for move in self:
             journal = move.journal_id
             if journal.active is False:
-                raise UserError(_("The Journal %s cannot be used.") % (
+                raise UserError(_(u"The Journal %s cannot be used.") % (
                                 journal.name))
 
         return super(AccountMove, self).post()
