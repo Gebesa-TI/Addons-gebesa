@@ -19,6 +19,7 @@
         "base",
         "sale",
         "mrp",
+        "account_invoice_sale_data",
 
 
     ],
