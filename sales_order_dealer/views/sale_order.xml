@@ -11,5 +11,15 @@
             </xpath>   
             </field>
         </record>
+        <record model='ir.ui.view' id='sale_order_invoive_status'>
+            <field name='name'>sale.order.invoive_status</field>
+            <field name='model'>sale.order</field>
+            <field name='inherit_id' ref='sale.view_order_form'/>
+            <field name='arch' type='xml'>
+            <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                <field name="geb_invoice_status"/> 
+            </xpath>   
+            </field>
+        </record>
     </data>
 </openerp>
