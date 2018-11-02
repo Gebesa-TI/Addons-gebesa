@@ -8,7 +8,7 @@ from openerp import _, fields, models
 class StockLocationRoute(models.Model):
     _inherit = 'stock.location.route'
 
-    product_family_id = fields.Many2one(
+    family_ids = fields.Many2many(
         'product.family',
         string=_("Preferred for family"),
     )
