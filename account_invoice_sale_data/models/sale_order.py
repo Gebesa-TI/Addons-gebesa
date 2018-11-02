@@ -34,8 +34,9 @@ class SaleOrder(models.Model):
                 else:
                     geb_invoice_status = 'no_invoice'
                 for line in sale.order_line:
-                    qty += line.product_uom_qty
-                    qty_inv += line.qty_invoiced
+                    if line.product_uom_qty > 0:
+                        qty += line.product_uom_qty
+                        qty_inv += line.qty_invoiced
                 if qty_inv == 0 and not geb_invoice_status:
                     sale.geb_invoice_status = 'no_invoice'
                 elif qty_inv < qty and geb_invoice_status == 'no_invoice':
