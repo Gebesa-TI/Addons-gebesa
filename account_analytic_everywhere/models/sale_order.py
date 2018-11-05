@@ -19,6 +19,18 @@ class SaleOrder(models.Model):
             inv.journal_id = inv.sale_id.project_id.journal_sale_id
         return res
 
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        product_obj = self.env['product.product']
+        res = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+        product_id = product_obj.browse(int(res['product_id']))
+        analytic_id = product_id.family_id.analytic_id
+        if analytic_id:
+            res['account_analytic_id'] = analytic_id.id
+        return res
 
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"

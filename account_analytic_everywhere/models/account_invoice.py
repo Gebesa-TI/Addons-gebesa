@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import api, fields, models, _
+from openerp.exceptions import ValidationError
 
 
 class AccountInvoice(models.Model):
@@ -20,7 +21,8 @@ class AccountInvoice(models.Model):
             if inv.type in ('in_invoice', 'in_refund'):
                 continue
             for line in inv.invoice_line_ids:
-                line.account_analytic_id = inv.account_analytic_id.id
+                if not line.account_analytic_id:
+                    line.account_analytic_id = inv.account_analytic_id.id
         return res
 
     @api.model
@@ -60,3 +62,23 @@ class AccountInvoiceLine(models.Model):
         analytic = self.account_analytic_id
         super(AccountInvoiceLine, self)._set_additional_fields(invoice)
         self.account_analytic_id = analytic
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        res = super(AccountInvoiceLine, self)._onchange_product_id()
+        for line in self:
+            analytic_id = line.invoice_id.account_analytic_id.id
+            if line.product_id:
+                product_tmpl_id = line.product_id.product_tmpl_id
+                if product_tmpl_id.type != 'service':
+                    if not product_tmpl_id.family_id:
+                        raise ValidationError(_(
+                            "El producto %s no tiene familia asignada") %
+                            line.product_id.default_code)
+                    if not product_tmpl_id.family_id.analytic_id:
+                        raise ValidationError(_(
+                            "La familia %s no tiene asignada una cuenta analitica") %
+                            product_tmpl_id.family_id.name)
+                    analytic_id = product_tmpl_id.family_id.analytic_id.id
+            line.account_analytic_id = analytic_id
+        return res
