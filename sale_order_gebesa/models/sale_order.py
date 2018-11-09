@@ -232,12 +232,14 @@ class SaleOrder(models.Model):
                         _('The following field is not invalid:\nAnalytic Account'))
                 if not order.client_order_ref:
                     raise UserError(_('This Sale Order not has OC captured'))
-                # Comented toda vez que ya hay un modulo de 
+                # Comented toda vez que ya hay un modulo de
                 # PLM que considera productos cotizacion:
                 # for line in order.order_line:
                 #     if line.product_id.quotation_product:
                 #         raise UserError(_('The Product contains Quotation'))
-
+            if order.warehouse_id != order.project_id.warehouse_id:
+                raise UserError(
+                    ('No coincide la Analítica con el almacen seleccionado'))
         return super(SaleOrder, self).action_confirm()
 
     @api.multi
