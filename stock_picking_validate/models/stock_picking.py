@@ -15,7 +15,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def button_stock_picking(self):
-    	self.authorized = True
+        self.authorized = True
 
     @api.multi
     def do_new_transfer(self):
@@ -25,4 +25,8 @@ class StockPicking(models.Model):
             if origin == 'inventory' or destin == 'inventory':
                 if not self.authorized:
                     raise UserError(_("Missing authorization module to be validated"))
+                if not self.env.user.has_group(
+                        'stock_picking_validate.group_button_validate_adjustment'):
+                    raise UserError(
+                        _('Error!\nDoes not count on provilegios to validate this exit by adjustment.'))
         return super(StockPicking, self).do_new_transfer()
