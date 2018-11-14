@@ -9,6 +9,9 @@
                 <xpath expr="//button[@name='invoice_cancel']" position="after">
                     <button name="cancel_picking" states="cancel" string="Cancel Picking" type="object" icon="fa-ban" groups="account_invoice_stock_picking_id.group_invoice_cancel_picking"/>
                 </xpath>
+                <field name='move_id' position='after'>
+                    <field name='picking_id'/>
+                </field>
         		<field name='tax_line_ids' position='after'>
         			<field name='picking_ids2'/>
         		</field>
