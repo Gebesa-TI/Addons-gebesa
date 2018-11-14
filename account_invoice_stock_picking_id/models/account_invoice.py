@@ -15,17 +15,18 @@ class AccountInvoice(models.Model):
     _name = 'account.invoice'
     _inherit = 'account.invoice'
 
-    picking_id = fields.Many2one('stock.picking',
-                                 ondelete='restrict',
-                                 string=_("Related Picking"),
-                                 index=True,
-                                 readonly=True)
+    picking_ids2 = fields.Many2many(
+        'stock.picking',
+        ondelete='restrict',
+        string=_("Related Picking"),
+        index=True,
+        readonly=True)
 
     @api.multi
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
         for inv in self:
-            if not inv.sale_id and not inv.picking_id:
+            if not inv.sale_id and not inv.picking_ids2:
                 if not inv.prepayment_ok and inv.type in ['out_invoice']:
                     inv._create_pickings_and_procurements(None)
         return res
@@ -36,23 +37,32 @@ class AccountInvoice(models.Model):
         # procurement_obj = self.env['procurement.order']
         # proc_ids = []
         generate = False
-        for line in self.invoice_line_ids:
-            if line.product_id.type == 'product':
-                generate = True
+        if 'product' in self.invoice_line_ids.mapped(
+                'product_id').mapped('type'):
+            generate = True
 
         if generate:
-            for line in self.invoice_line_ids:
-                date_planned = self._get_date_planned(line)
+            pickings = []
+            warehouses = self.invoice_line_ids.mapped(
+                'account_analytic_id').mapped('warehouse_id')
+            for warehouse in warehouses:
+                picking_id = False
+                lines = self.invoice_line_ids.filtered(
+                    lambda r:
+                    r.account_analytic_id.warehouse_id.id == warehouse.id)
+                for line in lines:
+                    date_planned = self._get_date_planned(line)
 
-                if line.product_id:
-                    if line.product_id.type in ('product', 'consu'):
-                        if not picking_id:
-                            picking_id = picking_obj.create(
-                                self._prepare_order_picking(line))
-                        # move_id = move_obj.create(
-                        for move in self._prepare_order_line_move(
-                                line, picking_id, date_planned):
-                            move_obj.create(move)
+                    if line.product_id:
+                        if line.product_id.type in ('product', 'consu'):
+                            if not picking_id:
+                                picking_id = picking_obj.create(
+                                    self._prepare_order_picking(line))
+                                pickings.append(picking_id.id)
+                            # move_id = move_obj.create(
+                            for move in self._prepare_order_line_move(
+                                    line, picking_id, date_planned):
+                                move_obj.create(move)
                     # else:
                     #    move_id = False
 
@@ -63,23 +73,23 @@ class AccountInvoice(models.Model):
                     # line.procurement_id = proc_id
                     # self.ship_recreate(line, move_id, proc_id)
 
-        if picking_id:
-            for picking in picking_id:
-                picking.action_confirm()
-                for move in picking.move_lines:
-                    move.force_assign()
-                for pack in picking.pack_operation_ids:
-                    if pack.product_qty > 0:
-                        pack.write({'qty_done': pack.product_qty})
-                    else:
-                        pack.unlink()
-                picking.do_transfer()
+                if picking_id:
+                    for picking in picking_id:
+                        picking.action_confirm()
+                        for move in picking.move_lines:
+                            move.force_assign()
+                        for pack in picking.pack_operation_ids:
+                            if pack.product_qty > 0:
+                                pack.write({'qty_done': pack.product_qty})
+                            else:
+                                pack.unlink()
+                        picking.do_transfer()
 
         # for proc_id in proc_ids:
         #    proc_id.run()
 
         if picking_id:
-            self.picking_id = picking_id
+            self.picking_ids2 = pickings
         return True
 
     def _get_date_planned(self, line):
@@ -93,8 +103,8 @@ class AccountInvoice(models.Model):
         return date_planned
 
     def _prepare_order_picking(self, line):
-        picking_name = self.env['ir.sequence'].get('stock.picking')
-        warehouse_id = self.account_analytic_id.warehouse_id
+        # picking_name = self.env['ir.sequence'].get('stock.picking')
+        warehouse_id = line.account_analytic_id.warehouse_id
         move_type_obj = self.env['stock.move.type']
         location_obj = self.env['stock.location']
         move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
@@ -102,7 +112,7 @@ class AccountInvoice(models.Model):
             ('stock_warehouse_id', '=', warehouse_id.id),
             ('type_stock_loc', '=', 'fp')])
         return {
-            'name': picking_name,
+            # 'name': picking_name,
             'origin': self.name,
             'date': self.date_to_datetime(self.date_invoice),
             'type': 'out',
