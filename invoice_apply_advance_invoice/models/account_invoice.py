@@ -40,8 +40,17 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def action_move_create(self):
+        res = super(AccountInvoice, self).action_move_create()
         for inv in self:
-            if inv.advance_id:
+            if inv.prepayment_move_ids:
+                advance_invoice_ids = self.prepayment_move_ids.mapped(
+                    'line_ids').mapped('invoice_id')
+                l10n_mx_edi_origin = '07|'
+                for advance_invoice in advance_invoice_ids:
+                    advance_invoice.advance_applied = True
+                    l10n_mx_edi_origin += advance_invoice.cfdi_uuid + ','
+                inv.l10n_mx_edi_origin = l10n_mx_edi_origin[:-1]
+            elif inv.advance_id:
                 inv.advance_id.advance_applied = True
                 inv.l10n_mx_edi_origin = '07|' + inv.advance_id.cfdi_uuid
 
@@ -83,6 +92,4 @@ class AccountInvoice(models.Model):
 
             #     inv.advance_id.advance_applied = True
 
-        super(AccountInvoice, self).action_move_create()
-
-        return True
+        return res
