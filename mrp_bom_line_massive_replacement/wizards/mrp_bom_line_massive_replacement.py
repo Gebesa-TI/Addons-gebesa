@@ -24,12 +24,8 @@ class MrpBomLineMassiveReplacement(models.TransientModel):
 
     @api.multi
     def process(self):
-        _logger.warning(
-            _('GEB - Entrando al metodo'))
         bom_line_obj = self.env['mrp.bom.line']
         for replacement in self:
-            _logger.warning(
-                _('GEB - limite %s') % str(replacement.limit))
             if replacement.limit > 0:
                 bom_line = bom_line_obj.search(
                     [('product_id', '=', replacement.product_id.id)],
@@ -38,22 +34,17 @@ class MrpBomLineMassiveReplacement(models.TransientModel):
                 bom_line = bom_line_obj.search(
                     [('product_id', '=', replacement.product_id.id)])
             done_ids = []
-            _logger.warning(
-                _('GEB - num reemp %s') % str(len(bom_line)))
             for line in bom_line:
                 line.product_id = replacement.new_product_id.id
+
+                if line.product_id.standard_price == replacement.new_product_id.standard_price:
+                    continue
+
                 if line.bom_id.id in done_ids:
                     continue
-                _logger.warning(
-                    _('GEB - ACTUAL %s') % line.bom_id.product_id.name)
-                done_ids.append(line.bom_id.id)
 
-            _logger.warning(
-                _('GEB - Entrando revaluar'))
+                done_ids.append(line.bom_id.id)
 
             # Revaluacion
             for bom in done_ids:
                 self.env['mrp.bom'].browse(bom).action_reval()
-
-            _logger.warning(
-                _('GEB - termina de revaluar'))
