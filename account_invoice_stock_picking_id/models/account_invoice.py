@@ -22,6 +22,9 @@ class AccountInvoice(models.Model):
                                  readonly=True)
     picking_ids2 = fields.Many2many(
         'stock.picking',
+        'acc_invoice_picking_rel',
+        'invoice_id',
+        'picking_id',
         ondelete='restrict',
         string=_("Related Picking"),
         index=True,
