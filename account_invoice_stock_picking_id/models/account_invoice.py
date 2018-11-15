@@ -199,7 +199,7 @@ class AccountInvoice(models.Model):
     def _prepare_order_line_move(self, line, picking_id, date_planned):
         location_obj = self.env['stock.location']
         product_obj = self.env['product.product']
-        warehouse_id = self.account_analytic_id.warehouse_id
+        warehouse_id = line.account_analytic_id.warehouse_id
         location_id = location_obj.search([
             ('stock_warehouse_id', '=', warehouse_id.id),
             ('type_stock_loc', '=', 'fp')])
