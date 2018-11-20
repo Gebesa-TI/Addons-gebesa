@@ -2,8 +2,10 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from openerp import _, api, fields, models
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class MrpBomLineMassiveReplacement(models.TransientModel):
     _name = "mrp.bom.line.massive.replacement"
@@ -34,8 +36,13 @@ class MrpBomLineMassiveReplacement(models.TransientModel):
             done_ids = []
             for line in bom_line:
                 line.product_id = replacement.new_product_id.id
+
+                if line.product_id.standard_price == replacement.new_product_id.standard_price:
+                    continue
+
                 if line.bom_id.id in done_ids:
                     continue
+
                 done_ids.append(line.bom_id.id)
 
             # Revaluacion
