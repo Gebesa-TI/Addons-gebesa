@@ -16,7 +16,7 @@
                     <page string="Product classification">
                         <group>
                            <group>
-                                <field name='family_id'/>
+                                <field name='family_id' domain="[('analytic_id', '!=', False)]"/>
                                 <field name='group_id'/>
                            </group>
                            <group>
