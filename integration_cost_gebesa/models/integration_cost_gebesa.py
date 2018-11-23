@@ -187,6 +187,11 @@ class IntegrationCostGebesa(models.Model):
 
                         amount = line_inv.price_subtotal * factor / rate
 
+                        prodName = ''
+                        prodName = line_inv2.product_id.default_code + ' - ' line_inv2.product_id.name
+                        if line_inv2.product_id.individual_name:
+                            prodName = line_inv2.product_id.default_code + ' - ' line_inv2.product_id.individual_name
+
                         ctx.update({'check_move_validity': False})
                         vals = {
                             'move_id': am_id.id,
@@ -196,7 +201,7 @@ class IntegrationCostGebesa(models.Model):
                             'product_id': line_inv2.product_id.id,
                             'credit': amount,
                             'name': line_inv.product_id.name + ' ' +
-                            line_inv2.product_id.name,
+                            prodName,
                             'account_id': account_expense,
                             'analytic_account_id': int_cost.
                             account_analytic_id.id,
@@ -212,7 +217,7 @@ class IntegrationCostGebesa(models.Model):
                             'product_id': line_inv2.product_id.id,
                             'credit': 0.0,
                             'name': line_inv.product_id.name + ' ' +
-                            line_inv2.product_id.name,
+                            prodName,
                             'account_id': account_price_difference,
                             'analytic_account_id': int_cost.
                             account_analytic_id.id,
