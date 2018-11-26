@@ -35,4 +35,5 @@ class ProductFamily(models.Model):
     analytic_id = fields.Many2one(
         'account.analytic.account',
         string=_('Analítica'),
+        company_dependent=True,
     )
