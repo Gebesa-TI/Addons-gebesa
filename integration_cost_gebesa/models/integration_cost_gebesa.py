@@ -188,9 +188,9 @@ class IntegrationCostGebesa(models.Model):
                         amount = line_inv.price_subtotal * factor / rate
 
                         prodName = ''
-                        prodName = line_inv2.product_id.default_code + ' - ' line_inv2.product_id.name
+                        prodName = line_inv2.product_id.default_code + ' - ' + line_inv2.product_id.name
                         if line_inv2.product_id.individual_name:
-                            prodName = line_inv2.product_id.default_code + ' - ' line_inv2.product_id.individual_name
+                            prodName = line_inv2.product_id.default_code + ' - ' + line_inv2.product_id.individual_name
 
                         ctx.update({'check_move_validity': False})
                         vals = {
