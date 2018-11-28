@@ -17,5 +17,16 @@
         		</field>
         	</field>
         </record>
+
+        <record model='ir.ui.view' id='account_invoice_supplires_view_form'>
+            <field name='name'>account_invoice_view.form</field>
+            <field name='model'>account.invoice</field>
+            <field name='inherit_id' ref='account.invoice_supplier_form'/>
+            <field name='arch' type='xml'>
+                <xpath expr="//page[2]/group" position="after">
+                    <field name='picking_ids2'/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>

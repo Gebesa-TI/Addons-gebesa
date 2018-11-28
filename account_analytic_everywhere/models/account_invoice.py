@@ -68,17 +68,18 @@ class AccountInvoiceLine(models.Model):
         res = super(AccountInvoiceLine, self)._onchange_product_id()
         for line in self:
             analytic_id = line.invoice_id.account_analytic_id.id
-            if line.product_id:
-                product_tmpl_id = line.product_id.product_tmpl_id
-                if product_tmpl_id.type != 'service':
-                    if not product_tmpl_id.family_id:
-                        raise ValidationError(_(
-                            "El producto %s no tiene familia asignada") %
-                            line.product_id.default_code)
-                    if not product_tmpl_id.family_id.analytic_id:
-                        raise ValidationError(_(
-                            "La familia %s no tiene asignada una cuenta analitica") %
-                            product_tmpl_id.family_id.name)
-                    analytic_id = product_tmpl_id.family_id.analytic_id.id
+            if line.invoice_id.type in ('out_invoice', 'out_refund'):
+                if line.product_id:
+                    product_tmpl_id = line.product_id.product_tmpl_id
+                    if product_tmpl_id.type != 'service':
+                        if not product_tmpl_id.family_id:
+                            raise ValidationError(_(
+                                "El producto %s no tiene familia asignada") %
+                                line.product_id.default_code)
+                        if not product_tmpl_id.family_id.analytic_id:
+                            raise ValidationError(_(
+                                "La familia %s no tiene asignada una cuenta analitica") %
+                                product_tmpl_id.family_id.name)
+                        analytic_id = product_tmpl_id.family_id.analytic_id.id
             line.account_analytic_id = analytic_id
         return res
