@@ -33,7 +33,6 @@ class AccountInvoice(models.Model):
     @api.multi
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
-        import ipdb; ipdb.set_trace()
         for inv in self:
             if inv.type in ['out_invoice']:
                 if not inv.sale_id and not inv.picking_ids2:
