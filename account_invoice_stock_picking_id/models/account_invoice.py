@@ -167,9 +167,14 @@ class AccountInvoice(models.Model):
             account_analytic = self.account_analytic_id
             warehouse_id = account_analytic.warehouse_id
             location = self.partner_id.property_stock_supplier
-            location_dest = location_obj.search([
-                ('stock_warehouse_id', '=', warehouse_id.id),
-                ('type_stock_loc', '=', 'rm')])
+            if self.company_id.is_manufacturer:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'rm')])
+            else:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'fp')])
             partner = self.partner_id.id
             picking_type = warehouse_id.in_type_id.id
         return {
@@ -271,9 +276,14 @@ class AccountInvoice(models.Model):
             account_analytic = self.account_analytic_id
             warehouse_id = account_analytic.warehouse_id
             location = self.partner_id.property_stock_supplier
-            location_dest = location_obj.search([
-                ('stock_warehouse_id', '=', warehouse_id.id),
-                ('type_stock_loc', '=', 'rm')])
+            if self.company_id.is_manufacturer:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'rm')])
+            else:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'fp')])
             partner = self.partner_id.id
             # picking_type = warehouse_id.in_type_id.id
         # warehouse_id = line.account_analytic_id.warehouse_id
