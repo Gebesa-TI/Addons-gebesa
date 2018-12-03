@@ -31,6 +31,9 @@ class ParticularReport(models.AbstractModel):
                 fabricacion += line.mrp_production_id.name + ', '
                 line_id = line.product_id.line_id
                 group_id = line.product_id.group_id
+                product_nombre = line.product_id.name
+                if line.product_id.individual_name:
+                    product_nombre = line.product_id.individual_name
                 if line_id not in lines:
                     lines.append(line_id)
                     groups[line_id.id] = []
@@ -48,7 +51,7 @@ class ParticularReport(models.AbstractModel):
                     products[str(line_id.id) + '-' + str(group_id.id)].append({
                         'id': line.product_id.id,
                         'product_code': line.product_id.default_code,
-                        'product_name': line.product_id.name,
+                        'product_name': product_nombre,
                         'standard_cost': line.standard_cost,
                         'product_qty': line.product_qty,
                     })
@@ -61,6 +64,10 @@ class ParticularReport(models.AbstractModel):
             for prod_line in product_lines_ids:
                 line_id = prod_line.product_id.line_id
                 group_id = prod_line.product_id.group_id
+                prodline_nombre = prod_line.product_id.name
+                if prod_line.product_id.individual_name:
+                    prodline_nombre = prod_line.product_id.individual_name
+
                 if line_id not in mp_lines:
                     mp_lines.append(line_id)
                     mp_groups[line_id.id] = []
@@ -82,7 +89,7 @@ class ParticularReport(models.AbstractModel):
                             'id': prod_line.product_id.id,
                             'location': prod_line.location_id.name,
                             'product_code': prod_line.product_id.default_code,
-                            'product_name': prod_line.product_id.name,
+                            'product_name': prodline_nombre,
                             'standard_cost': prod_line.standard_cost,
                             'product_qty': prod_line.product_qty,
                             'uom': prod_line.product_uom.name,

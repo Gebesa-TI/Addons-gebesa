@@ -72,8 +72,9 @@
                                         <field name="mrp_production_id"/>
                                         <field name="state"/>
                                         <field name="sale_name"/>
-                                        <field name="product_code"/>
-                                        <field name="product_name"/>
+                                        <!--field name="product_code"/-->
+                                        <field name="product_id"/>
+                                        <!--field name="product_name"/-->
                                         <field name="standard_cost"/>
                                         <field name="product_weight"/>
                                         <field name="product_volume"/>
