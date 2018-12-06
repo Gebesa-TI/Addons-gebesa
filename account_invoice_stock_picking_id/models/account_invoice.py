@@ -262,6 +262,7 @@ class AccountInvoice(models.Model):
         move_type_obj = self.env['stock.move.type']
         product_obj = self.env['product.product']
         price_unit = False
+        is_manufacturer = self.company_id.is_manufacturer
         if type_move == 'out':
             move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
             account_analytic = line.account_analytic_id
@@ -277,7 +278,7 @@ class AccountInvoice(models.Model):
             account_analytic = self.account_analytic_id
             warehouse_id = account_analytic.warehouse_id
             location = self.partner_id.property_stock_supplier
-            if self.company_id.is_manufacturer:
+            if is_manufacturer:
                 location_dest = location_obj.search([
                     ('stock_warehouse_id', '=', warehouse_id.id),
                     ('type_stock_loc', '=', 'rm')])
@@ -313,7 +314,7 @@ class AccountInvoice(models.Model):
                     pp.default_code,
                     CAST(1.000000 AS numeric),
                     mb.id,
-                    CASE WHEN mb.type = 'phantom' AND %s = 'out' THEN TRUE ELSE FALSE END,
+                    CASE WHEN mb.type = 'phantom' AND %s = 'out' AND %s IS TRUE THEN TRUE ELSE FALSE END,
                     1
                 FROM product_product AS pp
                 LEFT JOIN mrp_bom AS mb ON pp.id = mb.product_id
@@ -329,10 +330,10 @@ class AccountInvoice(models.Model):
                 JOIN bom_detail AS bd ON mbl.bom_id = bd.id_bom
                 JOIN product_product AS pp ON mbl.product_id = pp.id
                 LEFT JOIN mrp_bom AS mb ON pp.id = mb.product_id
-                WHERE bd.phantom AND %s = 'out'
+                WHERE bd.phantom AND %s = 'out' AND %s IS TRUE
             )
             SELECT * FROM bom_detail WHERE phantom IS FALSE""", (
-                [type_move, line.product_id.id, type_move]))
+                [type_move, is_manufacturer, line.product_id.id, type_move, is_manufacturer]))
         res = []
         if self._cr.rowcount:
             products = self._cr.fetchall()
