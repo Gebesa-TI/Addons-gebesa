@@ -261,6 +261,7 @@ class AccountInvoice(models.Model):
         location_obj = self.env['stock.location']
         move_type_obj = self.env['stock.move.type']
         product_obj = self.env['product.product']
+        price_unit = False
         if type_move == 'out':
             move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
             account_analytic = line.account_analytic_id
@@ -285,6 +286,17 @@ class AccountInvoice(models.Model):
                     ('stock_warehouse_id', '=', warehouse_id.id),
                     ('type_stock_loc', '=', 'fp')])
             partner = self.partner_id.id
+            price_unit = line.price_unit
+            if line.invoice_line_tax_ids:
+                price_unit = line.invoice_line_tax_ids.with_context(
+                    round=False).compute_all(
+                    price_unit, currency=line.invoice_id.currency_id,
+                    quantity=1.0)['total_excluded']
+            if line.uom_id.id != line.product_id.uom_id.id:
+                price_unit *= line.uom_id.factor / line.product_id.uom_id.factor
+            if line.invoice_id.currency_id != line.invoice_id.company_id.currency_id:
+                price_unit = line.invoice_id.currency_id.compute(
+                    price_unit, line.invoice_id.company_id.currency_id, round=False)
             # picking_type = warehouse_id.in_type_id.id
         # warehouse_id = line.account_analytic_id.warehouse_id
         # location_id = location_obj.search([
@@ -326,6 +338,8 @@ class AccountInvoice(models.Model):
             products = self._cr.fetchall()
             for prod in products:
                 product = product_obj.browse([prod[0]])
+                if not price_unit:
+                    price_unit = product.standard_price or 0.0
                 move_dict = {
                     'name': line.name[:50],
                     'picking_id': picking_id.id,
@@ -343,7 +357,7 @@ class AccountInvoice(models.Model):
                     'invoice_line_id': line.id,
                     'tracking_id': False,
                     'company_id': self.company_id.id,
-                    'price_unit': product.standard_price or 0.0,
+                    'price_unit': price_unit,
                     'stock_move_type_id': move_type_id[0].id,
                 }
                 res.append(move_dict)
