@@ -13,6 +13,7 @@
             <field name="model">mrp.shipment</field>
             <field name="arch" type="xml">
                 <search string="Search Shipment">
+                    <field name="folio" string="Shipment"/>
                     <field name="reference" string="Shipment Reference"/>
                     <field name="date"/>
                     <group expand="0" string="Group By">
@@ -115,11 +116,23 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="mrp_shipment_calendar">
+            <field name="name">mrp.shipment.calendar</field>
+            <field name="model">mrp.shipment</field>
+            <field name="arch" type="xml">
+                <calendar string="Shipment" date_start="date" color="state">
+                    <field name="folio"/>
+                    <field name="reference"/>
+                    <field name="amount"/>
+                </calendar>
+            </field>
+        </record>
+
         <record id='action_shipment_form' model='ir.actions.act_window'>
             <field name='name'>Shipment</field>
             <field name='res_model'>mrp.shipment</field>
             <field name='view_type'>form</field>
-            <field name='view_mode'>tree,form</field>
+            <field name='view_mode'>tree,form,calendar</field>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to start a shipment.

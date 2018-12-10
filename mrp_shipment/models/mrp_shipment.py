@@ -12,6 +12,7 @@ class MrpShipment(models.Model):
     _name = 'mrp.shipment'
     _description = 'Shipment'
     _rec_name = 'folio'
+    _order = "folio desc"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     state = fields.Selection(
