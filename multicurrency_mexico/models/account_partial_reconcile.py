@@ -54,24 +54,28 @@ class AccountPartialReconcile(models.Model):
                         date=credit_move.date).compute(credit_move.balance, partial_rec.currency_id))
 
                 if debit_amount_currency > credit_amount_currency:
-                    rate = round(debit_move.debit / debit_amount_currency, 6)
+                    rate = round(abs(debit_move.debit / debit_amount_currency), 6)
                     credit = credit_move.credit
                     debit = credit_amount_currency * rate
+                    diff = debit - credit
+                    if diff > 0:
+                        aml_to_balance = debit_move
+                    elif diff < 0:
+                        aml_to_balance = credit_move
+                        partial_rec.amount += diff
                 else:
-                    rate = round(credit_move.debit / credit_amount_currency, 6)
+                    rate = round(abs(credit_move.credit / credit_amount_currency), 6)
                     credit = debit_amount_currency * rate
                     debit = debit_move.debit
-
-                diff = debit - credit
-                if diff > 0:
-                    aml_to_balance = debit_move
-                elif diff < 0:
-                    aml_to_balance = credit_move
+                    diff = debit - credit
+                    if diff > 0:
+                        aml_to_balance = debit_move
+                        partial_rec.amount -= diff
+                    elif diff < 0:
+                        aml_to_balance = credit_move
 
                 if not aml_to_balance:
                     continue
-
-                partial_rec.amount += diff
 
                 aml_id, partial_rec_id = partial_rec.create_exchange_rate_entry_partial(
                     aml_to_balance, diff, 0.00, currency, maxdate)
