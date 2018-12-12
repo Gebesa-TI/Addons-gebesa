@@ -22,6 +22,7 @@ class AccountPartialReconcile(models.Model):
         # gather all journal items involved in the reconciliation just created
         partial_rec_set = OrderedDict.fromkeys([x for x in res])
         maxdate = None
+        aml_to_balance = None
         currency_company = self.env.user.company_id.currency_id
         currency = list(partial_rec_set)[0].currency_id
         if currency_company != currency:
@@ -56,15 +57,24 @@ class AccountPartialReconcile(models.Model):
                     rate = round(debit_move.debit / debit_amount_currency, 6)
                     credit = credit_move.credit
                     debit = credit_amount_currency * rate
-                    aml_to_balance = credit_move
                 else:
                     rate = round(credit_move.debit / credit_amount_currency, 6)
                     credit = debit_amount_currency * rate
                     debit = debit_move.debit
+
+                diff = debit - credit
+                if diff > 0:
                     aml_to_balance = debit_move
+                elif diff < 0:
+                    aml_to_balance = credit_move
+
+                if not aml_to_balance:
+                    continue
+
+                partial_rec.amount += diff
 
                 aml_id, partial_rec_id = partial_rec.create_exchange_rate_entry_partial(
-                    aml_to_balance, debit - credit, 0.00, currency, maxdate)
+                    aml_to_balance, diff, 0.00, currency, maxdate)
         return res
 
     def create_exchange_rate_entry_partial(self, aml_to_fix, amount_diff, diff_in_currency, currency, move_date):
