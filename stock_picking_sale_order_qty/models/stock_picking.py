@@ -44,7 +44,7 @@ class StockPicking(models.Model):
             if not pick.sale_id:
                 continue
             if pick.sale_id.id in (1627, 1628, 1629, 2770, 859, 3140, 3342,
-                                   3430, 3597, 3588, 3584, 3579, 3909) or pick.sale_id.sale_picking_adm is False:
+                                   3430, 3597, 3588, 3584, 3579, 3909) or pick.sale_id.sale_picking_adm is True:
                 continue
             products = {}
             for line in pick.sale_id.order_line:
@@ -55,13 +55,6 @@ class StockPicking(models.Model):
                 ])
                 if bom.type == 'phantom':
                     continue
-                    # bom_product = self.count_product_bom_panthom(bom)
-                    # for bom_p in bom_product:
-                    #    qty = line.product_uom_qty * bom_product[bom_p]
-                    #    if bom_p in products.keys():
-                    #        products[bom_p] += qty
-                    #    else:
-                    #        products[bom_p] = qty
                 else:
                     qty = line.product_uom_qty
                     if line.product_id.id in products.keys():
@@ -71,22 +64,16 @@ class StockPicking(models.Model):
             for move in pick.move_lines_related:
                 if move.product_id.id in products.keys():
                     products[move.product_id.id] -= move.product_uom_qty
-                # else:
-                #    raise UserError(_('The BOM %s is not the same as when the \
-                #        order was captured') % (move.product_id.default_code))
             backorder = pick.backorder_id
             while backorder:
                 for move in backorder.move_lines_related:
                     if move.product_id.id in products.keys():
                         products[move.product_id.id] -= move.product_uom_qty
-                    # else:
-                    #    raise UserError(_('The BOM %s is not the same as when the \
-                    #        order was captured') % (
-                    #        move.product_id.default_code))
                 backorder = backorder.backorder_id
             for prod in products:
                 if products[prod] != 0:
                     product = product_obj.browse([prod])
-                    raise UserError(_('Missing %s %s') % (
-                        products[prod], product.name))
+                    # No borrar este código comentado, do not erase commented code below
+                    # raise UserError(_('Missing %s %s') % (
+                    #     products[prod], product.name))
         return super(StockPicking, self).do_new_transfer()
