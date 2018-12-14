@@ -134,7 +134,7 @@ class SaleOrder(models.Model):
           """ % (self.env.user.company_id.name, table)
         mail = mail_obj.create({
             'subject': 'Pedidos Cancelados y/o Cerrados',
-            'email_to': 'equipocompras@gebesa.com,sistemas@gebesa.com',
+            'email_to': 'equipocompras@gebesa.com,sistemas@gebesa.com,brandon.ramirez@gebesa.com,miguel.martinez@gebesa.com,jose.medina@gebesa.com,victor.campos@gebesa.com,elizabeth.valenzuela@gebesa.com,cristina.rodriguez@gebesa.com,julio.delarosa@gebesa.com',
             'headers': "{'Return-Path': u'odoo@gebesa.com'}",
             'body_html': body_mail,
             'auto_delete': True,
