@@ -44,7 +44,7 @@ class StockPicking(models.Model):
             if not pick.sale_id:
                 continue
             if pick.sale_id.id in (1627, 1628, 1629, 2770, 859, 3140, 3342,
-                                   3430, 3597, 3588, 3584, 3579, 3909) or pick.sale_id.sale_picking_adm is True:
+                                   3430, 3597, 3588, 3584, 3579, 3909) or pick.sale_id.sale_picking_adm is False:
                 continue
             products = {}
             for line in pick.sale_id.order_line:
