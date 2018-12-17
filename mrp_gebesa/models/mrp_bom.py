@@ -52,17 +52,22 @@ class MrpBom(models.Model):
                 raise UserError(_('Kit products should not have route production'))
             if self.product_tmpl_id:
                     self.product_tmpl_id.invoice_policy = 'order'
-
+        route_ids = []
+        manuf_ids = [29, 30, 31, 32]
         if 'product_tmpl_id' in values.keys():
             # te traes el objeto vacio
             template = self.env['product.template']
             # se construye el objeto, y los busca por medio del values
             val = template.browse(values['product_tmpl_id'])
             # condicion para la busquedan
-            for route in val.route_ids:
-                # Se le agrega el id como busqueda, cambia bd cambiarlo
-                if route.id == 6:
+            route_ids = val.mapped('route_ids').mapped('id')
+            if not any(x in manuf_ids for x in route_ids):
+                if 6 in route_ids:
                     raise UserError(_('This product is raw material'))
+
+            # for route in val.route_ids:
+            #     if route.id == 6:
+            #         raise UserError(_('This product is raw material'))
         else:
             val = self.product_tmpl_id
 
@@ -88,6 +93,8 @@ class MrpBom(models.Model):
         val = template.browse(vals['product_tmpl_id'])
         ware = ware_obj.browse(vals['warehouse_id'])
         routing = routing_obj.browse(vals['routing_id'])
+        route_ids = []
+        manuf_ids = [29, 30, 31, 32]
         if 'product_id' in vals.keys():
             product = producto_obj.browse(vals['product_id'])
             if val.id != product.product_tmpl_id.id:
@@ -104,9 +111,14 @@ class MrpBom(models.Model):
         if vals['type'] == 'phantom':
             if routing.id != 0:
                 raise UserError(_('Kit products should not have route production'))
-        for route in val.route_ids:
-            if route.id == 6:
+
+        route_ids = val.mapped('route_ids').mapped('id')
+        if not any(x in manuf_ids for x in route_ids):
+            if 6 in route_ids:
                 raise UserError(_('This product is raw material'))
+        # for route in val.route_ids:
+        #     if route.id == 6:
+        #         raise UserError(_('This product is raw material'))
 
         return super(MrpBom, self).create(vals)
 
