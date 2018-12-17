@@ -20,49 +20,47 @@ class AccountInvoice(models.Model):
                                  string=_("Related Picking"),
                                  index=True,
                                  readonly=True)
+    picking_ids2 = fields.Many2many(
+        'stock.picking',
+        'acc_invoice_picking_rel',
+        'invoice_id',
+        'picking_id',
+        ondelete='restrict',
+        string=_("Related Picking"),
+        index=True,
+        readonly=True)
 
     @api.multi
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
         for inv in self:
-            if not inv.sale_id and not inv.picking_id:
-                if not inv.prepayment_ok and inv.type in ['out_invoice']:
-                    inv._create_pickings_and_procurements(None)
+            if inv.type in ['out_invoice']:
+                if not inv.sale_id and not inv.picking_ids2:
+                    if not inv.prepayment_ok:
+                        inv._create_pickings_and_procurements(None)
+            elif inv.type in ['in_invoice']:
+                lines_ids = inv.mapped('invoice_line_ids').filtered(
+                    lambda r: not r.purchase_line_id and
+                    r.product_id.type in ('product', 'consu'))
+                if lines_ids and not inv.picking_ids2:
+                    if not inv.prepayment_ok:
+                        inv._create_pickings_and_procurements_in_invoice()
         return res
 
-    def _create_pickings_and_procurements(self, picking_id=False):
+    def _create_pickings_and_procurements_in_invoice(self, picking_id=False):
         move_obj = self.env['stock.move']
         picking_obj = self.env['stock.picking']
-        # procurement_obj = self.env['procurement.order']
-        # proc_ids = []
-        generate = False
-        for line in self.invoice_line_ids:
-            if line.product_id.type == 'product':
-                generate = True
-
-        if generate:
-            for line in self.invoice_line_ids:
-                date_planned = self._get_date_planned(line)
-
-                if line.product_id:
-                    if line.product_id.type in ('product', 'consu'):
-                        if not picking_id:
-                            picking_id = picking_obj.create(
-                                self._prepare_order_picking(line))
-                        # move_id = move_obj.create(
-                        for move in self._prepare_order_line_move(
-                                line, picking_id, date_planned):
-                            move_obj.create(move)
-                    # else:
-                    #    move_id = False
-
-                    # proc_id = procurement_obj.create(
-                    #    self._prepare_order_line_procurement(
-                    #         line, move_id, date_planned))
-                    # proc_ids.append(proc_id)
-                    # line.procurement_id = proc_id
-                    # self.ship_recreate(line, move_id, proc_id)
-
+        lines_ids = self.mapped('invoice_line_ids').filtered(
+            lambda r: not r.purchase_line_id and
+            r.product_id.type in ('product', 'consu'))
+        for line in lines_ids:
+            date_planned = self._get_date_planned(line)
+            if not picking_id:
+                picking_id = picking_obj.create(
+                    self._prepare_order_picking(line, 'in'))
+            for move in self._prepare_order_line_move(
+                    line, picking_id, date_planned, 'in'):
+                move_obj.create(move)
         if picking_id:
             for picking in picking_id:
                 picking.action_confirm()
@@ -74,12 +72,70 @@ class AccountInvoice(models.Model):
                     else:
                         pack.unlink()
                 picking.do_transfer()
+        if picking_id:
+            self.picking_ids2 = picking_id
+        return True
+
+
+    def _create_pickings_and_procurements(self, picking_id=False):
+        move_obj = self.env['stock.move']
+        picking_obj = self.env['stock.picking']
+        # procurement_obj = self.env['procurement.order']
+        # proc_ids = []
+        generate = False
+        if 'product' in self.invoice_line_ids.mapped(
+                'product_id').mapped('type'):
+            generate = True
+
+        if generate:
+            pickings = []
+            warehouses = self.invoice_line_ids.mapped(
+                'account_analytic_id').mapped('warehouse_id')
+            for warehouse in warehouses:
+                picking_id = False
+                lines = self.invoice_line_ids.filtered(
+                    lambda r:
+                    r.account_analytic_id.warehouse_id.id == warehouse.id)
+                for line in lines:
+                    date_planned = self._get_date_planned(line)
+
+                    if line.product_id:
+                        if line.product_id.type in ('product', 'consu'):
+                            if not picking_id:
+                                picking_id = picking_obj.create(
+                                    self._prepare_order_picking(line, 'out'))
+                                pickings.append(picking_id.id)
+                            # move_id = move_obj.create(
+                            for move in self._prepare_order_line_move(
+                                    line, picking_id, date_planned, 'out'):
+                                move_obj.create(move)
+                    # else:
+                    #    move_id = False
+
+                    # proc_id = procurement_obj.create(
+                    #    self._prepare_order_line_procurement(
+                    #         line, move_id, date_planned))
+                    # proc_ids.append(proc_id)
+                    # line.procurement_id = proc_id
+                    # self.ship_recreate(line, move_id, proc_id)
+
+                if picking_id:
+                    for picking in picking_id:
+                        picking.action_confirm()
+                        for move in picking.move_lines:
+                            move.force_assign()
+                        for pack in picking.pack_operation_ids:
+                            if pack.product_qty > 0:
+                                pack.write({'qty_done': pack.product_qty})
+                            else:
+                                pack.unlink()
+                        picking.do_transfer()
 
         # for proc_id in proc_ids:
         #    proc_id.run()
 
         if picking_id:
-            self.picking_id = picking_id
+            self.picking_ids2 = pickings
         return True
 
     def _get_date_planned(self, line):
@@ -92,32 +148,52 @@ class AccountInvoice(models.Model):
                         ).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return date_planned
 
-    def _prepare_order_picking(self, line):
-        picking_name = self.env['ir.sequence'].get('stock.picking')
-        warehouse_id = self.account_analytic_id.warehouse_id
+    def _prepare_order_picking(self, line, type_move):
+        # picking_name = self.env['ir.sequence'].get('stock.picking')
         move_type_obj = self.env['stock.move.type']
         location_obj = self.env['stock.location']
-        move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
-        location = location_obj.search([
-            ('stock_warehouse_id', '=', warehouse_id.id),
-            ('type_stock_loc', '=', 'fp')])
+        if type_move == 'out':
+            move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
+            account_analytic = line.account_analytic_id
+            warehouse_id = account_analytic.warehouse_id
+            location = location_obj.search([
+                ('stock_warehouse_id', '=', warehouse_id.id),
+                ('type_stock_loc', '=', 'fp')])
+            location_dest = self.partner_id.property_stock_customer
+            partner = self.partner_shipping_id.id
+            picking_type = warehouse_id.out_type_id.id
+        else:
+            move_type_id = move_type_obj.search([('code', '=', 'E2')]) or False
+            account_analytic = self.account_analytic_id
+            warehouse_id = account_analytic.warehouse_id
+            location = self.partner_id.property_stock_supplier
+            if self.company_id.is_manufacturer:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'rm')])
+            else:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'fp')])
+            partner = self.partner_id.id
+            picking_type = warehouse_id.in_type_id.id
         return {
-            'name': picking_name,
+            # 'name': picking_name,
             'origin': self.name,
             'date': self.date_to_datetime(self.date_invoice),
-            'type': 'out',
+            'type': type_move,
             'state': 'waiting',
             'move_type': 'direct',
             'invoice_id': self.id,
-            'partner_id': self.partner_shipping_id.id,
+            'partner_id': partner,
             'note': self.comment,
-            'account_analytic_id': self.account_analytic_id.id,
+            'account_analytic_id': account_analytic.id,
             'invoice_state': 'invoiced',
             'company_id': self.company_id.id,
             'stock_move_type_id': move_type_id[0].id,
             'location_id': location.id,
-            'location_dest_id': self.partner_id.property_stock_customer.id,
-            'picking_type_id': warehouse_id.out_type_id.id
+            'location_dest_id': location_dest.id,
+            'picking_type_id': picking_type
         }
 
     def date_to_datetime(self, userdate):
@@ -181,16 +257,55 @@ class AccountInvoice(models.Model):
     #                 proc_obj.unlink([proc_id])
     #     return True
 
-    def _prepare_order_line_move(self, line, picking_id, date_planned):
+    def _prepare_order_line_move(self, line, picking_id, date_planned, type_move):
         location_obj = self.env['stock.location']
-        product_obj = self.env['product.product']
-        warehouse_id = self.account_analytic_id.warehouse_id
-        location_id = location_obj.search([
-            ('stock_warehouse_id', '=', warehouse_id.id),
-            ('type_stock_loc', '=', 'fp')])
-        output_id = self.partner_id.property_stock_customer.id
         move_type_obj = self.env['stock.move.type']
-        move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
+        product_obj = self.env['product.product']
+        price_unit = False
+        is_manufacturer = self.company_id.is_manufacturer
+        if type_move == 'out':
+            move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
+            account_analytic = line.account_analytic_id
+            warehouse_id = account_analytic.warehouse_id
+            location = location_obj.search([
+                ('stock_warehouse_id', '=', warehouse_id.id),
+                ('type_stock_loc', '=', 'fp')])
+            location_dest = self.partner_id.property_stock_customer
+            partner = self.partner_shipping_id.id
+            # picking_type = warehouse_id.out_type_id.id
+        else:
+            move_type_id = move_type_obj.search([('code', '=', 'E2')]) or False
+            account_analytic = self.account_analytic_id
+            warehouse_id = account_analytic.warehouse_id
+            location = self.partner_id.property_stock_supplier
+            if is_manufacturer:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'rm')])
+            else:
+                location_dest = location_obj.search([
+                    ('stock_warehouse_id', '=', warehouse_id.id),
+                    ('type_stock_loc', '=', 'fp')])
+            partner = self.partner_id.id
+            price_unit = line.price_unit
+            if line.invoice_line_tax_ids:
+                price_unit = line.invoice_line_tax_ids.with_context(
+                    round=False).compute_all(
+                    price_unit, currency=line.invoice_id.currency_id,
+                    quantity=1.0)['total_excluded']
+            if line.uom_id.id != line.product_id.uom_id.id:
+                price_unit *= line.uom_id.factor / line.product_id.uom_id.factor
+            if line.invoice_id.currency_id != line.invoice_id.company_id.currency_id:
+                price_unit = line.invoice_id.currency_id.compute(
+                    price_unit, line.invoice_id.company_id.currency_id, round=False)
+            # picking_type = warehouse_id.in_type_id.id
+        # warehouse_id = line.account_analytic_id.warehouse_id
+        # location_id = location_obj.search([
+        #    ('stock_warehouse_id', '=', warehouse_id.id),
+        #    ('type_stock_loc', '=', 'fp')])
+        # output_id = self.partner_id.property_stock_customer.id
+        # move_type_obj = self.env['stock.move.type']
+        # move_type_id = move_type_obj.search([('code', '=', 'S1')]) or False
         self._cr.execute(
             """
             WITH RECURSIVE bom_detail(id_product, code, qty, id_bom, phantom, lv) AS(
@@ -199,7 +314,7 @@ class AccountInvoice(models.Model):
                     pp.default_code,
                     CAST(1.000000 AS numeric),
                     mb.id,
-                    CASE WHEN mb.type = 'phantom' THEN TRUE ELSE FALSE END,
+                    CASE WHEN mb.type = 'phantom' AND %s = 'out' AND %s IS TRUE THEN TRUE ELSE FALSE END,
                     1
                 FROM product_product AS pp
                 LEFT JOIN mrp_bom AS mb ON pp.id = mb.product_id
@@ -215,15 +330,17 @@ class AccountInvoice(models.Model):
                 JOIN bom_detail AS bd ON mbl.bom_id = bd.id_bom
                 JOIN product_product AS pp ON mbl.product_id = pp.id
                 LEFT JOIN mrp_bom AS mb ON pp.id = mb.product_id
-                WHERE bd.phantom
+                WHERE bd.phantom AND %s = 'out' AND %s IS TRUE
             )
             SELECT * FROM bom_detail WHERE phantom IS FALSE""", (
-                [line.product_id.id]))
+                [type_move, is_manufacturer, line.product_id.id, type_move, is_manufacturer]))
         res = []
         if self._cr.rowcount:
             products = self._cr.fetchall()
             for prod in products:
                 product = product_obj.browse([prod[0]])
+                if not price_unit:
+                    price_unit = product.standard_price or 0.0
                 move_dict = {
                     'name': line.name[:50],
                     'picking_id': picking_id.id,
@@ -235,13 +352,13 @@ class AccountInvoice(models.Model):
                     'product_uos_qty': product.uom_id.id,
                     'product_uos': product.uom_id.id,
                     'product_packaging': False,
-                    'partner_id': self.partner_shipping_id.id,
-                    'location_id': location_id.id,
-                    'location_dest_id': output_id,
+                    'partner_id': partner,
+                    'location_id': location.id,
+                    'location_dest_id': location_dest.id,
                     'invoice_line_id': line.id,
                     'tracking_id': False,
                     'company_id': self.company_id.id,
-                    'price_unit': product.standard_price or 0.0,
+                    'price_unit': price_unit,
                     'stock_move_type_id': move_type_id[0].id,
                 }
                 res.append(move_dict)

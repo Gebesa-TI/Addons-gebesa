@@ -17,6 +17,8 @@
     },
     "depends": [
         "base", "account",
+        "stock",
+        "res_company_manufacturer"
     ],
     "data": [
         "views/account_invoice_view.xml",
