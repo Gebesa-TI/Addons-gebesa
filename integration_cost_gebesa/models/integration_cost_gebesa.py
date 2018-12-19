@@ -90,6 +90,11 @@ class IntegrationCostGebesa(models.Model):
         default='value',
     )
 
+    _sql_constraints = [
+        ('name_uniq', 'unique (name)',
+         'No se puede repetir el nombre del registro!')
+    ]
+
     def validate_data(self):
         ids = [res.id for res in self]
         gic = self.browse(ids[0])

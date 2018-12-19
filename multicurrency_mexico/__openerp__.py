@@ -17,6 +17,7 @@
     },
     "depends": [
         "base",
+        "account",
     ],
     "data": [
         "views/res_currency_rate.xml",

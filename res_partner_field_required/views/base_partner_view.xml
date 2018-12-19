@@ -14,7 +14,13 @@
         		</xpath>
         		<xpath expr="//field[@name='property_supplier_payment_term_id']" position="attributes">
         			<attribute name="required">True</attribute>
-        		</xpath>  		
+        		</xpath>
+                <xpath expr="//field[@name='email']" position="attributes">
+                    <attribute name="attrs">{'required':[('customer', '=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form/sheet/group/group[2]/field[@name='email']" position="attributes">
+                    <attribute name="attrs">{'required':[('customer', '=', True)]}</attribute>
+                </xpath>
         	</field>
         </record>
         <record model='ir.ui.view' id='base_partner_view_tree'>
