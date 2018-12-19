@@ -24,9 +24,10 @@ class ProcurementOrder(models.Model):
     @api.model
     def _run(self, procurement):
         if procurement.rule_id and procurement.rule_id.action == 'buy':
-            if not procurement.po_pending:
-                procurement.write({'po_pending': True})
-                return False
+            if procurement.company_id.is_manufacturer:
+                if not procurement.po_pending:
+                    procurement.write({'po_pending': True})
+                    return False
         return super(ProcurementOrder, self)._run(procurement)
 
     @api.model

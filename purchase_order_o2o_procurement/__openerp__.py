@@ -19,7 +19,8 @@
         "base",
         "purchase",
         "stock",
-        "mrp"
+        "mrp",
+        "res_company_manufacturer",
     ],
     "data": [
         "data/ir_cron_data.xml",
