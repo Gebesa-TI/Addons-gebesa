@@ -197,7 +197,8 @@ class IntegrationCostGebesa(models.Model):
                         if line_inv2.product_id.individual_name:
                             prodName = '[' + line_inv2.product_id.default_code + '] - ' + line_inv2.product_id.individual_name
 
-                        extraTxt = inv2.partner_id.name + ' - ' + inv2.reference + ' - ' + inv2.number
+                        extraTxt = 'Prov MP: ' + inv2.partner_id.name + ' - ' + inv2.reference + ' - ' + inv2.number
+                        extraTxt = extraTxt + ' - Prov Adicional: ' + inv.partner_id.name + ' - ' + inv.reference + ' - ' + inv.number
 
                         ctx.update({'check_move_validity': False})
                         vals = {
