@@ -232,6 +232,11 @@ class SaleOrder(models.Model):
                         _('The following field is not invalid:\nAnalytic Account'))
                 if not order.client_order_ref:
                     raise UserError(_('This Sale Order not has OC captured'))
+                for line in order.order_line:
+                    if not line.route_id:
+                        raise UserError(
+                            _('Product line %s does not have a route assigned'
+                              % (line.product_id.default_code)))
                 # Comented toda vez que ya hay un modulo de
                 # PLM que considera productos cotizacion:
                 # for line in order.order_line:
