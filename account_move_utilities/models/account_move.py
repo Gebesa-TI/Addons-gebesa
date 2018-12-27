@@ -2,7 +2,8 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models
+from openerp import _, api, models
+from openerp.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
@@ -40,3 +41,12 @@ class AccountMove(models.Model):
                     resul.append(line.id)
             move_line_obj.write(resul, {'analytic_account_id': analytic_id})
             self.post()
+
+    @api.multi
+    def post(self):
+        for move in self:
+            currency = move.line_ids[0].currency_id.id
+            if any(currency != line.currency_id.id for line in move.line_ids):
+                raise ValidationError(_("The lines of the accounting policy \
+                    have different currencies"))
+        return super(AccountMove, self).post()
