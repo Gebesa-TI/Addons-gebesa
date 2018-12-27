@@ -68,10 +68,11 @@ class AccountInvoiceLine(models.Model):
         res = super(AccountInvoiceLine, self)._onchange_product_id()
         for line in self:
             analytic_id = line.invoice_id.account_analytic_id.id
+            is_manufacturer = line.invoice_id.company_id.is_manufacturer
             if line.invoice_id.type in ('out_invoice', 'out_refund'):
                 if line.product_id:
                     product_tmpl_id = line.product_id.product_tmpl_id
-                    if product_tmpl_id.type != 'service':
+                    if product_tmpl_id.type != 'service' or is_manufacturer:
                         if not product_tmpl_id.family_id:
                             raise ValidationError(_(
                                 "El producto %s no tiene familia asignada") %

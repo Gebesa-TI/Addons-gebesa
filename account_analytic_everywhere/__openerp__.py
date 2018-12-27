@@ -19,7 +19,8 @@
         "base", "account", "stock",
         "purchase", "mrp", "sale_order_gebesa",
         "sale",
-        "account_invoice_purchase_order_data"
+        "account_invoice_purchase_order_data",
+        "res_company_manufacturer"
     ],
     "data": [
         "views/account_invoice.xml",
