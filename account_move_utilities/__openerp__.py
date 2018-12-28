@@ -18,6 +18,7 @@
     "depends": [
         "base",
         "account",
+        "gebesa_reports",
     ],
     "data": [
 

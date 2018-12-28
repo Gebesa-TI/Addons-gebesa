@@ -45,8 +45,9 @@ class AccountMove(models.Model):
     @api.multi
     def post(self):
         for move in self:
-            currency = move.line_ids[0].currency_id.id
-            if any(currency != line.currency_id.id for line in move.line_ids):
-                raise ValidationError(_("The lines of the accounting policy \
-                    have different currencies"))
+            if move.journal_id.foreign_currency:
+                currency = move.line_ids[0].currency_id.id
+                if any(currency != line.currency_id.id for line in move.line_ids):
+                    raise ValidationError(_("The lines of the accounting policy \
+                        have different currencies"))
         return super(AccountMove, self).post()
