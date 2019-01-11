@@ -89,6 +89,13 @@ class AccountInvoice(models.Model):
 
         if generate:
             pickings = []
+            for line in self.invoice_line_ids:
+                if not line.account_analytic_id:
+                    raise UserError(_('The %s product line does not have an \
+                        analytical account') % line.product_id.default_code)
+                if not line.account_analytic_id.warehouse_id:
+                    raise UserError(_('The %s analytical account does not \
+                        have an assigned warehouse') % line.account_analytic_id.name)
             warehouses = self.invoice_line_ids.mapped(
                 'account_analytic_id').mapped('warehouse_id')
             for warehouse in warehouses:
