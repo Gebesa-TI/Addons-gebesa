@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import fields, models, api
-import datetime
+from openerp.exceptions import ValidationError
 from openerp.addons import decimal_precision as dp
 
 
@@ -19,19 +19,29 @@ class SaleOrder(models.Model):
     # )
     rate_mex = fields.Float(
         'Rate',
-        digits_compute=dp.get_precision('Account')
+        digits_compute=dp.get_precision('Product Price'),
+        store=True,
+        compute="compute_rate_mex",
     )
     total_rate_mex = fields.Float(
         'Total MXN',
+        store=True,
+        compute="compute_sale_date_mex",
     )
     freight_rate_mex = fields.Float(
         'Flete MXN',
+        store=True,
+        compute="compute_sale_date_mex",
     )
     installation_rate_mex = fields.Float(
         u'Instalación MXN',
+        store=True,
+        compute="compute_sale_date_mex",
     )
     net_sale_rate_mex = fields.Float(
         'Vta Neta MXN',
+        store=True,
+        compute="compute_sale_date_mex",
     )
     amount_pending_mex = fields.Float(
         'Imp X Sur MXN',
@@ -39,40 +49,76 @@ class SaleOrder(models.Model):
         compute="compute_amount_pending_mex",
     )
 
+    @api.depends('pricelist_id.currency_id', 'date_order')
+    def compute_rate_mex(self):
+        for order in self:
+            if order.currency_id.id != order.company_id.currency_id.id:
+                self._cr.execute("""
+                    SELECT rate_mex
+                    FROM res_currency_rate
+                    WHERE currency_id = %s
+                        AND CAST(name AS DATE) = CAST(%s AS DATE)
+                        AND company_id = %s
+                """, (order.currency_id.id,
+                      order.date_order, order.company_id.id))
+                if self._cr.rowcount:
+                    order.rate_mex = self._cr.fetchone()[0]
+                else:
+                    raise ValidationError("without capturing parity captured \
+                        for the day %s of the %s currency" % (
+                        order.date_order[:10], order.currency_id.name))
+            else:
+                order.rate_mex = 1
+
     @api.depends('amount_pending', 'rate_mex')
     def compute_amount_pending_mex(self):
         for sale in self:
             pending = sale.amount_pending
             if not sale.rate_mex:
-                sale.amount_pending = pending
+                sale.amount_pending_mex = pending
             else:
                 sale.amount_pending_mex = pending * sale.rate_mex
 
-    @api.multi
-    def extra_data(self):
-        for sale in self:
-            # sale.currency_id = sale.pricelist_id.currency_id.id
-            self._cr.execute("""SELECT rate_mex From res_currency_rate
-                            WHERE currency_id = %s
-                            AND CAST(name AS DATE) = CAST(%s AS DATE)
-                            AND (company_id is null
-                                OR company_id = %s)
-                            """, (sale.currency_id.id,
-                                  sale.date_order, sale.company_id.id))
-            if self._cr.rowcount:
-                sale.rate_mex = self._cr.fetchone()[0]
+    @api.depends('amount_untaxed', 'total_freight', 'total_installation',
+                 'total_net_sale', 'rate_mex')
+    def compute_sale_date_mex(self):
+        for order in self:
+            if not order.rate_mex:
+                order.total_rate_mex = order.amount_untaxed
+                order.freight_rate_mex = order.total_freight
+                order.installation_rate_mex = order.total_installation
+                order.net_sale_rate_mex = order.total_net_sale
             else:
-                sale.rate_mex = 1
+                order.total_rate_mex = order.rate_mex * order.amount_untaxed
+                order.freight_rate_mex = order.rate_mex * order.total_freight
+                order.installation_rate_mex = order.rate_mex * order.total_installation
+                order.net_sale_rate_mex = order.rate_mex * order.total_net_sale
 
-            sale.total_rate_mex = sale.rate_mex * sale.amount_untaxed
-            sale.freight_rate_mex = sale.rate_mex * sale.total_freight
-            sale.installation_rate_mex = sale.rate_mex * sale.total_installation
-            sale.net_sale_rate_mex = sale.rate_mex * sale.total_net_sale
+    # @api.multi
+    # def extra_data(self):
+    #     for sale in self:
+    #         # sale.currency_id = sale.pricelist_id.currency_id.id
+    #         self._cr.execute("""SELECT rate_mex From res_currency_rate
+    #                         WHERE currency_id = %s
+    #                         AND CAST(name AS DATE) = CAST(%s AS DATE)
+    #                         AND (company_id is null
+    #                             OR company_id = %s)
+    #                         """, (sale.currency_id.id,
+    #                               sale.date_order, sale.company_id.id))
+    #         if self._cr.rowcount:
+    #             sale.rate_mex = self._cr.fetchone()[0]
+    #         else:
+    #             sale.rate_mex = 1
 
-    @api.multi
-    def action_done(self):
-        super(SaleOrder, self).action_done()
-        self.extra_data()
+    #         sale.total_rate_mex = sale.rate_mex * sale.amount_untaxed
+    #         sale.freight_rate_mex = sale.rate_mex * sale.total_freight
+    #         sale.installation_rate_mex = sale.rate_mex * sale.total_installation
+    #         sale.net_sale_rate_mex = sale.rate_mex * sale.total_net_sale
+
+    # @api.multi
+    # def action_done(self):
+    #     super(SaleOrder, self).action_done()
+    #     self.extra_data()
 
     # @api.model
     # def create(self, vals):
