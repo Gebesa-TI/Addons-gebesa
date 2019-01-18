@@ -149,7 +149,7 @@
                                                                 <span t-esc="line.product_id.default_code"/>
                                                             </td>
                                                             <td><span t-esc="line.sale_order_id.name"/></td>
-                                                            <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                            <td><span t-esc="line.product_id.family_id.name"/></td>
                                                             <td><span t-esc="line.quantity_shipped"/></td>
                                                         </tr>
                                                     </t>
@@ -169,7 +169,7 @@
                                                                 <span t-esc="line.product_id.default_code"/>
                                                             </td>
                                                             <td><span t-esc="line.sale_order_id.name"/></td>
-                                                            <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                            <td><span t-esc="line.product_id.family_id.name"/></td>
                                                             <td><span t-esc="line.quantity_shipped"/></td>
                                                         </tr>
                                                         <t t-foreach="kit[line.product_id.id].bom_line_ids" t-as="bom_line">
@@ -189,7 +189,7 @@
                                                                     <span t-esc="bom_line.product_id.default_code"/>
                                                                 </td>
                                                                 <td><span t-esc="line.sale_order_id.name"/></td>
-                                                                <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                                <td><span t-esc="bom_line.product_id.family_id.name"/></td>
                                                                 <td><span t-esc="bom_line_qty"/></td>
                                                             </tr>
                                                         </t>
