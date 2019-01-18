@@ -152,7 +152,7 @@
                                                                 </t>
                                                             </td>
                                                             <td><span t-esc="line.sale_order_id.name"/></td>
-                                                            <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                            <td><span t-esc="line.product_id.family_id.name"/></td>
                                                             <td><span t-esc="line.quantity_shipped"/></td>
                                                         </tr>
                                                     </t>
@@ -173,7 +173,7 @@
                                                                 </t>
                                                             </td>
                                                             <td><span t-esc="line.sale_order_id.name"/></td>
-                                                            <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                            <td><span t-esc="line.product_id.family_id.name"/></td>
                                                             <td><span t-esc="line.quantity_shipped"/></td>
                                                         </tr>
                                                         <t t-foreach="kit[line.product_id.id]" t-as="bom_line">
@@ -196,7 +196,7 @@
                                                                     </t-->
                                                                 </td>
                                                                 <td><span t-esc="line.sale_order_id.name"/></td>
-                                                                <td><span t-esc="line.sale_order_id.warehouse_id.name"/></td>
+                                                                <td><span t-esc="bom_line[4]"/></td>
                                                                 <td><span t-esc="bom_line_qty"/></td>
                                                             </tr>
                                                         </t>

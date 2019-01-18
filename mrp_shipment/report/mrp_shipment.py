@@ -35,18 +35,20 @@ class ParticularReport(models.AbstractModel):
                 # self._cr.execute("""SELECT geb_invoice_status From sale_order WHERE id = %s""", ([sale.id]))
                 self._cr.execute(
                     """
-                    WITH RECURSIVE componentes(product_id, code, name, qty, not_kit, r) AS (
+                    WITH RECURSIVE componentes(product_id, code, name, qty, family, not_kit, r) AS (
                         SELECT
                             pp.id,
                             pp.default_code,
                             COALESCE(ir.value, pp.individual_name, ir2.value, pp.name_template, 'Sin definir') as producto,
                             ROUND((mbl.product_qty / mb.product_qty) * 1,6) AS product_qty,
+                            pf.name,
                             CASE WHEN mb2.type = 'phantom' THEN FALSE ELSE TRUE END AS not_kit,
                             CAST(ROW_NUMBER () OVER () AS TEXT)
                         FROM mrp_bom AS mb
                         JOIN mrp_bom_line AS mbl ON mb.id = mbl.bom_id
                         JOIN product_product AS pp ON mbl.product_id = pp.id
                         JOIN product_template AS pt ON pp.product_tmpl_id = pt.id
+                        LEFT JOIN product_family AS pf ON pt.family_id = pf.id
                         LEFT JOIN ir_translation AS ir ON ir.res_id = pp.id
                             AND ir.lang = 'es_MX' AND ir.name = 'product.product,individual_name'
                         LEFT JOIN ir_translation AS ir2 ON pt.id = ir2.res_id
@@ -58,6 +60,7 @@ class ParticularReport(models.AbstractModel):
                             pp.default_code,
                             COALESCE(ir.value, pp.individual_name, ir2.value, pp.name_template, 'Sin definir') as producto,
                             ROUND(c.qty * ((mbl.product_qty / mb.product_qty) * 1), 6) AS product_qty,
+                            pf.name,
                             CASE WHEN mb2.type = 'phantom' THEN FALSE ELSE TRUE END AS not_kit,
                             CONCAT(c.r, '-', CAST(ROW_NUMBER () OVER () AS TEXT))
                         FROM componentes AS c
@@ -65,6 +68,7 @@ class ParticularReport(models.AbstractModel):
                         JOIN mrp_bom_line AS mbl ON mb.id = mbl.bom_id
                         JOIN product_product AS pp ON mbl.product_id = pp.id
                         JOIN product_template AS pt ON pp.product_tmpl_id = pt.id
+                        LEFT JOIN product_family AS pf ON pt.family_id = pf.id
                         LEFT JOIN ir_translation AS ir ON ir.res_id = pp.id
                             AND ir.lang = 'es_MX' AND ir.name = 'product.product,individual_name'
                         LEFT JOIN ir_translation AS ir2 ON pt.id = ir2.res_id
@@ -72,8 +76,8 @@ class ParticularReport(models.AbstractModel):
                         JOIN mrp_bom AS mb2 ON pp.id = mb2.product_id
                         WHERE c.not_kit IS false
                     )
-                    SELECT product_id, code, name, SUM(qty) FROM componentes
-                    WHERE not_kit GROUP BY product_id, code, name""",
+                    SELECT product_id, code, name, SUM(qty), family FROM componentes
+                    WHERE not_kit GROUP BY product_id, code, name, family""",
                     ([line.product_id.id]))
                 if self._cr.rowcount:
                     if line.product_id.id not in kit.keys():
