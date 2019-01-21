@@ -18,7 +18,6 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.route_id = False
             if line.product_id:
-            	import ipdb; ipdb.set_trace()
             	if line.product_id.available_sale != 'false':
                 	raise UserError(_('No puede seleccionar este producto, porfavor escoge otro.'))
                 if not line.product_id.family_id:
