@@ -2,8 +2,9 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import _, api, fields, models
+from openerp import _, api, exceptions, fields, models
 from openerp.exceptions import ValidationError
+from openerp.exceptions import UserError
 
 
 class SaleOrderLine(models.Model):
@@ -17,6 +18,9 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.route_id = False
             if line.product_id:
+            	import ipdb; ipdb.set_trace()
+            	if line.product_id.available_sale != 'false':
+                	raise UserError(_('No puede seleccionar este producto, porfavor escoge otro.'))
                 if not line.product_id.family_id:
                     warning_mess = {
                         'title': _('Odoo Warning!'),
@@ -24,6 +28,7 @@ class SaleOrderLine(models.Model):
                                     (line.product_id.default_code)
                     }
                     return {'warning': warning_mess}
+                product_id = route_obj.search([('product_id'), '=', line.product_id.product_id.id])
                 route_id = route_obj.search([('family_ids', '=',
                                               line.product_id.family_id.id)])
                 if len(route_id) < 1:
@@ -33,6 +38,7 @@ class SaleOrderLine(models.Model):
                                     (line.product_id.family_id.name)
                     }
                     return {'warning': warning_mess}
+
                 if len(route_id) > 1:
                     warning_mess = {
                         'title': _('Odoo Warning!'),
