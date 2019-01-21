@@ -27,7 +27,6 @@ class SaleOrderLine(models.Model):
                                     (line.product_id.default_code)
                     }
                     return {'warning': warning_mess}
-                product_id = route_obj.search([('product_id'), '=', line.product_id.product_id.id])
                 route_id = route_obj.search([('family_ids', '=',
                                               line.product_id.family_id.id)])
                 if len(route_id) < 1:
