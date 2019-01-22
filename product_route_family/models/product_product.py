@@ -8,4 +8,4 @@ from openerp import fields, models
 class AvailableSale(models.Model):
     _inherit = "product.product"
 
-    available_sale = fields.Boolean("Venta disponible", default=False)
+    available_sale = fields.Boolean("Venta disponible", default=True)
