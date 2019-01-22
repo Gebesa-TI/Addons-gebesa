@@ -18,7 +18,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.route_id = False
             if line.product_id:
-            	if line.product_id.available_sale != 'false':
+            	if line.product_id.available_sale != 'true':
                 	raise UserError(_('Este producto esta inhabilitado para captura de pedidos.'))
                 if not line.product_id.family_id:
                     warning_mess = {
@@ -46,3 +46,5 @@ class SaleOrderLine(models.Model):
                     return {'warning': warning_mess}
                 line.route_id = route_id.id
         return res
+
+ 
