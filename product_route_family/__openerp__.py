@@ -17,12 +17,14 @@
     },
     "depends": [
         "stock",
+        "product",
         "product_structure_gebesa",
 
     ],
     "data": [
         "views/stock_location_route.xml",
         "views/sale_order.xml",
+        "views/available_sale.xml",
     ],
     "demo": [
     ],
