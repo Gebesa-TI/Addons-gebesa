@@ -19,7 +19,7 @@ class SaleOrderLine(models.Model):
             line.route_id = False
             if line.product_id:
             	if line.product_id.available_sale != 'false':
-                	raise UserError(_('No puede seleccionar este producto, porfavor escoge otro.'))
+                	raise UserError(_('Este producto esta inhabilitado para captura de pedidos.'))
                 if not line.product_id.family_id:
                     warning_mess = {
                         'title': _('Odoo Warning!'),
