@@ -10,6 +10,6 @@
        				<field name="available_sale"/>       
        	        </xpath>
             </field>
-        </record>S
+        </record>
     </data>
 </openerp>
