@@ -18,6 +18,7 @@
     "depends": [
         "stock",
         "mrp",
+        "system_administrator",
     ],
     "data": [
         "views/stock_picking_view.xml",
