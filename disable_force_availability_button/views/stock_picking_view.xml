@@ -12,8 +12,8 @@
                 <xpath expr="//button[@name='action_assign']" position="replace">
                     <button name="action_assign" states="confirmed,waiting" string="Reserve" type="object" class="oe_highlight" groups="disable_force_availability_button.group_reserve_button"/>
                 </xpath>
-                <xpath expr="//button[@name='action_cancel']" position="attributes">
-                    <attribute name="invisible">True</attribute>
+                <xpath expr="//button[@name='action_cancel']" position="replace">
+                    <button name="action_cancel" states="assigned,confirmed,partially_available,draft,waiting" string="Cancel" groups="system_administrator.group_system_administrator_gebesa" type="object"/>
                 </xpath>      		     		
         	</field>
         </record>
