@@ -11,8 +11,22 @@ class MrpProduction(models.Model):
     segment_line_ids = fields.One2many(
         'mrp.segment.line',
         'mrp_production_id',
-        string=_('Segment'),
+        string=_('Segments line'),
     )
+    segment = fields.Char(
+        string=_('Segment'),
+        compute='_compute_segment_name',
+        store=True,
+    )
+
+    @api.depends('segment_line_ids')
+    def _compute_segment_name(self):
+        for production in self:
+            segment = ''
+            for line in production.segment_line_ids:
+                segment += line.segment_id.folio + ','
+            production.segment = segment[:-1]
+
 
 
 class MrpProductionProductLine(models.Model):
