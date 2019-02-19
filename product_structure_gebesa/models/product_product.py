@@ -22,6 +22,17 @@ class ProductProduct(models.Model):
         string=_('Quotation Product'),
     )
 
+    @api.multi
+    def propagar_peso_volumen_variantes(self):
+        for product in self:
+            self._cr.execute(
+                """UPDATE product_product SET
+                    volume = %s,
+                    weight = %s
+                    WHERE product_tmpl_id = %s
+                        AND active IS TRUE""",
+                (product.volume, product.weight, product.product_tmpl_id.id))
+
     @api.depends('product_tmpl_id.name', 'individual_name')
     def compute_name_template(self):
         for prod in self:
