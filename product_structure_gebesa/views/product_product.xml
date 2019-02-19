@@ -6,6 +6,9 @@
             <field name='model'>product.product</field>
             <field name='inherit_id' ref="product.product_normal_form_view"/>
             <field name='arch' type='xml'>
+                <header>
+                    <button name="propagar_peso_volumen_variantes" string="Propagar peso y volumen a variantes" type="object"/> 
+                </header>
                 <xpath expr="//div[@class='oe_title']" position="inside">
                     <div name="indiv_name">
                         <label class="oe_edit_only" for="individual_name"/>
@@ -19,14 +22,6 @@
                 <xpath expr="//notebook/page/group/field[@name='type']" position="before">
                     <field name="quotation_product" string="Quotation Product" groups="product_structure_gebesa.group_quotation_product"/>
                 </xpath> -->
-            </field>
-        </record>
-
-        <record model='ir.ui.view' id='product_normal_form_view'>
-            <field name='name'>product.product.form</field>
-            <field name='model'>product.product</field>
-            <field name='inherit_id' ref="product.product_normal_form_view"/>
-            <field name='arch' type='xml'>
                 <field name="item_ids" position="replace">
                     <field name="item_ids" widget="many2many">
                         <tree string="Pricelist Items">
