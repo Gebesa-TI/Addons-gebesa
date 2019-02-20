@@ -45,6 +45,7 @@ class SaleOrder(models.Model):
         table = ''
         remp_date = ''
         remp_ord = ''
+        rel_seg = ''
         for res in order_ids:
             if not res.date_cancelled:
                 remp_date = '---'
@@ -54,13 +55,18 @@ class SaleOrder(models.Model):
                 remp_ord = '---'
             else:
                 remp_ord = res.order_replaced.name
+            if not res.related_segment:
+                rel_seg = '---'
+            else:
+                rel_seg = res.related_segment
             table += """
                 <tr><td style="border-bottom: 1px solid silver;">%s</td>
                     <td style="border-bottom: 1px solid silver;">%s</td>
                     <td style="border-bottom: 1px solid silver;">%s</td>
+                    <td style="border-bottom: 1px solid silver;">%s</td>
                     <td align="right" style="border-bottom: 1px solid silver;">
                     %s</td></tr>
-            """ % (remp_date, res.partner_id.name, res.name, remp_ord)
+            """ % (remp_date, res.partner_id.name, res.name, remp_ord, rel_seg)
         mail_obj = self.env['mail.mail']
         body_mail = u"""
             <div summary="o_mail_notification" style="padding:0px; width:700px;
@@ -114,18 +120,21 @@ class SaleOrder(models.Model):
                 <table style="border-collapse:collapse; margin: 0 auto; width:
                 700px; background:inherit; color:inherit">
                     <tbody><tr>
-                        <th width="16%%" style="padding:5px 10px 5px 5px;font-
+                        <th width="14%%" style="padding:5px 10px 5px 5px;font-
                         size: 14px; border-bottom: 2px solid silver;"><strong>
                         Fecha de Cancelacion y/o Cerrado</strong></th>
-                        <th width="54%%" style="padding:5px 10px 5px 5px;font-
+                        <th width="50%%" style="padding:5px 10px 5px 5px;font-
                         size: 14px; border-bottom: 2px solid silver;"><strong>
                         Cliente</strong></th>
-                        <th width="15%%" style="padding:5px 10px 5px 5px;font-
+                        <th width="12%%" style="padding:5px 10px 5px 5px;font-
                         size: 14px; border-bottom: 2px solid silver;"><strong>
                         Pedido</strong></th>
-                        <th width="15%%" style="padding:5px 10px 5px 5px;font-
+                        <th width="12%%" style="padding:5px 10px 5px 5px;font-
                         size: 14px; border-bottom: 2px solid silver;"><strong>
                         Pedido que Sustituye</strong></th>
+                        <th width="12%%" style="padding:5px 10px 5px 5px;font-
+                        size: 14px; border-bottom: 2px solid silver;"><strong>
+                        Segmento(s) Relacionado(s)</strong></th>
                     </tr>
                     %s
                     </tbody>
