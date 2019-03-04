@@ -350,3 +350,9 @@ class stock_quant(osv.osv):
             ctx['force_company'] = move.company_id.id
             journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
             self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
+
+        if move.location_id.type_stock_loc == 'wip' and move.location_dest_id.usage == 'transit':
+            ctx = context.copy()
+            ctx['force_company'] = move.company_id.id
+            journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+            self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
