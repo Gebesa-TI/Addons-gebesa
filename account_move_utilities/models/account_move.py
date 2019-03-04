@@ -11,7 +11,7 @@ class AccountMove(models.Model):
 
     def delete_zeros(self):
         move_line_obj = self.env['account.move.line']
-
+        import ipdb; ipdb.set_trace()
         self._cr.execute('UPDATE account_move '
                          'SET state=%s '
                          'WHERE id IN %s', ('draft', tuple([self._id]),))
@@ -28,7 +28,7 @@ class AccountMove(models.Model):
 
     def assigned_analytics(self, analytic_id=False):
         move_line_obj = self.env['account.move.line']
-
+        import ipdb; ipdb.set_trace()
         self._cr.execute('UPDATE account_move '
                          'SET state=%s '
                          'WHERE id IN %s', ('draft', tuple([self._id]),))
@@ -45,6 +45,9 @@ class AccountMove(models.Model):
     @api.multi
     def post(self):
         for move in self:
+            for line in move.line_ids:
+                if line.account_id.required_partner and not line.partner_id:
+                    raise ValidationError(_("Esta cuenta requiere partner"))
             if move.journal_id.foreign_currency:
                 currency = move.line_ids[0].currency_id.id
                 if any(currency != line.currency_id.id for line in move.line_ids):
