@@ -4,7 +4,7 @@
 from openerp import _, fields, models
 
 
-class account_move_utilities(models.Model):
+class Account_Account(models.Model):
     _name = 'account.account'
     _inherit = 'account.account'
 
