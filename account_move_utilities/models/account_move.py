@@ -11,7 +11,6 @@ class AccountMove(models.Model):
 
     def delete_zeros(self):
         move_line_obj = self.env['account.move.line']
-        import ipdb; ipdb.set_trace()
         self._cr.execute('UPDATE account_move '
                          'SET state=%s '
                          'WHERE id IN %s', ('draft', tuple([self._id]),))
@@ -28,7 +27,6 @@ class AccountMove(models.Model):
 
     def assigned_analytics(self, analytic_id=False):
         move_line_obj = self.env['account.move.line']
-        import ipdb; ipdb.set_trace()
         self._cr.execute('UPDATE account_move '
                          'SET state=%s '
                          'WHERE id IN %s', ('draft', tuple([self._id]),))
