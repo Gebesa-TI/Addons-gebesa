@@ -300,6 +300,9 @@ class SaleOrder(models.Model):
                    order.priority != 'replenishment':
                     raise UserError(_('Este no es un Pedido de Reposición solicita \
                     la aprobación de Credito y Cobranza.'))
+            if not self.env.user.has_group('account.group_account_manager'):
+                raise ValidationError(_('Este no es un Pedido de Reposición solicita \
+                    la aprobación de Credito y Cobranza.'))
             order.write({'approve': 'approved'})
             order.date_approved = fields.Datetime.now()
 
