@@ -26,6 +26,7 @@
         "mrp_shipment",
         "stock_batch_picking",
         "project",
+        "mail",
     ],
     "data": [
         "views/account_payment_view.xml",
