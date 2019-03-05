@@ -9,6 +9,9 @@ class AccountPayment(models.Model):
     _name = 'account.payment'
     _inherit = ['account.payment', 'message.post.show.all']
 
+class AccountAccount(models.Model):
+    _name = 'account.account'
+    _inherit = ['account.account', 'mail.thread', 'message.post.show.all']
 
 class AccountInvoice(models.Model):
     _name = 'account.invoice'
