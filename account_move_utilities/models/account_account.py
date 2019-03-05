@@ -4,7 +4,7 @@
 from openerp import _, fields, models
 
 
-class Account_Account(models.Model):
+class AccountAccount(models.Model):
     _name = 'account.account'
     _inherit = 'account.account'
 
