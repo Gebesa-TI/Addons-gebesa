@@ -21,7 +21,7 @@
         "gebesa_reports",
     ],
     "data": [
-        "views/account_move_utilities_view.xml",
+        "views/account_account_view.xml",
 
     ],
     "demo": [
