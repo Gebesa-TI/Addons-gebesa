@@ -293,12 +293,16 @@ class SaleOrder(models.Model):
     @api.multi
     def approve_action(self):
         for order in self:
+            import ipdb; ipdb.set_trace()
             if order.approve == 'approved':
                 raise UserError(_('This Sale Order is already approved'))
             if order.create_uid.id == self.env.uid:
                 if order.manufacture != 'replenishment' or \
                    order.priority != 'replenishment':
                     raise UserError(_('Este no es un Pedido de Reposición solicita \
+                    la aprobación de Credito y Cobranza.'))
+            if not self.env.user.has_group('account.group_account_manager'):
+                raise ValidationError(_('Este no es un Pedido de Reposición solicita \
                     la aprobación de Credito y Cobranza.'))
             order.write({'approve': 'approved'})
             order.date_approved = fields.Datetime.now()
