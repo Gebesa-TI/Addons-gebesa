@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
 	<data>
-		<record id="action_adjustment_input" model="ir.actions.act_window">
-			<field name="name">Adjustment Input</field>
-			<field name="res_model">stock.picking</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="domain">[('stock_move_type_id.code', 'in', ['E4']), ('picking_type_id.code', '=', 'incoming'), ('picking_type_id.warehouse_id', '!=', False)]</field>
-			<field name="context">{
-                    'default_stock_move_type_id': 7,
-                    'default_location_id': 5,
-            }</field>
-			<field name="help" type="html">
-				<p class="oe_view_nocontent_create">
-					Click to register a Adjustment Input
-				</p>
-				<p>
-					Make your first Adjustment Input.
-				</p>
-			</field>
-		</record>
+		<record id="action_adjustment_input_server" model="ir.actions.server">
+            <field name="name">Adjustment Input Server</field>
+            <field name="model_id" ref="model_stock_picking"/>
+            <field name="code">
+                action = self.dynamic_action_adjustment_input(cr, uid, context)
+            </field>
+        </record>
 
-		<menuitem action="action_adjustment_input" id="menu_action_adjustment_input" parent="stock.menu_stock_inventory_control"  sequence="40"/>
+
+		<menuitem action="action_adjustment_input_server" id="menu_action_adjustment_input" parent="stock.menu_stock_inventory_control"  sequence="40"/>
     </data>
 </openerp>
