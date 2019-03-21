@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 23:16+0000\n"
-"PO-Revision-Date: 2017-01-18 23:16+0000\n"
+"POT-Creation-Date: 2019-03-21 22:58+0000\n"
+"PO-Revision-Date: 2019-03-21 22:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,35 +16,27 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,name:stock_picking_adjustement.action_adjustment_input
-#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_input
+#: code:addons/stock_picking_adjustement/models/stock_picking.py:61
+#, python-format
 msgid "Adjustment Input"
 msgstr ""
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,name:stock_picking_adjustement.action_adjustment_output
-#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_output
+#: model:ir.actions.server,name:stock_picking_adjustement.action_adjustment_input_server
+#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_input
+msgid "Adjustment Input Server"
+msgstr ""
+
+#. module: stock_picking_adjustement
+#: code:addons/stock_picking_adjustement/models/stock_picking.py:41
+#, python-format
 msgid "Adjustment OutPut"
 msgstr ""
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_input
-msgid "Click to register a Adjustment Input"
-msgstr ""
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_output
-msgid "Click to register a Adjustment Output"
-msgstr ""
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_input
-msgid "Make your first Adjustment Input."
-msgstr ""
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_output
-msgid "Make your first Adjustment Output."
+#: model:ir.actions.server,name:stock_picking_adjustement.action_adjustment_output_server
+#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_output
+msgid "Adjustment OutPut Server"
 msgstr ""
 
 #. module: stock_picking_adjustement
@@ -54,6 +46,7 @@ msgstr ""
 
 #. module: stock_picking_adjustement
 #: code:addons/stock_picking_adjustement/models/stock_picking.py:12
+#: model:ir.model.fields,field_description:stock_picking_adjustement.field_stock_picking_type_adjustment_id
 #, python-format
 msgid "Type Adjustment"
 msgstr ""

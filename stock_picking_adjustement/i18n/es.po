@@ -1,60 +1,54 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* stock_picking_adjustement
+# 	* stock_picking_adjustement
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 23:16+0000\n"
-"PO-Revision-Date: 2017-01-18 23:16+0000\n"
+"POT-Creation-Date: 2019-03-21 22:59+0000\n"
+"PO-Revision-Date: 2019-03-21 17:00-0600\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,name:stock_picking_adjustement.action_adjustment_input
-#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_input
+#: code:addons/stock_picking_adjustement/models/stock_picking.py:61
+#, python-format
 msgid "Adjustment Input"
 msgstr "Entrada por Ajuste"
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,name:stock_picking_adjustement.action_adjustment_output
-#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_output
+#: model:ir.actions.server,name:stock_picking_adjustement.action_adjustment_input_server
+#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_input
+msgid "Adjustment Input Server"
+msgstr "Entrada por Ajuste Servidor"
+
+#. module: stock_picking_adjustement
+#: code:addons/stock_picking_adjustement/models/stock_picking.py:41
+#, python-format
 msgid "Adjustment OutPut"
 msgstr "Salida por Ajuste"
 
 #. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_input
-msgid "Click to register a Adjustment Input"
-msgstr "Click para registrar una Entrada por Ajuste"
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_output
-msgid "Click to register a Adjustment Output"
-msgstr "Click para registart una Salida por Ajuste"
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_input
-msgid "Make your first Adjustment Input."
-msgstr "Crea tu primera Entrada por Ajuste."
-
-#. module: stock_picking_adjustement
-#: model:ir.actions.act_window,help:stock_picking_adjustement.action_adjustment_output
-msgid "Make your first Adjustment Output."
-msgstr "Crea tu primera Salida por Ajuste"
+#: model:ir.actions.server,name:stock_picking_adjustement.action_adjustment_output_server
+#: model:ir.ui.menu,name:stock_picking_adjustement.menu_action_adjustment_output
+msgid "Adjustment OutPut Server"
+msgstr "Salida por Ajuste Servidor"
 
 #. module: stock_picking_adjustement
 #: model:ir.model,name:stock_picking_adjustement.model_stock_picking
 msgid "Transfer"
-msgstr "Transferencia"
+msgstr "Transferir"
 
 #. module: stock_picking_adjustement
 #: code:addons/stock_picking_adjustement/models/stock_picking.py:12
+#: model:ir.model.fields,field_description:stock_picking_adjustement.field_stock_picking_type_adjustment_id
 #, python-format
 msgid "Type Adjustment"
 msgstr "Tipo de Ajuste"
-

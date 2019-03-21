@@ -28,3 +28,43 @@ class StockPicking(models.Model):
                     ctx.update({'default_picking_type_id': default})
         res = super(StockPicking, self.with_context(ctx)).create(vals)
         return res
+
+    @api.multi
+    def dynamic_action_adjustment_output(self):
+        inventory_lost = self.env['stock.location'].search(
+            [('usage', '=', 'inventory')], limit=1)
+        ctx = self._context.copy()
+        ctx['default_stock_move_type_id'] = 8
+        ctx['default_location_dest_id'] = inventory_lost.id
+        action = {
+            'type': "ir.actions.act_window",
+            'name': _('Adjustment OutPut'),
+            'res_model': "stock.picking",
+            'view_type': "form",
+            'view_mode': "tree,form",
+            'domain': "[('stock_move_type_id.code', 'in', ['S4']), \
+                        ('picking_type_id.code', '=', 'outgoing'), \
+                        ('picking_type_id.warehouse_id', '!=', False)]",
+            'context': ctx,
+        }
+        return action
+
+    @api.multi
+    def dynamic_action_adjustment_input(self):
+        inventory_lost = self.env['stock.location'].search(
+            [('usage', '=', 'inventory')], limit=1)
+        ctx = self._context.copy()
+        ctx['default_stock_move_type_id'] = 7
+        ctx['default_location_id'] = inventory_lost.id
+        action = {
+            'type': "ir.actions.act_window",
+            'name': _('Adjustment Input'),
+            'res_model': "stock.picking",
+            'view_type': "form",
+            'view_mode': "tree,form",
+            'domain': "[('stock_move_type_id.code', 'in', ['E4']), \
+                        ('picking_type_id.code', '=', 'incoming'), \
+                        ('picking_type_id.warehouse_id', '!=', False)]",
+            'context': ctx
+        }
+        return action
