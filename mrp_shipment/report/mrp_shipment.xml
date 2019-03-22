@@ -19,7 +19,7 @@
         <template id="report_shipment_document">
             <t t-call="report.internal_layout">
                 <div class="page" style="font-size: 10pt;">
-                    <t t-foreach="shipment[doc.id]" t-as="ship">
+                    <t t-foreach="shipment[doc.id]" t-as="family">
                         <div class="col-xs-12" style="border: 1px solid black">
                             <t t-set="total_m" t-value="0"/>
                             <t t-set="total_fle" t-value="0"/>
@@ -84,13 +84,13 @@
                         </div>
                         <div class="col-xs-12" style="margin-top: 15px;">
                             <div style="text-align:center;font-size:20pt">
-                                ///&#160;<span t-esc="ship"/>&#160;\\\
+                                ///&#160;<span t-esc="family"/>&#160;\\\
                             </div>
-                            <t t-foreach="shipment[doc.id][ship]" t-as="partner">
+                            <t t-foreach="shipment[doc.id][family]" t-as="partner">
                                 <div style="text-align:center;margin-top:10px">
                                     <span t-esc="partner"/>
                                     <br />
-                                    <t t-foreach="shipment[doc.id][ship][partner]" t-as="city">
+                                    <t t-foreach="shipment[doc.id][family][partner]" t-as="city">
                                         <div aling="center" style="text-align:center;margin-top:5px">
                                             <span t-esc="city"/>
                                             <t t-set="pedido" t-value="''"/>
@@ -98,7 +98,7 @@
                                             <t t-set="peso" t-value="0"/>
                                             <t t-set="flete" t-value="0"/>
                                             <t t-set="importe" t-value="0"/>
-                                            <t t-foreach="shipment[doc.id][ship][partner][city]" t-as="line">
+                                            <t t-foreach="shipment[doc.id][family][partner][city]" t-as="line">
                                                 <t t-set="line" t-value="line.with_context({'lang':'es_MX'})"/>
                                                 <t t-if="line.sale_order_id.name not in pedido">
                                                     <t t-set="pedido" t-value="pedido+line.sale_order_id.name+','"/>
@@ -123,7 +123,7 @@
                                                 </tr>
                                             </table>
                                             <br />
-                                            <table width="100%" class="mrp_shipment_table_detail">
+                                            <table  id="table_detail" width="100%" class="mrp_shipment_table_detail">
                                                 <tr>
                                                     <td width="19%">Codigo de Barras</td>
                                                     <td width="14%">Clave</td>
@@ -133,7 +133,7 @@
                                                     <td width="8%">Embarca</td>
                                                     <td width="8%">Cantidad</td>
                                                 </tr>
-                                                <t t-foreach="shipment[doc.id][ship][partner][city]" t-as="line">
+                                                <t t-foreach="shipment[doc.id][family][partner][city]" t-as="line">
                                                     <t t-set="line" t-value="line.with_context({'lang':'es_MX'})"/>
                                                     <t t-if="line.product_id.id not in kit.keys()">
                                                         <tr>
