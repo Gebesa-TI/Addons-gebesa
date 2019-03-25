@@ -21,6 +21,7 @@
                     <field name='type_calculation'/>
                     <field name='account_id'/>
                     <field name='active'/>
+
         		</tree>
         	</field>
         </record>
@@ -44,6 +45,7 @@
         						<field name='type_calculation' required='True'/>
                                 <field name='account_id' required='True'/>
                                 <field name='active'/>
+                                <field name='company_id'/>
         					</group>
         				</group>
         			</sheet>

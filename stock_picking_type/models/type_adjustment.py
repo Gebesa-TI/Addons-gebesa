@@ -50,7 +50,9 @@ class TypeAdjustment(models.Model):
     account_id = fields.Many2one(
         'account.account', string=_(u'Account'),
     )
-
+    company_id = fields.Many2one(
+        'res.company', string=_(u'Company'),
+    )
     active = fields.Boolean(
         default=True,
         help="Set active to false to hide the tax without removing it.")
