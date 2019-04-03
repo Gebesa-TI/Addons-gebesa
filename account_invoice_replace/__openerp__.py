@@ -24,6 +24,7 @@
     "data": [
         "views/account_invoice_replace.xml",
         "data/ir_cron_data.xml",
+        "data/send_account_invoice_cancel_tgalbo.xml",
 
     ],
     "demo": [
