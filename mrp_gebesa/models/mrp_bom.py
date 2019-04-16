@@ -220,8 +220,15 @@ class MrpBomLine(models.Model):
             if product.id == bom.product_id.id:
                 raise UserError(_('One product cannot be detail of itself'))
 
+            bom_dynamic = False
+            if self._context and self._context.get('bom_dynamic'):
+                bom_dynamic = self._context['bom_dynamic']
             for line in bom.bom_line_ids:
-                if line.product_id.id == product.id and line.id != self.id:
-                    raise UserError(_('This product is already in this Bom'))
+                if bom_dynamic:
+                    if line.product_id.id == product.id and line.id < self.id:
+                        raise UserError(_('This product is already in this Bom'))
+                else:
+                    if line.product_id.id == product.id and line.id != self.id:
+                        raise UserError(_('This product is already in this Bom'))
 
         return super(MrpBomLine, self).write(values)
