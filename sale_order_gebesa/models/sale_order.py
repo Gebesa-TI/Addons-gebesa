@@ -346,6 +346,7 @@ class SaleOrder(models.Model):
         invoice_vals['perc_freight'] = self.perc_freight
         invoice_vals['perc_installation'] = self.perc_installation
         # invoice_vals['executive'] = self.executive
+        invoice_vals['journal_id'] = self.project_id.journal_sale_id
         invoice_vals['manufacture'] = self.manufacture
 
         return invoice_vals
