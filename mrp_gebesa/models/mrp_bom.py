@@ -224,10 +224,7 @@ class MrpBomLine(models.Model):
             if self._context and self._context.get('bom_dynamic'):
                 bom_dynamic = self._context['bom_dynamic']
             for line in bom.bom_line_ids:
-                if bom_dynamic:
-                    if line.product_id.id == product.id and line.id < self.id:
-                        raise UserError(_('This product is already in this Bom'))
-                else:
+                if not bom_dynamic:
                     if line.product_id.id == product.id and line.id != self.id:
                         raise UserError(_('This product is already in this Bom'))
 
