@@ -60,6 +60,9 @@ class AccountInvoiceRefund(models.Model):
             wf_service.trg_validate(self._uid, 'account.invoice', refund_id,
                                     'invoice_open', self._cr)
 
+        for line in refund.invoice_line_ids:
+            line._set_taxes()
+
         for form in self:
             for invoice in invoice_obj.browse(self._context.get('active_ids')):
                 if mode == 'refund':
