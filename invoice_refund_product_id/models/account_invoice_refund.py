@@ -62,6 +62,7 @@ class AccountInvoiceRefund(models.Model):
 
         for line in refund.invoice_line_ids:
             line._set_taxes()
+            line.price_unit = amount
 
         for form in self:
             for invoice in invoice_obj.browse(self._context.get('active_ids')):
