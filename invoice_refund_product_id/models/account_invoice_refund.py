@@ -61,8 +61,15 @@ class AccountInvoiceRefund(models.Model):
                                     'invoice_open', self._cr)
 
         for line in refund.invoice_line_ids:
+            fpos = line.invoice_id.fiscal_position_id
+            company = line.invoice_id.company_id
+            type = line.invoice_id.type
+            account = line.get_invoice_line_account(type, line.product_id, fpos, company)
+            if account:
+                line.account_id = account.id
             line._set_taxes()
             line.price_unit = amount
+
         refund.compute_taxes()
 
         for form in self:
