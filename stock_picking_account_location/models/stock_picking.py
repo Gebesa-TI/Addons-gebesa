@@ -54,7 +54,6 @@ class StockPicking(models.Model):
         for pick in self:
             move_ids = []
             for move in pick.move_lines:
-                import ipdb; ipdb.set_trace()
                 if move.state != 'done':
                     continue
                 location_from = move.location_id
