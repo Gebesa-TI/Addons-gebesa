@@ -49,10 +49,10 @@ class AccountInvoiceRefund(models.Model):
         ctx.update({'mode': mode})
         ctx.update({'amount': amount})
         # Se cambia el estatus para cuando sea tipo saldar o modificar, evitar la validacion de aprovar
-        if mode in ('cancel', 'modify'):
-            mode = 'refund'
+        # if mode in ('cancel', 'modify'):
+        #     mode = 'refund'
         res = super(AccountInvoiceRefund, self.with_context(
-                    ctx)).compute_refund(mode)
+                    ctx)).compute_refund('refund')
         refund_id = res['domain'][1][2][0]
         # import pdb; pdb.set_trace()
         refund = invoice_obj.browse(refund_id)
@@ -60,17 +60,18 @@ class AccountInvoiceRefund(models.Model):
             wf_service.trg_validate(self._uid, 'account.invoice', refund_id,
                                     'invoice_open', self._cr)
 
-        for line in refund.invoice_line_ids:
-            fpos = line.invoice_id.fiscal_position_id
-            company = line.invoice_id.company_id
-            type = line.invoice_id.type
-            account = line.get_invoice_line_account(type, line.product_id, fpos, company)
-            if account:
-                line.account_id = account.id
-            line._set_taxes()
-            line.price_unit = amount
+        if mode == 'refund':
+            for line in refund.invoice_line_ids:
+                fpos = line.invoice_id.fiscal_position_id
+                company = line.invoice_id.company_id
+                type = line.invoice_id.type
+                account = line.get_invoice_line_account(type, line.product_id, fpos, company)
+                if account:
+                    line.account_id = account.id
+                line._set_taxes()
+                line.price_unit = amount
 
-        refund.compute_taxes()
+            refund.compute_taxes()
 
         for form in self:
             for invoice in invoice_obj.browse(self._context.get('active_ids')):

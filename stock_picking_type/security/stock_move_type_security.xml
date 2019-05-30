@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
         <record id="group_stock_picking_type" model="res.groups">
             <field name="name">Stock type of move / Manager</field>
         </record>        
@@ -13,6 +13,12 @@
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
             <field eval="False" name="global"/>
+        </record>
+        <record id="ir_rule_stock_picking_type_adjustment" model="ir.rule">
+            <field name="name">Stock type adjustment</field>
+            <field name="model_id" ref="model_type_adjustment"/>
+            <field name="global" eval="False"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
         </record>
     </data>
 </openerp>
