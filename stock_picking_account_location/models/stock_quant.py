@@ -186,7 +186,6 @@ class stock_quant(osv.osv):
             reference = "W/O Reference "
             name = move.product_id.name
             # + trace
-
         analytic_id = move.location_id.account_analytic_id.id or False
         if not analytic_id:
             analytic_id = move.location_dest_id.account_analytic_id.id or False
@@ -206,8 +205,11 @@ class stock_quant(osv.osv):
             'debit': valuation_amount < 0 and -valuation_amount or 0,
             'account_id': credit_account_id,
         }
-        if move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal' and move.location_id.stock_warehouse_id.id != move.location_dest_id.stock_warehouse_id.id:
-            analytic_id = move.location_dest_id.account_analytic_id.id or False
+        if context.get('force_vehicle_analytic_id'):
+            analytic_id = context.get('force_vehicle_analytic_id')
+        else:
+            if move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal' and move.location_id.stock_warehouse_id.id != move.location_dest_id.stock_warehouse_id.id:
+                analytic_id = move.location_dest_id.account_analytic_id.id or False
 
         debit_line_vals = {
             'name': name,
