@@ -22,6 +22,7 @@
     ],
     "data": [
         "views/base_partner_view.xml",
+        "security/security.xml"
     ],
     "demo": [
 
