@@ -167,6 +167,10 @@ class AccountInvoice(models.Model):
                 ('stock_warehouse_id', '=', warehouse_id.id),
                 ('type_stock_loc', '=', 'fp')])
             location_dest = self.partner_id.property_stock_customer
+            if not location_dest:
+                raise UserError(_(
+                    'El cliente %s no tiene asignada una ubicacion de cliente')
+                    % self.partner_id.name)
             partner = self.partner_shipping_id.id
             picking_type = warehouse_id.out_type_id.id
         else:
@@ -174,6 +178,10 @@ class AccountInvoice(models.Model):
             account_analytic = self.account_analytic_id
             warehouse_id = account_analytic.warehouse_id
             location = self.partner_id.property_stock_supplier
+            if not location:
+                raise UserError(_(
+                    'El proveedor %s no tiene asignada una ubicacion de proveedor')
+                    % self.partner_id.name)
             if self.company_id.is_manufacturer:
                 location_dest = location_obj.search([
                     ('stock_warehouse_id', '=', warehouse_id.id),
