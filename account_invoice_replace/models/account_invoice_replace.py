@@ -136,7 +136,7 @@ class AccountInvoice(models.Model):
           """ % (self.env.user.company_id.name, table)
         mail = mail_obj.create({
             'subject': 'Facturas Canceladas',
-            'email_to': 'mayte.valdes@gebesa.com,andrea.mejia@gebesa.com,monica.sanchez@gebesa.com,federico.yanez@gebesa.com,jesus.castrellon@gebesa.com,cristina.rodriguez@gebesa.com,esmeralda.gutierrez@gebesa.com,sistemas@gebesa.com',
+            'email_to': 'mayte.valdes@gebesa.com,sergio.hernandez@gebesa,pedro.acosta@gebesa.com,andrea.mejia@gebesa.com,monica.sanchez@gebesa.com,federico.yanez@gebesa.com,jesus.castrellon@gebesa.com,cristina.rodriguez@gebesa.com,esmeralda.gutierrez@gebesa.com,sistemas@gebesa.com',
             'headers': "{'Return-Path': u'odoo@gebesa.com'}",
             'body_html': body_mail,
             'auto_delete': True,
@@ -248,7 +248,7 @@ class AccountInvoice(models.Model):
           """ % (self.env.user.company_id.name, table)
         mail = mail_obj.create({
             'subject': 'Facturas Canceladas Transportes Galbo del Norte',
-            'email_to': 'soporte.odoo@gebesa.com,salmon@gebesa.com,contabilidad@tansportesgalbo.com,gabriel.oviedo@transportesgalbo.com,roberto.oviedo@transportesgalbo.com,roberto.herrera@transportesgalbo.com',
+            'email_to': 'soporte.odoo@gebesa.com,salmon@gebesa.com,contabilidad@tansportesgalbo.com,gabriel.oviedo@transportesgalbo.com,roberto.herrera@transportesgalbo.com',
             'headers': "{'Return-Path': u'odoo@gebesa.com'}",
             'body_html': body_mail,
             'auto_delete': True,
