@@ -57,10 +57,11 @@ class AccountInvoice(models.Model):
                 inv.l10n_mx_edi_origin = l10n_mx_edi_origin[:-1]
             elif inv.advance_id:
                 inv.advance_id.advance_applied = True
-                #inv.l10n_mx_edi_origin = '07|' + inv.advance_id.cfdi_uuid
+                inv.l10n_mx_edi_origin = '07|' + inv.advance_id.cfdi_uuid
             elif inv.advance_ids:
                 total_advance = 0.0
                 resta = 0.0
+                inv.l10n_mx_edi_origin = '07|'
                 for advance in inv.advance_ids:
                     if advance.advance_id:
                         if not advance.amount_advance > advance.advance_id.amount_residual_advance:
@@ -69,13 +70,14 @@ class AccountInvoice(models.Model):
                             if advance.advance_id.amount_residual_advance == 0.0:
                                 advance.advance_id.advance_applied = True
                         else:
-                            raise UserError('La Factura tiene monto mayor')
+                            raise UserError('El monto de anticipo es mayor al saldo de la factura %s' % advance.advance_id.number)
                         total_advance += advance.amount_advance
                         if total_advance > self.amount_total:
-                            raise UserError('La sumatoria de las facturas es mayor que el monto total')
-                        advance.advance_id.l10n_mx_edi_origin = '07|' + str(advance.advance_id.cfdi_uuid)
+                            raise UserError('La sumatoria de las facturas de anticipo es mayor que el monto total de esta facturas')
+                        inv.l10n_mx_edi_origin += str(advance.advance_id.cfdi_uuid) + ','
                     else:
                         raise UserError('El monto necesita un anticipo')
+                inv.l10n_mx_edi_origin = inv.l10n_mx_edi_origin[:-1]
 
             # if inv.advance_id and not inv.advance_id.sale_id:
             #     adv_id = inv.advance_id
