@@ -62,18 +62,20 @@ class AccountInvoice(models.Model):
                 total_advance = 0.0
                 resta = 0.0
                 for advance in inv.advance_ids:
-                    if not advance.amount_advance > advance.advance_id.amount_residual_advance:
-                        resta = advance.advance_id.amount_residual_advance - advance.amount_advance
-                        advance.advance_id.amount_residual_advance = resta
-                        if advance.advance_id.amount_residual_advance == 0.0:
-                            advance.advance_id.advance_applied = True
+                    if advance.advance_id:
+                        if not advance.amount_advance > advance.advance_id.amount_residual_advance:
+                            resta = advance.advance_id.amount_residual_advance - advance.amount_advance
+                            advance.advance_id.amount_residual_advance = resta
+                            if advance.advance_id.amount_residual_advance == 0.0:
+                                advance.advance_id.advance_applied = True
+                        else:
+                            raise UserError('La Factura tiene monto mayor')
+                        total_advance += advance.amount_advance
+                        if total_advance > self.amount_total:
+                            raise UserError('La sumatoria de las facturas es mayor que el monto total')
+                        advance.advance_id.l10n_mx_edi_origin = '07|' + str(advance.advance_id.cfdi_uuid)
                     else:
-                        raise UserError('La Factura tiene monto mayor')
-                    total_advance += advance.amount_advance
-                    if total_advance > self.amount_total:
-                        raise UserError('La sumatoria de las facturas es mayor que el monto total')
-                    advance.advance_id.l10n_mx_edi_origin = '07|' + advance.advance_id.cfdi_uuid
-
+                        raise UserError('El monto necesita un anticipo')
 
             # if inv.advance_id and not inv.advance_id.sale_id:
             #     adv_id = inv.advance_id
