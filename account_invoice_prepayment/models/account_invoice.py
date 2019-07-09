@@ -18,6 +18,14 @@ class AccountInvoice(models.Model):
         help=_('The advance has already been applied'),
     )
 
+    amount_residual_advance = fields.Float(
+        string='Amount Residual Advance',
+    )
+
+    note_applied = fields.Boolean(
+        string='Nota de Credito aplicada',
+    )
+
     @api.multi
     def action_move_create(self):
         if self.type == 'out_invoice':
@@ -28,5 +36,6 @@ class AccountInvoice(models.Model):
                                          'deposit_product_id_setting') or False
                 if product == deposit and line.price_subtotal > 0:
                     self.prepayment_ok = True
+                    self.amount_residual_advance = self.amount_total
 
         return super(AccountInvoice, self).action_move_create()

@@ -9,11 +9,28 @@
                 <xpath expr="//field[@name='comment']" position="before">
                     <group>
                         <group>
-                            <field name="advance_id" domain="[('prepayment_ok', '=', True), ('partner_id','=', partner_id), ('advance_applied', '=', False), ('state', '!=', ['draft','cancel'])]" attrs="{'readonly':[('state','!=', 'draft')]}"/>
-                            <field name="amount_advance" widget="monetary" readonly="1"/>
+                            <field name="advance_id" domain="[('prepayment_ok', '=', True), ('partner_id','=', partner_id), ('advance_applied', '=', False), ('state', '!=', ['draft','cancel'])]" readonly='1'/>
+                            <field name="amount_advance" widget="monetary" readonly='1'/>
                         </group>
                     </group>
                 </xpath>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='account_invoice_rel_advance_tree'>
+            <field name='name'>account_invoice_rel_advance.tree</field>
+            <field name='model'>account.invoice</field>
+            <field name='inherit_id' ref='account_invoice_prepayment.account_invoice_prepayment_form_view'/>
+            <field name='arch' type='xml'>
+                <xpath expr="//page[@name='advance_data']/group/group[2]" position="after">
+                    <field name="advance_ids" context="{'partner_advance_id': partner_id}" attrs="{'readonly':[('state','!=', 'draft'),('advance_id','=','null')]}">
+                        <tree editable="bottom">
+                            <field name="invoice_id" invisible="1"/>
+                            <field name="advance_id" domain="[('prepayment_ok', '=', True), ('partner_id','=', context.get('partner_advance_id')), ('advance_applied', '=', False), ('state', '!=', ['draft','cancel'])]"/>
+                            <field name="amount_advance" widget="monetary" sum="Total"/>
+                        </tree>
+                    </field>
+                </xpath>                
             </field>
         </record>
     </data>
