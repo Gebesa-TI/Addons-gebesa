@@ -70,29 +70,29 @@ class SaleOrder(models.Model):
             else:
                 order.rate_mex = 1
 
-    @api.depends('amount_pending', 'rate_mex')
+    @api.depends('o_amount_pending', 'rate_mex')
     def compute_amount_pending_mex(self):
         for sale in self:
-            pending = sale.amount_pending
+            pending = sale.o_amount_pending
             if not sale.rate_mex:
                 sale.amount_pending_mex = pending
             else:
                 sale.amount_pending_mex = pending * sale.rate_mex
 
-    @api.depends('amount_untaxed', 'total_freight', 'total_installation',
-                 'total_net_sale', 'rate_mex')
+    @api.depends('amount_untaxed', 'o_total_freight', 'o_total_installation',
+                 'o_total_net_sale', 'rate_mex')
     def compute_sale_date_mex(self):
         for order in self:
             if not order.rate_mex:
                 order.total_rate_mex = order.amount_untaxed
-                order.freight_rate_mex = order.total_freight
-                order.installation_rate_mex = order.total_installation
-                order.net_sale_rate_mex = order.total_net_sale
+                order.freight_rate_mex = order.o_total_freight
+                order.installation_rate_mex = order.o_total_installation
+                order.net_sale_rate_mex = order.o_total_net_sale
             else:
                 order.total_rate_mex = order.rate_mex * order.amount_untaxed
-                order.freight_rate_mex = order.rate_mex * order.total_freight
-                order.installation_rate_mex = order.rate_mex * order.total_installation
-                order.net_sale_rate_mex = order.rate_mex * order.total_net_sale
+                order.freight_rate_mex = order.rate_mex * order.o_total_freight
+                order.installation_rate_mex = order.rate_mex * order.o_total_installation
+                order.net_sale_rate_mex = order.rate_mex * order.o_total_net_sale
 
     # @api.multi
     # def extra_data(self):
