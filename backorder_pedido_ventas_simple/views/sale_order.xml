@@ -41,9 +41,9 @@
                     <field name="shipped_departure_date" string='Fecha Salida Embarque'/>
                     <field name="currency_id"/>
                     <field name='amount_untaxed' string='Total'/>
-                    <field name='o_total_freight' string='Total Flete'/>
-                    <field name='o_total_installation' string='Total Instalación'/>
-                    <field name='o_total_net_sale' string='Vta Neta Total'/>
+                    <field name='total_freight' string='Total Flete'/>
+                    <field name='total_installation' string='Total Instalación'/>
+                    <field name='total_net_sale' string='Vta Neta Total'/>
 
 
                     <field name='state'/>
