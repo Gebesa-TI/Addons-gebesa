@@ -11,6 +11,22 @@ class StockPicking(models.Model):
     type_adjustment_id = fields.Many2one('type.adjustment',
                                          string=_('Type Adjustment'),
                                          store=True,)
+    total_cost = fields.Float(
+        string='Totals Cost',
+        compute="compute_total_cost"
+    )
+
+    @api.depends('move_lines', 'move_lines.product_id',
+                 'move_lines.product_uom_qty', 'move_lines.state')
+    def compute_total_cost(self):
+        for picking in self:
+            picking.total_cost = 0.0
+            for move in picking.move_lines:
+                # import ipdb; ipdb.set_trace()
+                if move.state != 'cancel':
+                    picking.total_cost += (
+                        move.product_uom_qty *
+                        move.product_id.standard_price)
 
     @api.model
     def create(self, vals):
