@@ -522,6 +522,14 @@ class MrpShipmentPartner(models.Model):
         string='Sequence',
     )
 
+    date_arrival = fields.Date(
+        string=_('Time arrival date')
+    )
+
+    maniobras = fields.Boolean(
+        string='Maniobras',
+    )
+
     @api.model
     def delete_partner_not_shipment_id(self):
         partners = self.search([('shipment_id', '=', False)])

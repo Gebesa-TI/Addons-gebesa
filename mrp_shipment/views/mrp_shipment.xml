@@ -116,6 +116,8 @@
                                     <tree string="Shipment Destination"  editable="bottom">                                     
                                         <field name="sequence" widget="handle"/>
                                         <field name="partner_id" readonly="1"/>
+                                        <field name="date_arrival"/>
+                                        <field name="maniobras"/>
                                     </tree>
                                 </field>
                             </page>
