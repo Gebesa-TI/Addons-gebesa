@@ -81,6 +81,35 @@ class MrpShipment(models.Model):
         states={'done': [('readonly', True)]},
         copy=True
     )
+    partner_ids = fields.One2many(
+        'mrp.shipment.partner',
+        'shipment_id',
+        string=(u'Shipment Partner'),
+        compute='_compute_partners',
+        readonly=False,
+        store=True,
+    )
+
+    @api.depends('sale_ids', 'sale_ids.partner_id')
+    def _compute_partners(self):
+        list_partner = []
+        for shipment in self:
+            list_partner = shipment.mapped('sale_ids').mapped('partner_id').mapped('id')
+            sequence = 0
+            partners_obj = self.env['mrp.shipment.partner']
+            for list_ in list_partner:
+                #import ipdb; ipdb.set_trace()
+                data = {
+                    'partner_id': list_,
+                    #'shipment_id': shipment.id,
+                    'sequence': sequence,
+                }
+                partner = partners_obj.new(data)
+                partners_obj += partner
+                sequence += 1
+            # import ipdb; ipdb.set_trace()
+            shipment.partner_ids += partners_obj
+        return {}
 
     @api.depends('line_ids', 'line_ids.quantity_shipped')
     def _compute_meters(self):
@@ -326,6 +355,10 @@ class MrpShipmentSale(models.Model):
         compute='_compute_weight_shipped',
     )
 
+    sequence = fields.Integer(
+        string='Sequence',
+    )
+
     def _compute_volume_shipped(self):
         volum = 0.0
         for line in self:
@@ -467,3 +500,38 @@ class MrpShipmentLine(models.Model):
                 raise ValidationError(_("The quantity shipped in a \
                     line is different from 0"))
         return super(MrpShipmentLine, self).unlink()
+
+
+
+class MrpShipmentPartner(models.Model):
+    _name = 'mrp.shipment.partner'
+    _description = 'Shipment partner'
+
+    shipment_id = fields.Many2one(
+        'mrp.shipment',
+        string=_(u'Shipment'),
+        select=True
+    )
+
+    partner_id = fields.Many2one(
+        'res.partner',
+        string=_(u'Customer'),
+    )
+
+    sequence = fields.Integer(
+        string='Sequence',
+    )
+
+    date_arrival = fields.Date(
+        string=_('Time arrival date')
+    )
+
+    maniobras = fields.Boolean(
+        string='Maniobras',
+    )
+
+    @api.model
+    def delete_partner_not_shipment_id(self):
+        partners = self.search([('shipment_id', '=', False)])
+        for partner in partners:
+            partner.unlink()
