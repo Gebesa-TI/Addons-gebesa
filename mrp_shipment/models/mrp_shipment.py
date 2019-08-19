@@ -94,7 +94,7 @@ class MrpShipment(models.Model):
     def _compute_partners(self):
         list_partner = []
         for shipment in self:
-            list_partner = shipment.mapped('sale_ids').mapped('partner_id').mapped('id')
+            list_partner = shipment.mapped('sale_ids').mapped('partner_shipping_id').mapped('id')
             sequence = 0
             partners_obj = self.env['mrp.shipment.partner']
             for list_ in list_partner:
@@ -523,11 +523,13 @@ class MrpShipmentPartner(models.Model):
     )
 
     date_arrival = fields.Date(
-        string=_('Time arrival date')
+        string=_('Time arrival date'),
+        store=True,
     )
 
     maniobras = fields.Boolean(
         string='Maniobras',
+        store=True,
     )
 
     @api.model
