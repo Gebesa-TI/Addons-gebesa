@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import _, fields, models
+from openerp.exceptions import UserError
 
 
 class AccountInvoiceRefund(models.Model):
@@ -16,3 +17,5 @@ class AccountInvoiceRefund(models.Model):
         'res.users',
         string=_('Responsible'),
     )
+
+

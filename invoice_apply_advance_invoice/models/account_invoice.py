@@ -22,21 +22,26 @@ class AccountInvoice(models.Model):
         store=True,
     )
 
+    advance_ids = fields.One2many(
+        'account.invoice.rel.advance',
+        'invoice_id',
+        string=(_('Advance')),
+    )
+
     @api.onchange('advance_id')
     def _onchange_advance_id(self):
         advance = self.advance_id
         if advance:
-            amount = advance.amount_total
-            self.amount_advance = amount
-        else:
-            self.amount_advance = 0.0
-
+            if advance.amount_residual_advance >= self.amount_total:
+                self.amount_advance = self.amount_total
+            else:
+                self.amount_advance = advance.amount_residual_advance
         return
 
-    @api.depends('advance_id')
-    def _compute_amount_adv(self):
-        if self.advance_id:
-            self.amount_advance = self.advance_id.amount_total
+    #@api.depends('advance_id')
+    #def _compute_amount_adv(self):
+        #if self.advance_id:
+            #self.amount_advance = self.advance_id.amount_total
 
     @api.multi
     def action_move_create(self):
@@ -53,6 +58,26 @@ class AccountInvoice(models.Model):
             elif inv.advance_id:
                 inv.advance_id.advance_applied = True
                 inv.l10n_mx_edi_origin = '07|' + inv.advance_id.cfdi_uuid
+            elif inv.advance_ids:
+                total_advance = 0.0
+                resta = 0.0
+                inv.l10n_mx_edi_origin = '07|'
+                for advance in inv.advance_ids:
+                    if advance.advance_id:
+                        if not advance.amount_advance > advance.advance_id.amount_residual_advance:
+                            resta = advance.advance_id.amount_residual_advance - advance.amount_advance
+                            advance.advance_id.amount_residual_advance = resta
+                            if advance.advance_id.amount_residual_advance == 0.0:
+                                advance.advance_id.advance_applied = True
+                        else:
+                            raise UserError('El monto de anticipo es mayor al saldo de la factura %s' % advance.advance_id.number)
+                        total_advance += advance.amount_advance
+                        if total_advance > self.amount_total:
+                            raise UserError('La sumatoria de las facturas de anticipo es mayor que el monto total de esta facturas')
+                        inv.l10n_mx_edi_origin += str(advance.advance_id.cfdi_uuid) + ','
+                    else:
+                        raise UserError('El monto necesita un anticipo')
+                inv.l10n_mx_edi_origin = inv.l10n_mx_edi_origin[:-1]
 
             # if inv.advance_id and not inv.advance_id.sale_id:
             #     adv_id = inv.advance_id

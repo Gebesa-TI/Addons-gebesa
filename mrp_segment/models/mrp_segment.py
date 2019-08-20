@@ -254,9 +254,11 @@ class MrpSegment(models.Model):
                             (segment.folio + ', ', sale.id)
                         )
                     prod = production_obj.search(
-                        [('sale_id', '=', sale.id)])
+                        [('sale_id', '=', sale.id),
+                         ('state', '!=', 'cancel')])
                     prod_seg = production_obj.search(
                         [('sale_id', '=', sale.id),
+                         ('state', '!=', 'cancel'),
                          ('segment_line_ids', '!=', False)])
                     if not prod_seg:
                         sale.segment_status = 'no_segment'

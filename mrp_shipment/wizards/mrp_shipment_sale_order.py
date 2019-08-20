@@ -48,7 +48,8 @@ class MrpShipmentSaleOrder(models.TransientModel):
                     # FIN PEDIDOS VINCULADOS
                     for line in sale.order_line:
                         if line.id not in order_line_id:
-                            if line.missing_quantity > 0:
+                            if line.missing_quantity > 0 and \
+                                    not self._check_order_line_closed(line):
                                 # miss_seg = line.segment_qty
                                 # miss_seg = miss_seg - line.quantity_shipped
                                 # if miss_seg > 0:
@@ -91,3 +92,7 @@ class MrpShipmentSaleOrder(models.TransientModel):
                                     # 'quantity': miss_seg,
                                     # 'quantity_shipped': miss_seg,
                                 })
+
+    @api.multi
+    def _check_order_line_closed(self, line):
+        return False
