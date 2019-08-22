@@ -190,6 +190,11 @@ class stock_quant(osv.osv):
         if not analytic_id:
             analytic_id = move.location_dest_id.account_analytic_id.id or False
 
+        analytic_backup_id = False
+        if move.location_dest_id.usage == 'internal' and context.get('force_vehicle_analytic_id'):
+            analytic_backup_id = analytic_id
+            analytic_id = context.get('force_vehicle_analytic_id')
+
         # Cesar Barron 09 Ago 2016 ####
 
         credit_line_vals = {
@@ -205,7 +210,11 @@ class stock_quant(osv.osv):
             'debit': valuation_amount < 0 and -valuation_amount or 0,
             'account_id': credit_account_id,
         }
-        if context.get('force_vehicle_analytic_id'):
+
+        if analytic_backup_id:
+            analytic_id = analytic_backup_id
+
+        if move.location_id.usage == 'internal' and context.get('force_vehicle_analytic_id'):
             analytic_id = context.get('force_vehicle_analytic_id')
         else:
             if move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal' and move.location_id.stock_warehouse_id.id != move.location_dest_id.stock_warehouse_id.id:
