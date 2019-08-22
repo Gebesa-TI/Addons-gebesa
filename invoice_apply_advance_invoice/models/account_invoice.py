@@ -72,11 +72,11 @@ class AccountInvoice(models.Model):
                         else:
                             raise UserError('El monto de anticipo es mayor al saldo de la factura %s' % advance.advance_id.number)
                         total_advance += advance.amount_advance
-                        if total_advance > self.amount_total:
-                            raise UserError('La sumatoria de las facturas de anticipo es mayor que el monto total de esta facturas')
                         inv.l10n_mx_edi_origin += str(advance.advance_id.cfdi_uuid) + ','
                     else:
                         raise UserError('El monto necesita un anticipo')
+                if total_advance > self.amount_total:
+                    raise UserError('La sumatoria de las facturas de anticipo es mayor que el monto total de esta facturas')        
                 inv.l10n_mx_edi_origin = inv.l10n_mx_edi_origin[:-1]
 
             # if inv.advance_id and not inv.advance_id.sale_id:
