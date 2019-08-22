@@ -116,5 +116,22 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="production_cancel_action_server" model="ir.actions.server">
+            <field name="name">Production Cancel</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="model_mrp_production" />
+            <field name="code">self.action_cancel(cr, uid, context.get('active_ids', []), context)</field>
+        </record>
+
+        <record id="production_cancel_action" model="ir.values">
+            <field name="name">Production Cancel</field>
+            <field name="key">action</field>
+            <field name="key2">client_action_multi</field>
+            <field name="model">mrp.production</field>
+            <field name="value" eval="'ir.actions.server,%d' % ref('mrp_gebesa.production_cancel_action_server')" />
+        </record>
+
     </data>
 </openerp>
