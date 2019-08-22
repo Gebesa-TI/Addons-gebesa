@@ -201,4 +201,28 @@ class MrpProduction(models.Model):
 
             if not production.cancellation_reason:
                 raise UserError(_('Specify the reason for cancellation'))
-        return super(MrpProduction, self).action_cancel()
+
+        res = super(MrpProduction, self).action_cancel()
+
+        for production in self:
+            for picking in production.picking_raw_material_ids:
+                if picking.state not in ['done', 'cancel']:
+                    picking.do_unreserve()
+                    moves = ''
+                    cancel_pick = True
+                    for move in picking.move_lines:
+                        if move.state not in ('done'):
+                            moves += str(move.id) + ','
+                        else:
+                            cancel_pick = False
+                    if moves != '':
+                        moves = moves[:-1]
+                        self.env.cr.execute("""
+                            UPDATE stock_move SET state = 'cancel'
+                            WHERE id in (%s) """ % (moves))
+                if cancel_pick:
+                    self.env.cr.execute("""
+                        UPDATE stock_picking SET state = 'cancel'
+                        WHERE id in (%s) """ % (picking.id))
+
+        return res
