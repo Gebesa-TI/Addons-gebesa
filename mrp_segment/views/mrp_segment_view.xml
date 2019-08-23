@@ -45,7 +45,8 @@
                         <button name="validate_segment" states="construction" string="Validate" type="object" class="oe_highlight"/>
                         <button name="add" states="construction" string="Add production" type="object"/>
                         <button name="cancel_segment" states="construction" string="Cancel" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,construction,confirm,done"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,construction,confirm,done"/>                        
+                        <button name="reverse_in_construction" states="confirm" string="Reverse in Construction" type="object" class="oe_highlight" />
                     </header>
                     <sheet>
                         <div class="oe_title">
