@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-13 23:54+0000\n"
-"PO-Revision-Date: 2019-02-13 17:56-0600\n"
+"POT-Creation-Date: 2019-08-23 14:13+0000\n"
+"PO-Revision-Date: 2019-08-23 09:14-0500\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: es\n"
+"Language: es_MX\n"
 "X-Generator: Poedit 2.0.6\n"
 
 #. module: mrp_segment
@@ -66,7 +66,7 @@ msgid "Ancho"
 msgstr "Ancho"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:315
+#: code:addons/mrp_segment/models/mrp_segment.py:322
 #, python-format
 msgid "Awaiting Raw Materials"
 msgstr "En espera de materiales"
@@ -92,7 +92,7 @@ msgid "COMPONENTE"
 msgstr "COMPONENTE"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:416
+#: code:addons/mrp_segment/models/mrp_segment.py:423
 #, python-format
 msgid "Can only be removed in the                     construction state of the segment"
 msgstr "Can only be removed in the                     construction state of the segment"
@@ -105,7 +105,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:314
+#: code:addons/mrp_segment/models/mrp_segment.py:321
 #: selection:mrp.segment,state:0
 #, python-format
 msgid "Cancelled"
@@ -149,7 +149,7 @@ msgid "Cliente"
 msgstr "Cliente"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:331
+#: code:addons/mrp_segment/models/mrp_segment.py:338
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_code
 #, python-format
 msgid "Code Product"
@@ -281,8 +281,8 @@ msgid "Display Name"
 msgstr "Nombre desplegado"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:318
-#: code:addons/mrp_segment/models/mrp_segment.py:386
+#: code:addons/mrp_segment/models/mrp_segment.py:325
+#: code:addons/mrp_segment/models/mrp_segment.py:393
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_quantity
 #, python-format
 msgid "Done"
@@ -468,7 +468,7 @@ msgstr ""
 "                            Solicitud para Orden de Fabricacion"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:308
+#: code:addons/mrp_segment/models/mrp_segment.py:315
 #: model:ir.model,name:mrp_segment.model_mrp_production
 #, python-format
 msgid "Manufacturing Order"
@@ -498,7 +498,7 @@ msgid "Messages"
 msgstr "Mensages"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:337
+#: code:addons/mrp_segment/models/mrp_segment.py:344
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_name
 #, python-format
 msgid "Name Product"
@@ -510,7 +510,7 @@ msgid "Name for Segment"
 msgstr "Nombre para el Segmento"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:313
+#: code:addons/mrp_segment/models/mrp_segment.py:320
 #, python-format
 msgid "New"
 msgstr "New"
@@ -610,14 +610,14 @@ msgid "Procurement"
 msgstr "Abastecimiento"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:326
+#: code:addons/mrp_segment/models/mrp_segment.py:333
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_id
 #, python-format
 msgid "Product"
 msgstr "Producto"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:374
+#: code:addons/mrp_segment/models/mrp_segment.py:381
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_qty
 #, python-format
 msgid "Product quantity"
@@ -634,7 +634,7 @@ msgid "Production Scheduled Product"
 msgstr "Fabricación planificada producto"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:317
+#: code:addons/mrp_segment/models/mrp_segment.py:324
 #, python-format
 msgid "Production Started"
 msgstr "Comienzo de la producción"
@@ -669,7 +669,7 @@ msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:380
+#: code:addons/mrp_segment/models/mrp_segment.py:387
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_manufacture_qty
 #, python-format
 msgid "Quantity to manufacture"
@@ -681,7 +681,7 @@ msgid "R-00-23-02-2009"
 msgstr "R-00-23-02-2009"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:316
+#: code:addons/mrp_segment/models/mrp_segment.py:323
 #, python-format
 msgid "Ready to Produce"
 msgstr "Listo para producir"
@@ -697,6 +697,11 @@ msgid "Relatad Segment"
 msgstr "Segmento Relacionado"
 
 #. module: mrp_segment
+#: model:ir.ui.view,arch_db:mrp_segment.view_segment_form
+msgid "Reverse in Construction"
+msgstr "Regresar en Construcción"
+
+#. module: mrp_segment
 #: model:ir.model.fields,field_description:mrp_segment.field_stock_picking_review
 #: selection:stock.picking,review:0
 msgid "Revisar"
@@ -708,7 +713,7 @@ msgid "SOLICITA"
 msgstr "SOLICITA"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:369
+#: code:addons/mrp_segment/models/mrp_segment.py:376
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_sale_name
 #, python-format
 msgid "Sale Order"
@@ -748,6 +753,7 @@ msgstr "Buscar Segmento"
 #: model:ir.ui.view,arch_db:mrp_segment.mrp_production_form_view
 #: model:ir.ui.view,arch_db:mrp_segment.mrp_production_segment_form
 #: model:ir.ui.view,arch_db:mrp_segment.mrp_segment_add_production_form
+#: model:ir.ui.view,arch_db:mrp_segment.view_mrp_production_filter
 #, python-format
 msgid "Segment"
 msgstr "Segmento"
@@ -820,7 +826,7 @@ msgid "Segment location"
 msgstr "Ubicación del segmento"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:300
+#: code:addons/mrp_segment/models/mrp_segment.py:307
 #: model:ir.ui.menu,name:mrp_segment.menu_mrp_segment_action
 #: model:ir.ui.view,arch_db:mrp_segment.view_segment_form
 #, python-format
@@ -867,7 +873,7 @@ msgstr "Ubicación de la fuente"
 
 #. module: mrp_segment
 #: code:addons/mrp_segment/models/mrp_production.py:36
-#: code:addons/mrp_segment/models/mrp_segment.py:355
+#: code:addons/mrp_segment/models/mrp_segment.py:362
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_production_product_line_standard_cost
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_standard_cost
 #, python-format
@@ -876,7 +882,7 @@ msgstr "Costo estándar"
 
 #. module: mrp_segment
 #: code:addons/mrp_segment/models/mrp_segment.py:55
-#: code:addons/mrp_segment/models/mrp_segment.py:319
+#: code:addons/mrp_segment/models/mrp_segment.py:326
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_state
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_state
 #: model:ir.ui.view,arch_db:mrp_segment.view_segment_filter
@@ -908,7 +914,7 @@ msgid "The production order %s does not                                       be
 msgstr "La orden de fabricación %s no pertenece a la ubicación seleccionada"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:394
+#: code:addons/mrp_segment/models/mrp_segment.py:401
 #, python-format
 msgid ""
 "The quantity available is less than \n"
@@ -929,12 +935,6 @@ msgstr "El peso del contenido en Kg, sin incluir empaquetado, etc..."
 #: sql_constraint:mrp.segment:0
 msgid "This field must be unique!"
 msgstr "¡Este campo debe ser único!"
-
-#. module: mrp_segment
-#: code:addons/mrp_segment/report/cut_order_production_consolidado.py:20
-#, python-format
-msgid "Todas las ordernes de fabricacion tienen                 que tener el mismo producto"
-msgstr "Todas las ordernes de fabricacion tienen                 que tener el mismo producto"
 
 #. module: mrp_segment
 #: model:ir.ui.view,arch_db:mrp_segment.report_manufacturing_order_document
@@ -1001,7 +1001,7 @@ msgid "Validated"
 msgstr "Validado"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:349
+#: code:addons/mrp_segment/models/mrp_segment.py:356
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_volume
 #, python-format
 msgid "Volume Product"
@@ -1018,7 +1018,7 @@ msgid "Website communication history"
 msgstr "Historia de la comunicación sitio web"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:343
+#: code:addons/mrp_segment/models/mrp_segment.py:350
 #: model:ir.model.fields,field_description:mrp_segment.field_mrp_segment_line_product_weight
 #, python-format
 msgid "Weight Product"
@@ -1054,7 +1054,7 @@ msgid "You can not modify this segment"
 msgstr "No puedes modificar este segmento"
 
 #. module: mrp_segment
-#: code:addons/mrp_segment/models/mrp_segment.py:407
+#: code:addons/mrp_segment/models/mrp_segment.py:414
 #, python-format
 msgid "You can not segment because order %s has exceptions"
 msgstr "No se puede segmentar porque la orden %s tiene excepciones"
