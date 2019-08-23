@@ -239,6 +239,10 @@ class SaleOrder(models.Model):
                         raise UserError(
                             _('Product line %s does not have a route assigned'
                               % (line.product_id.default_code)))
+                    if line.standard_cost == 0.00:
+                        raise UserError(
+                            "No se puede validar un producto con costo 0 (%s)"
+                            % (line.product_id.default_code))
                 # Comented toda vez que ya hay un modulo de
                 # PLM que considera productos cotizacion:
                 # for line in order.order_line:
