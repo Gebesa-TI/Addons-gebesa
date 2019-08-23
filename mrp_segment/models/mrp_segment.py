@@ -292,8 +292,6 @@ class MrpSegment(models.Model):
     @api.multi
     def reverse_in_construction(self):
         return self.write({'state': 'construction'})
-        #self.env.cr.execute("""UPDATE mrp_segment SET state = 'construction'
-        #                       WHERE id in (%s) """ % (self.id))
 
 
 
