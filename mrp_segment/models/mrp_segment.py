@@ -291,6 +291,11 @@ class MrpSegment(models.Model):
             'context': ctx,
         }
 
+    @api.multi
+    def reverse_in_construction(self):
+        return self.write({'state': 'construction'})
+
+
 
 class MrpSegmentLine(models.Model):
     _name = "mrp.segment.line"

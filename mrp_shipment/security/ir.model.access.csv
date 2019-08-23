@@ -5,3 +5,5 @@ access_mrp_shipment_line_user,mrp.shipment.line.user,model_mrp_shipment_line,mrp
 access_mrp_shipment_line_manager,mrp.shipment.line.manager,model_mrp_shipment_line,mrp_shipment.group_logistic_superuser,1,1,1,1
 access_mrp_shipment_sale_user,mrp.shipment.sale.user,model_mrp_shipment_sale,mrp_shipment.group_logistic_user,1,0,0,0
 access_mrp_shipment_sale_manager,mrp.shipment.sale.manager,model_mrp_shipment_sale,mrp_shipment.group_logistic_superuser,1,1,1,1
+access_mrp_shipment_partner_user,mrp.shipment.partner.user,model_mrp_shipment_partner,mrp_shipment.group_logistic_user,1,0,0,0
+access_mrp_shipment_partner_manager,mrp.shipment.partner.manager,model_mrp_shipment_partner,mrp_shipment.group_logistic_superuser,1,1,1,1
