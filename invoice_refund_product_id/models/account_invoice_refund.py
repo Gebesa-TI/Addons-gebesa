@@ -44,6 +44,12 @@ class AccountInvoiceRefund(models.Model):
                                           of the invoice is less than the \
                                           amount payable"))
                 ctx.update({'type': inv.type})
+                if inv.partner_shipping_id:
+                    ctx.update({
+                        'default_partner_shipping_id': inv.partner_shipping_id.id})
+                if inv.sales_channel_id:
+                    ctx.update({
+                        'default_sales_channel_id': inv.sales_channel_id.id})
 
         ctx.update({'product_id': product_id})
         ctx.update({'mode': mode})
