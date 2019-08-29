@@ -9,6 +9,19 @@ from openerp.exceptions import ValidationError
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    @api.constrains('name', 'company_id', 'state')
+    def _check_unique_name_company(self):
+        for move in self:
+            if move.state != 'draft':
+                move_ids = self.search([
+                    ('name', '=', move.name),
+                    ('company_id', '=', move.company_id.id),
+                    ('id', '!=', move.id)])
+                if move_ids:
+                    raise ValidationError(
+                        _("You cannot have two moves with the same name!"))
+
+
     def delete_zeros(self):
         move_line_obj = self.env['account.move.line']
         self._cr.execute('UPDATE account_move '
