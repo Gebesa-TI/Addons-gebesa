@@ -43,5 +43,16 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_partner_place_form" model="ir.ui.view">
+            <field name="name">view.partner.place.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/group[2]/field[@name='category_id']" position="after">
+                    <field name="sku_on_invoices"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>

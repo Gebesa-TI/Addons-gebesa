@@ -2,7 +2,7 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import fields, models
+from openerp import fields, models, api,_ 
 
 
 class ProductProductCustomer(models.Model):
@@ -38,3 +38,29 @@ class ProductProduct(models.Model):
         'product_id',
         string='Customer product',
     )
+
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    sku_on_invoices = fields.Boolean(
+        string=_('SKU'),
+    )
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+
+        domain = super(AccountInvoiceLine, self)._onchange_product_id()
+        part = self.invoice_id.partner_id
+        product = self.product_id
+
+        if part.sku_on_invoices and product:
+            ppc_ids = self.env['product.product.customer'].search([('partner_id', '=', part.id),('product_id', '=', product.id)], limit=1)
+            if ppc_ids:
+                self.name = 'SKU: ' + ppc_ids.customer_code + ' \n' + self.name
+
+        return domain
