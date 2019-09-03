@@ -120,7 +120,19 @@ class MrpSegment(models.Model):
     @api.multi
     def _compute_documents_ids(self):
         for segment in self:
-            document_ids = self.mapped('line_ids').mapped('mrp_production_id').mapped('product_id').mapped('product_tmpl_id').mapped('product_document_ids').ids
+            production_ids = self.mapped('line_ids').mapped(
+                'mrp_production_id').mapped('move_prod_id').mapped(
+                'move_dest_id').mapped('move_dest_id').mapped(
+                'raw_material_production_id')
+
+            if production_ids:
+                document_ids = production_ids.mapped('product_id').mapped(
+                    'product_tmpl_id').mapped('product_document_ids').ids
+            else:
+                document_ids = self.mapped('line_ids').mapped(
+                    'mrp_production_id').mapped('product_id').mapped(
+                    'product_tmpl_id').mapped('product_document_ids').ids
+
             segment.document_count = len(document_ids)
 
     @api.depends('line_ids.mrp_production_id')
@@ -321,7 +333,18 @@ class MrpSegment(models.Model):
             'res_model': action.res_model,
         }
 
-        document_ids = self.mapped('line_ids').mapped('mrp_production_id').mapped('product_id').mapped('product_tmpl_id').mapped('product_document_ids').ids
+        production_ids = self.mapped('line_ids').mapped(
+            'mrp_production_id').mapped('move_prod_id').mapped(
+            'move_dest_id').mapped('move_dest_id').mapped(
+            'raw_material_production_id')
+
+        if production_ids:
+            document_ids = production_ids.mapped('product_id').mapped(
+                'product_tmpl_id').mapped('product_document_ids').ids
+        else:
+            document_ids = self.mapped('line_ids').mapped(
+                'mrp_production_id').mapped('product_id').mapped(
+                'product_tmpl_id').mapped('product_document_ids').ids
 
         if len(document_ids) > 1:
             result['domain'] = "[('id', 'in',["+','.join(map(str, document_ids))+"])]"
