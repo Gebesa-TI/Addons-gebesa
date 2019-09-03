@@ -24,6 +24,7 @@
         "security/shipment_security.xml",
         "security/ir.model.access.csv",
         "data/ir_sequence.xml",
+        "data/ir_cron_data.xml",
         "views/mrp_shipment.xml",
         "views/sale_order.xml",
         "report/mrp_shipment.xml",

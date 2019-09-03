@@ -76,7 +76,8 @@
                         <notebook attrs="{'invisible':[('state','=','draft')]}">
                             <page string="Shipment" >
                                  <field name="sale_ids" string="Shipment" attrs="{'readonly':[('state','!=','confirm')]}" >
-                                    <tree string="Shipment" editable="bottom" create="false">
+                                    <tree string="Shipment" editable="bottom" create="false">           
+                                        <field name="sequence" widget="handle"/>
                                         <field name="shipment_id" readonly="1" invisible="1"/>
                                         <field name="sale_id" readonly="1"/>
                                         <field name='partner_id' readonly="1"/>
@@ -107,6 +108,16 @@
                                         <field name="price_unit" readonly="1"/>
                                         <field name="total_cost" readonly="1"/>
                                         <field name="total_price" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Shipment Destination">
+                                <field name="partner_ids" string="Shipment Destination">
+                                    <tree string="Shipment Destination"  editable="bottom">                                     
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="partner_id" readonly="1"/>
+                                        <field name="date_arrival"/>
+                                        <field name="maniobras"/>
                                     </tree>
                                 </field>
                             </page>

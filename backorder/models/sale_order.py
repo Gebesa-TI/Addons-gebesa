@@ -44,7 +44,7 @@ class SaleOrder(models.Model):
         store=False,
     )
 
-    @api.depends('order_line.pending_qty', 'order_line.price_unit')
+    @api.depends('order_line.pending_qty', 'order_line.net_sale')
     def _compute_amount_pending(self):
         for sale in self:
             sale.amount_pending = 0

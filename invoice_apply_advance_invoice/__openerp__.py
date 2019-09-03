@@ -25,6 +25,7 @@
     ],
     "data": [
         "views/account_invoice_view.xml",
+        "security/ir.model.access.csv",
     ],
     "demo": [
     ],

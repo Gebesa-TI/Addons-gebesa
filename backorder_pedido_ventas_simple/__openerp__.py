@@ -22,7 +22,7 @@
         "mrp_gebesa",
         "mrp_segment",
         "mrp_shipment",
-        "week_number_validate"
+        "week_number_validate",
     ],
     "data": [
         "views/sale_order.xml",

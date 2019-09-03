@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
 
     date_reception = fields.Date(
         string=_(u'Date reception'),
-        default=fields.Date.today,
+        #default=fields.Date.today,
     )
 
     total_net_sale = fields.Float(
@@ -232,11 +232,17 @@ class SaleOrder(models.Model):
                         _('The following field is not invalid:\nAnalytic Account'))
                 if not order.client_order_ref:
                     raise UserError(_('This Sale Order not has OC captured'))
+                if not order.date_reception:
+                    raise UserError(_('This Sale Order not has Date Reception'))
                 for line in order.order_line:
                     if not line.route_id:
                         raise UserError(
                             _('Product line %s does not have a route assigned'
                               % (line.product_id.default_code)))
+                    if line.standard_cost == 0.00:
+                        raise UserError(
+                            "No se puede validar un producto con costo 0 (%s)"
+                            % (line.product_id.default_code))
                 # Comented toda vez que ya hay un modulo de
                 # PLM que considera productos cotizacion:
                 # for line in order.order_line:
