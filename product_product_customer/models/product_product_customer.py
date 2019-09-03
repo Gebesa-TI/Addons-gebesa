@@ -64,3 +64,22 @@ class AccountInvoiceLine(models.Model):
                 self.name = 'SKU: ' + ppc_ids.customer_code + ' \n' + self.name
 
         return domain
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.multi
+    @api.onchange('product_id')
+    def product_id_change(self):
+
+        domain = super(SaleOrderLine, self).product_id_change()
+        partner = self.order_partner_id
+        product = self.product_id
+
+        if partner.sku_on_invoices and product:
+            ppc_ids = self.env['product.product.customer'].search([('partner_id', '=', partner.id),('product_id', '=', product.id)], limit=1)
+            if ppc_ids:
+                self.name = 'SKU: ' + ppc_ids.customer_code + ' \n' + self.name
+
+        return domain
