@@ -17,7 +17,8 @@
     },
     "depends": [
         "base",
-        "product"
+        "product",
+        "sale",
     ],
     "data": [
         "views/product_product_customer.xml",
