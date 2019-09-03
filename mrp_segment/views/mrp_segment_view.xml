@@ -39,7 +39,7 @@
             <field name="model">mrp.segment</field>
             <field name="arch" type="xml">
                 <form string="Segmentation">
-                    <header>
+                    <header>                        
                         <button name="prepare_segment" states="draft" string="Proceed" type="object" class="oe_highlight"/>
                         <button name="process_segment" states="confirm" string="Process" type="object" class="oe_highlight"/>
                         <button name="validate_segment" states="construction" string="Validate" type="object" class="oe_highlight"/>
@@ -49,10 +49,18 @@
                         <button name="reverse_in_construction" states="confirm" string="Reverse in Construction" type="object" class="oe_highlight" />
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"
+                               name="action_view_document"
+                               class="oe_stat_button"
+                               icon="fa-dropbox">
+                               <field name="document_count" widget="statinfo" string="Documents"/>
+                            </button>
+                        </div>
                         <div class="oe_title">
                             <label for="folio" class="oe_edit_only"/>
                             <h1><field name='folio'/></h1>
-                        </div>
+                        </div>                        
                         <group>
                             <group>
                                 <field name="name" placeholder="Name for Segment"/>

@@ -112,6 +112,17 @@ class MrpSegment(models.Model):
         string=_('Progress Date')
     )
 
+    document_count = fields.Integer(
+        string='Delivery Orders',
+        compute='_compute_documents_ids'
+    )
+
+    @api.multi
+    def _compute_documents_ids(self):
+        for segment in self:
+            document_ids = self.mapped('line_ids').mapped('mrp_production_id').mapped('product_id').mapped('product_tmpl_id').mapped('product_document_ids').ids
+            segment.document_count = len(document_ids)
+
     @api.depends('line_ids.mrp_production_id')
     def _compute_product_lines_ids(self):
         product_lines = []
@@ -295,7 +306,33 @@ class MrpSegment(models.Model):
     def reverse_in_construction(self):
         return self.write({'state': 'construction'})
 
+    @api.multi
+    def action_view_document(self):
+        action = self.env.ref('product_document.product_document_action')
 
+        result = {
+            'name': action.name,
+            'help': action.help,
+            'type': action.type,
+            'view_type': action.view_type,
+            'view_mode': action.view_mode,
+            'target': action.target,
+            'context': action.context,
+            'res_model': action.res_model,
+        }
+
+        document_ids = self.mapped('line_ids').mapped('mrp_production_id').mapped('product_id').mapped('product_tmpl_id').mapped('product_document_ids').ids
+
+        if len(document_ids) > 1:
+            result['domain'] = "[('id', 'in',["+','.join(map(str, document_ids))+"])]"
+        elif len(document_ids) == 1:
+            form = self.env.ref('product_document.document_product_form', False)
+            form_id = form.id if form else False
+            result['views'] = [(form_id, 'form')]
+            result['res_id'] = document_ids[0]
+        else:
+            result['domain'] = "[('id', '=', 0)]"
+        return result
 
 class MrpSegmentLine(models.Model):
     _name = "mrp.segment.line"
