@@ -27,6 +27,7 @@
         "mrp_cut_detail",
         "purchase",
         "stock_warehouse_analytic_id",
+        "product_document",
     ],
     "data": [
         'security/security.xml',
