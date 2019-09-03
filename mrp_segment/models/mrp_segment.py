@@ -114,7 +114,14 @@ class MrpSegment(models.Model):
 
     document_count = fields.Integer(
         string='Delivery Orders',
+        compute='_compute_documents_ids'
     )
+
+    @api.multi
+    def _compute_documents_ids(self):
+        for segment in self:
+            document_ids = self.mapped('line_ids').mapped('mrp_production_id').mapped('product_id').mapped('product_tmpl_id').mapped('product_document_ids').ids
+            segment.document_count = len(document_ids)
 
     @api.depends('line_ids.mrp_production_id')
     def _compute_product_lines_ids(self):

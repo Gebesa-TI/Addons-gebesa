@@ -53,8 +53,8 @@
                             <button type="object"
                                name="action_view_document"
                                class="oe_stat_button"
-                               icon="fa-truck"
-                               string="Document Product">
+                               icon="fa-dropbox">
+                               <field name="document_count" widget="statinfo" string="Documents"/>
                             </button>
                         </div>
                         <div class="oe_title">
