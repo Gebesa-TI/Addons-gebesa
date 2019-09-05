@@ -24,6 +24,7 @@
     "data": [
         "views/mrp_bom_view.xml",
         "views/sale_order_view.xml",
+        "views/procurement_view.xml",
     ],
     "demo": [
         # "demo/res_partner_demo.xml",
