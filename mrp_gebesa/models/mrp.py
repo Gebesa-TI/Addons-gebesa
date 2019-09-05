@@ -220,9 +220,9 @@ class MrpProduction(models.Model):
                         self.env.cr.execute("""
                             UPDATE stock_move SET state = 'cancel'
                             WHERE id in (%s) """ % (moves))
-                if cancel_pick:
-                    self.env.cr.execute("""
-                        UPDATE stock_picking SET state = 'cancel'
-                        WHERE id in (%s) """ % (picking.id))
+                    if cancel_pick:
+                        self.env.cr.execute("""
+                            UPDATE stock_picking SET state = 'cancel'
+                            WHERE id in (%s) """ % (picking.id))
 
         return res
