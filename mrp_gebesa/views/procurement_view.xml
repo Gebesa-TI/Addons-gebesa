@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="procurement_cancel_action_server" model="ir.actions.server">
+            <field name="name">Procurement Cancel</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="model_procurement_order" />
+            <field name="code">self.cancel(cr, uid, context.get('active_ids', []), context)</field>
+        </record>
+
+        <record id="procurement_cancel_action" model="ir.values">
+            <field name="name">Procurement Cancel</field>
+            <field name="key">action</field>
+            <field name="key2">client_action_multi</field>
+            <field name="model">procurement.order</field>
+            <field name="value" eval="'ir.actions.server,%d' % ref('mrp_gebesa.procurement_cancel_action_server')" />
+        </record>
+
+    </data>
+</openerp>
