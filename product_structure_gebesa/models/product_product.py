@@ -44,6 +44,20 @@ class ProductProduct(models.Model):
                 prod.name_template = ''
 
     @api.multi
+    def create(self, vals):
+        if 'default_code' in vals:
+            vals['barcode'] = vals['default_code']
+        return super(ProductProduct, self).create(vals)
+
+    @api.one
+    def write(self, values):
+        if 'default_code' in values:
+            values['barcode'] = values['default_code']
+        else:
+            values['barcode'] = self.default_code
+        return super(ProductProduct, self).write(values)
+
+    @api.multi
     def name_get(self):
         def _name_get(d):
             name = d.get('name', '')
