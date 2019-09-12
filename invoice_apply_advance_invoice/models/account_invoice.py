@@ -43,6 +43,13 @@ class AccountInvoice(models.Model):
         #if self.advance_id:
             #self.amount_advance = self.advance_id.amount_total
 
+
+    @api.onchange('partner_id', 'company_id')
+    def _onchange_partner_id(self):
+        res = super(AccountInvoice, self)._onchange_partner_id()
+        for partner in self:
+            partner.advance_ids = ''
+
     @api.multi
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
