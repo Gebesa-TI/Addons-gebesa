@@ -19,14 +19,13 @@
         "base",
         "sale",
         "mrp",
+        "sale",
         "account_invoice_sale_data",
-
-
     ],
     "data": [
-       'views/sale_order.xml',
-       'views/mrp_production.xml',
-
+        'views/sale_order.xml',
+        'views/mrp_production.xml',
+        'views/res_partner.xml'
     ],
     "demo": [
 
