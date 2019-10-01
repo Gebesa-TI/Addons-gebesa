@@ -7,7 +7,8 @@
             <field name='inherit_id' ref='sale.view_order_form'/>
             <field name='arch' type='xml'>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
-                <field name="dealer_id" domain="[('parent_id', '=', partner_id)]"/> 
+                <field name="requires_dealer" invisible="1" /> 
+                <field name="dealer_id" domain="[('parent_id', '=', partner_id)]" attrs="{'required': [('requires_dealer','=', True)]}"/> 
             </xpath>   
             </field>
         </record>
