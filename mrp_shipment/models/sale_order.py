@@ -44,8 +44,8 @@ class SaleOrder(models.Model):
                     shipment = shipment_line.shipment_id
                     if shipment.folio not in folio:
                         folio.append(shipment.folio)
-                        date = date + ' ' + shipment.date + ','
-                        date2 = date2 + ' ' + shipment.departure_date + ','
+                        date = date + ' ' + fields.Date.from_string(shipment.date).strftime('%d/%m/%Y') + ','
+                        date2 = date2 + ' ' + fields.Date.from_string(shipment.departure_date).strftime('%d/%m/%Y') + ','
                         fol = fol + ' ' + shipment.folio + ','
             sale.folio_shipped = fol[1:-1]
             sale.date_shipped = date[1:-1]
