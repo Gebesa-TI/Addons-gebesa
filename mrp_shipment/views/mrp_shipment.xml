@@ -49,6 +49,7 @@
                         <button name="prepare_shipment" states="draft" string="Proceed" type="object" class="oe_highlight"/>
                         <button name="done" states="confirm" string="Done" type="object" class="oe_highlight"/>
                         <button name="finished" states="done" string="Finished" type="object" class="oe_highlight"/>
+                        <button name ="reverse_in_progress" states="done" string="Reverse in Progress" type="object" class="oe_highlight"/>
                         <button name="cancel" string="Cancel" type="object" attrs="{'invisible':[('state','in', ['cancel', 'draft', 'done', 'finished'])]}"/>
                         <button name="add" states="confirm" string="Add Sale Order" type="object"/>
                         <field name="state" widget="statusbar"/>
