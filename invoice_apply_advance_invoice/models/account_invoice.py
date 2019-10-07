@@ -38,11 +38,23 @@ class AccountInvoice(models.Model):
                 self.amount_advance = advance.amount_residual_advance
         return
 
+    @api.multi
+    def action_cancel(self):
+        res = super(AccountInvoice, self).action_cancel()
+        suma = 0.0
+        for inv in self:
+            for advance in inv.advance_ids:
+                if advance.advance_id:
+                    suma = advance.advance_id.amount_residual_advance + advance.amount_advance
+                    advance.advance_id.amount_residual_advance = suma
+                    advance.advance_id.advance_applied = False
+                    inv.advance_ids = ''
+            return res
+
     #@api.depends('advance_id')
     #def _compute_amount_adv(self):
         #if self.advance_id:
             #self.amount_advance = self.advance_id.amount_total
-
 
     @api.onchange('partner_id', 'company_id')
     def _onchange_partner_id(self):
