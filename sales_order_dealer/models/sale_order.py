@@ -9,6 +9,11 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
 
-    dealer_id = fields.Many2one('res.partner', 
+    dealer_id = fields.Many2one(
+        'res.partner', 
         string="Comerciante",
-        )
+    )
+    requires_dealer = fields.Boolean(
+        string=_('Requires dealer'),
+        related="partner_id.requires_dealer"
+    )

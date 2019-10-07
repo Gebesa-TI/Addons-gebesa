@@ -17,14 +17,15 @@ class AccountInvoiceRefund(models.Model):
             self._context.get('active_id', False))
         invoice.mode = mode
 
-        deposit = self.pool['ir.values'].get_default(self._cr, self._uid, 'sale.config.settings', 
+        deposit = self.pool['ir.values'].get_default(
+            self._cr, self._uid, 'sale.config.settings',
             'deposit_product_id_setting') or False
         total_advance = 0.0
         if self.filter_refund == 'refund':
             if self.product_id.id == deposit:
                 for advance in invoice.advance_ids:
                     total_advance += advance.amount_advance
-                if total_advance != self.amount:
+                if abs(total_advance - self.amount) > 0.50:
                     raise UserError('Debe aplicar el total de los anticipos')
 
                 invoice.note_applied = True
