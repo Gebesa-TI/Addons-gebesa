@@ -14,6 +14,9 @@
                         </group>
                     </group>
                 </xpath>
+                <xpath expr="//form/header" position="inside">
+                    <button name="update_advance" states="draft" type="object" string="Update Advance" class="oe_highlight"/>
+                </xpath>
             </field>
         </record>
 
