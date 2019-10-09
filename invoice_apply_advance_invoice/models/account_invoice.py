@@ -39,6 +39,13 @@ class AccountInvoice(models.Model):
         return
 
     @api.multi
+    def update_advance(self):
+        for invoice in self:
+            for advance in invoice.advance_ids:
+                if advance.advance_id:
+                    advance._onchange_advance_id()
+
+    @api.multi
     def action_cancel(self):
         res = super(AccountInvoice, self).action_cancel()
         suma = 0.0

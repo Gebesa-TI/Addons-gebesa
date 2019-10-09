@@ -90,6 +90,10 @@ class MrpShipment(models.Model):
         store=True,
     )
 
+    @api.multi
+    def reverse_in_progress(self):
+        return self.write({'state': 'confirm'})
+
     @api.depends('sale_ids', 'sale_ids.partner_id')
     def _compute_partners(self):
         list_partner = []
