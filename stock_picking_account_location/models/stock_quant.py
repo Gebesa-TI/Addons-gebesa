@@ -66,7 +66,10 @@ class stock_quant(osv.osv):
             else:
                 acc_valuation = move.location_id.account_id or False
         else:
-            acc_valuation = move.location_id.account_id or False
+            if move.location_id.type_stock_loc in ('rm', 'fp'):
+                acc_valuation = move.location_id.account_id or False
+            else:
+                acc_valuation = move.location_dest_id.account_id or False
 
         if move.picking_id.stock_move_type_id:
             move_type = move.picking_id.stock_move_type_id.code
