@@ -11,6 +11,7 @@ class StockMove(models.Model):
     acc_move_id = fields.Many2one(
         'account.move',
         string=_(u'Account Move'),
+        copy=False
     )
 
     def action_done(self, cr, uid, ids, context=None):
@@ -41,8 +42,10 @@ class StockMove(models.Model):
 
         if production_id:
             production = production_obj.browse(cr, uid, production_id.id, context=ctx)
-            production.am_ids = False
+            # production.am_ids = False
             if move_ids:
-                production.am_ids = move_ids or False
+                for move in move_ids:
+                    production.write({'am_ids': [(4, move)]})
+                # production.am_ids = move_ids or False
 
         return res

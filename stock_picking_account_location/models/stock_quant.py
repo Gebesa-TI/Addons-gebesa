@@ -66,7 +66,10 @@ class stock_quant(osv.osv):
             else:
                 acc_valuation = move.location_id.account_id or False
         else:
-            acc_valuation = move.location_id.account_id or False
+            if move.location_id.usage == 'internal':
+                acc_valuation = move.location_id.account_id or False
+            else:
+                acc_valuation = move.location_dest_id.account_id or False
 
         if move.picking_id.stock_move_type_id:
             move_type = move.picking_id.stock_move_type_id.code
@@ -320,25 +323,27 @@ class stock_quant(osv.osv):
 
         #in case of routes making the link between several warehouse of the same company, the transit location belongs to this company, so we don't need to create accounting entries
         # Create Journal Entry for products arriving in the company
-        # if company_to and (move.location_id.usage not in ('internal', 'transit') and move.location_dest_id.usage == 'internal' or company_from != company_to):
-        if company_to and (move.location_id.type_stock_loc != 'rm' and move.location_dest_id.type_stock_loc == 'rm' or move.location_id.type_stock_loc != 'fp' and move.location_dest_id.type_stock_loc == 'fp' or company_from != company_to):
+        if company_to and (move.location_id.usage not in ('internal') and
+                           move.location_dest_id.usage == 'internal'):
+            # if company_to and (move.location_id.type_stock_loc != 'rm' and move.location_dest_id.type_stock_loc == 'rm' or move.location_id.type_stock_loc != 'fp' and move.location_dest_id.type_stock_loc == 'fp' or company_from != company_to):
             ctx = context.copy()
             ctx['force_company'] = company_to.id
             journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
             if location_from and location_from.usage == 'customer':
-                #goods returned from customer
+                # goods returned from customer
                 self._create_account_move_line(cr, uid, quants, move, acc_dest, acc_valuation, journal_id, context=ctx)
             else:
                 self._create_account_move_line(cr, uid, quants, move, acc_src, acc_valuation, journal_id, context=ctx)
 
         # Create Journal Entry for products leaving the company
-        # if company_from and (move.location_id.usage == 'internal' and move.location_dest_id.usage not in ('internal', 'transit') or company_from != company_to):
-        if company_from and (move.location_id.type_stock_loc == 'rm' and move.location_dest_id.type_stock_loc != 'rm' or move.location_id.type_stock_loc == 'fp' and move.location_dest_id.type_stock_loc != 'fp' or company_from != company_to):
+        if company_from and (move.location_id.usage == 'internal' and
+                             move.location_dest_id.usage not in ('internal')):
+            # if company_from and (move.location_id.type_stock_loc == 'rm' and move.location_dest_id.type_stock_loc != 'rm' or move.location_id.type_stock_loc == 'fp' and move.location_dest_id.type_stock_loc != 'fp' or company_from != company_to):
             ctx = context.copy()
             ctx['force_company'] = company_from.id
             journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
             if location_to and location_to.usage == 'supplier':
-                #goods returned to supplier
+                # goods returned to supplier
                 self._create_account_move_line(cr, uid, quants, move, acc_valuation, acc_src, journal_id, context=ctx)
             else:
                 self._create_account_move_line(cr, uid, quants, move, acc_valuation, acc_dest, journal_id, context=ctx)
@@ -350,26 +355,28 @@ class stock_quant(osv.osv):
             journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
             self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
 
-        if move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal' and move.location_id.stock_warehouse_id.id != move.location_dest_id.stock_warehouse_id.id:
+        if (move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal' and 
+                (move.location_id.stock_warehouse_id.id != move.location_dest_id.stock_warehouse_id.id or
+                    move.location_id.type_stock_loc != move.location_dest_id.type_stock_loc)):
             ctx = context.copy()
             ctx['force_company'] = move.company_id.id
             journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
             self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
 
-        if move.location_id.usage == 'transit' and move.location_dest_id.usage == 'production':
-            ctx = context.copy()
-            ctx['force_company'] = move.company_id.id
-            journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
-            self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
+        # if move.location_id.usage == 'transit' and move.location_dest_id.usage == 'production':
+        #     ctx = context.copy()
+        #     ctx['force_company'] = move.company_id.id
+        #     journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        #     self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
 
-        if move.location_id.type_stock_loc == 'wip' and move.location_dest_id.usage == 'transit':
-            ctx = context.copy()
-            ctx['force_company'] = move.company_id.id
-            journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
-            self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
+        # if move.location_id.type_stock_loc == 'wip' and move.location_dest_id.usage == 'transit':
+        #     ctx = context.copy()
+        #     ctx['force_company'] = move.company_id.id
+        #     journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        #     self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
 
-        if (move.location_id.type_stock_loc == 'wip' and move.location_dest_id.usage == 'inventory') or (move.location_id.usage == 'inventory' and move.location_dest_id.type_stock_loc == 'wip') :
-            ctx = context.copy()
-            ctx['force_company'] = move.company_id.id
-            journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
-            self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
+        # if (move.location_id.type_stock_loc == 'wip' and move.location_dest_id.usage == 'inventory') or (move.location_id.usage == 'inventory' and move.location_dest_id.type_stock_loc == 'wip') :
+        #     ctx = context.copy()
+        #     ctx['force_company'] = move.company_id.id
+        #     journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        #     self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)

@@ -65,3 +65,10 @@ class AccountMove(models.Model):
                     raise ValidationError(_("The lines of the accounting policy \
                         have different currencies"))
         return super(AccountMove, self).post()
+
+    @api.multi
+    def reverse_moves(self, date=None, journal_id=None):
+        if not date:
+            date = self.date
+        return super(AccountMove, self).reverse_moves(
+            date=date, journal_id=journal_id)
