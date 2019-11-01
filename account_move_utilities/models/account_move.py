@@ -68,7 +68,8 @@ class AccountMove(models.Model):
 
     @api.multi
     def reverse_moves(self, date=None, journal_id=None):
-        if not date:
-            date = self.date
+        for move in self:
+            if not date:
+                date = move.date
         return super(AccountMove, self).reverse_moves(
             date=date, journal_id=journal_id)
