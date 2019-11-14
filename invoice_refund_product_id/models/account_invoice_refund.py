@@ -33,6 +33,7 @@ class AccountInvoiceRefund(models.Model):
         for ref in self:
             product_id = ref.product_id.id
             amount = ref.amount
+            filter_refund = ref.filter_refund
             for inv in invoice_obj.browse(self._context.get('active_ids')):
                 # journal_id = inv.journal_id.id
                 if mode != 'refund':
@@ -62,6 +63,8 @@ class AccountInvoiceRefund(models.Model):
         refund_id = res['domain'][1][2][0]
         # import pdb; pdb.set_trace()
         refund = invoice_obj.browse(refund_id)
+        if refund and filter_refund == 'cancel':
+            refund.write({'cfdi_uuid': '00000000-0000-0000-0000-000000000000'})
         if refund.type == 'in_refund':
             wf_service.trg_validate(self._uid, 'account.invoice', refund_id,
                                     'invoice_open', self._cr)
