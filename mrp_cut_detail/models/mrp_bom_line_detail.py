@@ -91,6 +91,7 @@ class MrpBomLineDetail(models.Model):
 
     kilos = fields.Float(
         _('Kilos'),
+        compute='_compute_kilos',
     )
 
     variants = fields.Char(
@@ -122,6 +123,13 @@ class MrpBomLineDetail(models.Model):
                 reg.meters2 = 0.00
             else:
                 reg.meters2 = width * longs
+
+    @api.depends('meters2', 'caliber_id')
+    def _compute_kilos(self):
+        for reg in self:
+            if reg.meters2 == 0.00 or not reg.caliber_id:
+                return
+            reg.kilos = reg.meters2 * reg.caliber_id.peso_kg
 
     @api.model
     def create(self, vals):
