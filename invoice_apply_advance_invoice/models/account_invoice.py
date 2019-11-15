@@ -92,9 +92,13 @@ class AccountInvoice(models.Model):
                     if advance.advance_id:
                         if round(advance.amount_advance, 2) <= round(advance.advance_id.amount_residual_advance, 2):
                             resta = advance.advance_id.amount_residual_advance - advance.amount_advance
-                            advance.advance_id.amount_residual_advance = resta
+                            advance.advance_id.sudo().write({
+                                'amount_residual_advance': resta
+                            })
                             if advance.advance_id.amount_residual_advance <= 0.0:
-                                advance.advance_id.advance_applied = True
+                                advance.advance_id.sudo().write({
+                                    'advance_applied': True
+                                })
                         else:
                             raise UserError('El monto de anticipo es mayor al saldo de la factura %s' % advance.advance_id.number)
                         total_advance += advance.amount_advance
