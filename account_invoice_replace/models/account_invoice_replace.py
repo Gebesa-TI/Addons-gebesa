@@ -142,7 +142,7 @@ class AccountInvoice(models.Model):
             'auto_delete': True,
             'message_type': 'comment',
             'model': 'account.invoice',
-            'res_id': inv_ids[0].id,
+            #'res_id': inv_ids[0].id,
         })
         mail.send()
 
@@ -154,7 +154,7 @@ class AccountInvoice(models.Model):
         date_cancel = dd - limit_date
         inv_ids = self.search([
             ('state', '=', ['cancel']),
-            ('company_id', '=', 1),
+            ('company_id', '=', 4),
             ('type', '=', 'out_invoice'),
             ('date_cancelled', '=', date_cancel)])
         table = ''
@@ -254,6 +254,6 @@ class AccountInvoice(models.Model):
             'auto_delete': True,
             'message_type': 'comment',
             'model': 'account.invoice',
-            'res_id': inv_ids[0].id,
+            #'res_id': inv_ids[0].id,
         })
         mail.send()
