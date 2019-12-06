@@ -25,7 +25,7 @@ class AccountInvoiceRefund(models.Model):
             if self.product_id.id == deposit:
                 for advance in invoice.advance_ids:
                     total_advance += advance.amount_advance
-                if abs(total_advance - self.amount) > 0.50:
+                if abs(total_advance - self.amount) > 0.50 and invoice.date_invoice > '2019-10-07':
                     raise UserError('Debe aplicar el total de los anticipos')
 
                 invoice.note_applied = True
